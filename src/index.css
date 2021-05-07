@@ -11,3 +11,23 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+body {
+  font-family: "Lato", sans-serif;
+}
+
+
+.nav-icon{
+  color: #E3E3E3;
+}
+
+.main {
+  margin-left: 25%; /* Same as the width of the sidenav */
+  font-size: 28px; /* Increased text to enable scrolling */
+  padding: 0px 10px;
+}
+@media screen and (max-width: 1208px),(max-height: 450px) {
+  .main{
+    margin-left: 0%;
+  }
+}

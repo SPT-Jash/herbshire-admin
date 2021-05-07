@@ -1,0 +1,13 @@
+.order-table-row{    
+    background-image: linear-gradient(90deg, #ffffff00, #ffffff00);
+}
+.order-table-row:hover{    
+    background-image: linear-gradient(90deg, #5bf5e3, #ffffff00);
+}
+
+.delivery-icon svg path{
+    stroke: #ffff;
+}
+.shopping-cart-icon{
+    color: #ffff;
+}
