@@ -1,0 +1,80 @@
+.sidenav {
+    height: 100%;
+    width: 25%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: white;
+    background-image: linear-gradient(180deg, #bffcf4, #ffffff00);
+    overflow-x: hidden;
+    padding-top: 20px;
+  }
+
+  @media screen and (max-width: 1208px), (max-height: 450px) {
+    .sidenav { width: 0%; }    
+  }
+  
+  .side-nav-title{
+    padding: 10px 8px;
+    padding-left: 8%;
+    margin-bottom: 10%;  
+    font-size: 23px;  
+    font-family: Arial, Helvetica, sans-serif;
+    color: #4C4C66;
+    display: block;
+  }
+  
+  .side-nav-title div{
+    font-weight: 700;
+    display: inline-block;  
+  }
+  
+  .side-nav-content{
+    padding: 20px 15%;  
+    text-decoration: none;
+    font-size: 20px;
+    color: #818181;
+    display: block;  
+  }
+  .side-nav-content:hover{
+    background-image: linear-gradient(90deg, #5bf5e3, #ffffff00);
+    color: #00b6a1;
+    font-weight: 700;
+  }
+  
+  .side-nav-content-selected{
+    background-image: linear-gradient(90deg, #5bf5e3, #ffffff00);
+    color: #00b6a1;
+    font-weight: 700;
+  }
+  
+  .side-nav-content svg{
+    display: inline;  
+    margin-left: 8%;
+    margin-right: 10%;
+    /* background-color: red;   */
+  }
+  
+  .side-nav-content svg path{
+    stroke: #6F6C99;  
+  }
+  .side-nav-icon-hover svg path{
+    stroke: #2A9F85;
+  }
+  
+  .side-nav-icon-selected svg path{
+    stroke: #2A9F85;
+  }
+  
+  .side-nav-title img{
+    display: inline-block;
+    height: 70px;
+    /* background-color: red;   */
+  }
+  
+  .nav-icon-color{
+    fill: #ffff;
+  }
+
+  
