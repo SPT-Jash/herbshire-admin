@@ -53,29 +53,30 @@ export default function ReactCharts({ type, lineColor }) {
     []
   );
   const getMonth = (num) => {
-    if (num == 1) {
+    const n = parseFloat(num);
+    if (n === 1) {
       return "January";
-    } else if (num == 2) {
+    } else if (n === 2) {
       return "February";
-    } else if (num == 3) {
+    } else if (n === 3) {
       return "March";
-    } else if (num == 4) {
+    } else if (n === 4) {
       return "April";
-    } else if (num == 5) {
+    } else if (n === 5) {
       return "May";
-    } else if (num == 6) {
+    } else if (n === 6) {
       return "June";
-    } else if (num == 7) {
+    } else if (n === 7) {
       return "July";
-    } else if (num == 8) {
+    } else if (n === 8) {
       return "August";
-    } else if (num == 9) {
+    } else if (n === 9) {
       return "September";
-    } else if (num == 10) {
+    } else if (n === 10) {
       return "October";
-    } else if (num == 11) {
+    } else if (n === 11) {
       return "November";
-    } else if (num == 12) {
+    } else if (n === 12) {
       return "December";
     }
   };
@@ -100,9 +101,9 @@ export default function ReactCharts({ type, lineColor }) {
     []
   );
 
-  if (type == "normal") {
+  if (type === "normal") {
     return <Chart data={data} series={series} axes={axes} tooltip />;
-  } else if (type == "small") {
+  } else if (type === "small") {
     return <Chart data={orderData} series={series} axes={noAxes} tooltip />;
   }
 }

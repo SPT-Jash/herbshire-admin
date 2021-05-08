@@ -29,7 +29,7 @@ export default function Routes() {
         <Route path="/customers" component={Customers} />
         <Route path="/products" component={Products} />
         <Route path="/add-products" component={AddProducts} />
-        <Redirect from="*" to="/" />
+        <Route render={() => <h1>404: page not found</h1>} />
       </Switch>
     );
   }
