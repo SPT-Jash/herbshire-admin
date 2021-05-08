@@ -110,10 +110,7 @@ export default function AddProducts() {
       toastMessage("error", "weight Cannot be null !");
       return false;
     }
-    if (displayUrl.trim() === "") {
-      toastMessage("error", "Image Cannot be null !");
-      return false;
-    }
+
     if (calories.trim() === "") {
       toastMessage("error", "calories Cannot be null !");
       return false;
@@ -150,7 +147,6 @@ export default function AddProducts() {
       price,
       discount,
       description,
-      displayUrl,
       freshTill,
       count: 0,
       calories,
@@ -195,9 +191,8 @@ export default function AddProducts() {
             url: image,
           });
         });
-
+        data.displayUrl = productImagesDTOS[0].url;
         data.productImagesDTOS = productImagesDTOS;
-
         addProduct(data);
       })
       .catch((reason) => {
