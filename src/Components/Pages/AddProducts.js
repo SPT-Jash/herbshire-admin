@@ -182,17 +182,6 @@ export default function AddProducts() {
         console.log(res.data);
         setUploadedImages([...res.data]);
         toastMessage("success", "Images Uploaded !");
-
-        let productImagesDTOS = [];
-
-        uploadedImages.forEach((image, id) => {
-          productImagesDTOS.push({
-            id,
-            url: image,
-          });
-        });
-        data.displayUrl = productImagesDTOS[0].url;
-        data.productImagesDTOS = productImagesDTOS;
         addProduct(data);
       })
       .catch((reason) => {
@@ -224,6 +213,17 @@ export default function AddProducts() {
       },
     };
 
+    let productImagesDTOS = [];
+    const tempImages = uploadedImages;
+    tempImages.forEach((image, id) => {
+      productImagesDTOS.push({
+        id,
+        url: image,
+      });
+    });
+    data.displayUrl = tempImages[0];
+    data.productImagesDTOS = productImagesDTOS;
+
     const formData = form.current;
 
     console.log(data);
@@ -239,36 +239,39 @@ export default function AddProducts() {
       .catch(function (error) {
         console.log(error);
         toastMessage("error", "Product Not Added !");
-        const deleteFile_url =
-          "https://api.herbshire.in/api/storage/deleteFile";
-
-        console.log(uploadedImages);
-        uploadedImages.forEach((image) => {
-          var myHeaders = new Headers();
-          myHeaders.append("Authorization", `Bearer ${auth.user.token}`);
-
-          var formdata = new FormData();
-          formdata.append("url", image);
-
-          var requestOptions = {
-            method: "DELETE",
-            headers: myHeaders,
-            body: formdata,
-            redirect: "follow",
-          };
-
-          fetch(deleteFile_url, requestOptions)
-            .then((response) => {
-              response.text();
-              toastMessage("info", "Image deteled !");
-            })
-            .then((result) => console.log(result))
-            .catch((error) => console.log("error", error));
-        });
+        deleteUploadedImages(tempImages);
       })
       .then(function () {
         // always executed
       });
+  };
+
+  const deleteUploadedImages = (images) => {
+    const deleteFile_url = "https://api.herbshire.in/api/storage/deleteFile";
+
+    console.log(uploadedImages);
+    images.forEach((image) => {
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", `Bearer ${auth.user.token}`);
+
+      var formdata = new FormData();
+      formdata.append("url", image);
+
+      var requestOptions = {
+        method: "DELETE",
+        headers: myHeaders,
+        body: formdata,
+        redirect: "follow",
+      };
+
+      fetch(deleteFile_url, requestOptions)
+        .then((response) => {
+          response.text();
+          toastMessage("info", "Image deteled !");
+        })
+        .then((result) => console.log(result))
+        .catch((error) => console.log("error", error));
+    });
   };
 
   const SelectedImages = (

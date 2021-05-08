@@ -136,7 +136,7 @@ export default function Products() {
             ALL CUSTOMERS
           </Text>
           <Spacer />
-          <Button backgroundColor="green.400" as={Link} to="/add-products">
+          <Button backgroundColor="blue.200" as={Link} to="/add-products">
             Add Product
           </Button>
         </Flex>
