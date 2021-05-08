@@ -19,7 +19,7 @@ export default function AddProducts() {
   const toast = useToast();
 
   useEffect(() => {
-    const url = "http://api.herbshire.in/gst";
+    const url = "https://api.herbshire.in/gst";
     const config = {
       headers: {
         Authorization: `Bearer ${auth.user.token}`,
@@ -167,7 +167,7 @@ export default function AddProducts() {
     if (!data) {
       return;
     }
-    const url = "http://api.herbshire.in/api/storage/uploadMultipleFile";
+    const url = "https://api.herbshire.in/api/storage/uploadMultipleFile";
     const config = {
       headers: {
         Authorization: `Bearer ${auth.user.token}`,
@@ -220,7 +220,7 @@ export default function AddProducts() {
   };
 
   const addProduct = (data) => {
-    const url_product_add = "http://api.herbshire.in/product";
+    const url_product_add = "https://api.herbshire.in/product";
     const config = {
       headers: {
         Authorization: `Bearer ${auth.user.token}`,
@@ -244,7 +244,8 @@ export default function AddProducts() {
       .catch(function (error) {
         console.log(error);
         toastMessage("error", "Product Not Added !");
-        const deleteFile_url = "http://api.herbshire.in/api/storage/deleteFile";
+        const deleteFile_url =
+          "https://api.herbshire.in/api/storage/deleteFile";
 
         console.log(uploadedImages);
         uploadedImages.forEach((image) => {

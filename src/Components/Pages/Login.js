@@ -33,7 +33,7 @@ export default function Login() {
     const number = event.target.number.value;
     event.target.number.value = "";
     phone.current = number;
-    const url = "http://api.herbshire.in/otp";
+    const url = "https://api.herbshire.in/otp";
     const config = {
       headers: {
         Accept: "Application/json",
@@ -64,7 +64,7 @@ export default function Login() {
     event.preventDefault();
     const otp = event.target.number.value;
     console.log(phone.current, otp);
-    const url = "http://api.herbshire.in/otp";
+    const url = "https://api.herbshire.in/otp";
     const config = {
       headers: {
         Accept: "Application/json",
