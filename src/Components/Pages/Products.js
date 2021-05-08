@@ -23,6 +23,7 @@ import React, { useEffect } from "react";
 import ReactCharts from "../Views/ReactCharts";
 import { BsChevronDown } from "react-icons/bs";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 export default function Products() {
   const [isSmallerThan600] = useMediaQuery("(max-width: 600px)");
@@ -130,9 +131,15 @@ export default function Products() {
   return (
     <Box w="100%" p="4">
       <Box flex="1" flexDirection="row" mt="8">
-        <Text mb="2" fontSize="sm" fontWeight="semibold">
-          ALL CUSTOMERS
-        </Text>
+        <Flex>
+          <Text mb="2" fontSize="sm" fontWeight="semibold">
+            ALL CUSTOMERS
+          </Text>
+          <Spacer />
+          <Button backgroundColor="green.400" as={Link} to="/add-products">
+            Add Product
+          </Button>
+        </Flex>
         <Flex pt="2" pb="1">
           <Flex ml="5">
             <Center>
