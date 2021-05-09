@@ -96,14 +96,14 @@ export default function Sidenav() {
       </NavLink>
       <NavLink
         className={
-          selectedNavItem === "delivries"
+          selectedNavItem === "deliveries"
             ? "side-nav-content side-nav-content-selected side-nav-icon-selected"
             : deliveryIconClassName
         }
         onMouseEnter={DeliveryIconHoverColor}
         onMouseLeave={DeliveryIconNormalColor}
         onClick={() => {
-          setSelectedNavItem("delivries");
+          setSelectedNavItem("deliveries");
         }}
         to="/deliveries"
       >

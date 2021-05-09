@@ -17,14 +17,13 @@ export default function Login() {
   const phone = useRef();
   const toast = useToast();
 
-  const toastMessage = (msg, error) => {
-    // const statuses = ["success", "error", "warning", "info"];
+  const toastMessage = (status, msg) => {
     toast({
-      title: msg,
-      //   description: msg,
-      status: error,
+      description: msg,
+      status: status,
       duration: 9000,
       isClosable: true,
+      position: "bottom-right",
     });
   };
 
@@ -54,6 +53,7 @@ export default function Login() {
       .then((res) => {
         console.log(res.data);
         setOtpRequested(true);
+        toastMessage("success", `Otp sent to ${number}.`);
       })
       .catch((reason) => {
         console.log(reason);
@@ -84,11 +84,11 @@ export default function Login() {
         const data = res.data.body;
         console.log(data);
         if (data.otpStatus === "VALID") {
-          toastMessage(data.otpStatus + " otp!", "success");
+          toastMessage("success", data.otpStatus + " otp!");
           setAuth(data);
           localStorage.setItem("auth", JSON.stringify(data));
         } else {
-          toastMessage(data.otpStatus + " otp!", "error");
+          toastMessage("error", data.otpStatus + " otp!");
         }
       })
       .catch((reason) => {

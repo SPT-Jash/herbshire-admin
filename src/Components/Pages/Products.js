@@ -1,3 +1,4 @@
+import "./pages.css";
 import {
   Box,
   Spacer,
@@ -18,116 +19,62 @@ import {
   Tbody,
   Td,
   Avatar,
+  Stack,
+  Slider,
+  SliderTrack,
+  SliderFilledTrack,
 } from "@chakra-ui/react";
-import React, { useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import ReactCharts from "../Views/ReactCharts";
 import { BsChevronDown } from "react-icons/bs";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { GrDeliver } from "react-icons/gr";
+import { FaShoppingCart } from "react-icons/fa";
+import { Context } from "../Data/Context";
 
 export default function Products() {
+  const { auth } = useContext(Context);
   const [isSmallerThan600] = useMediaQuery("(max-width: 600px)");
-  const orderData = [
-    {
-      profileSrc: "https://bit.ly/dan-abramov",
-      receiver: "Andrew",
-      days: "Today",
-      status: "Pending",
-      date: "01 Apr 2020",
-      amount: "75.65",
-    },
-    {
-      profileSrc: "https://bit.ly/dan-abramov",
-      receiver: "Andrew",
-      days: "Today",
-      status: "Cancel",
-      date: "01 Apr 2020",
-      amount: "75",
-    },
-    {
-      profileSrc: "https://bit.ly/dan-abramov",
-      receiver: "Andrew",
-      days: "Today",
-      status: "Pending",
-      date: "01 Apr 2020",
-      amount: "75.65",
-    },
-    {
-      profileSrc: "https://bit.ly/dan-abramov",
-      receiver: "Andrew",
-      days: "Today",
-      status: "Delivered",
-      date: "01 Apr 2020",
-      amount: "75",
-    },
-    {
-      profileSrc: "https://bit.ly/dan-abramov",
-      receiver: "Andrew",
-      days: "Today",
-      status: "Delivered",
-      date: "01 Apr 2020",
-      amount: "75.65",
-    },
-    {
-      profileSrc: "https://bit.ly/dan-abramov",
-      receiver: "Andrew",
-      days: "Today",
-      status: "Delivered",
-      date: "01 Apr 2020",
-      amount: "75",
-    },
-    {
-      profileSrc: "https://bit.ly/dan-abramov",
-      receiver: "Andrew",
-      days: "Today",
-      status: "Pending",
-      date: "01 Apr 2020",
-      amount: "75.65",
-    },
-  ];
+  const [products, setProducts] = useState([]);
+  const [totalPages, setTotalPages] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  useEffect(() => {
+    const url = "https://api.herbshire.in/product";
+    const config = {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
+      },
+      params: {
+        filter: {},
+        ascSort: true,
+        pageSize: 10,
+        pageNumber: currentPage,
+      },
+    };
+    axios
+      .get(url, config)
+      .then(function (response) {
+        const data = response.data.body.content;
+        setTotalPages(response.data.body.totalPages);
+        console.log(data);
+        setProducts(data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
+      .then(function () {
+        // always executed
+      });
+  }, [currentPage]);
 
-  // useEffect(() => {
-  //     const url = "http://api.herbshire.in/product";
-  //     const data = {
-  //         "id": 0,
-  //         "productName": "Test Product 1",
-  //         "weight": 1,
-  //         "quantity": 1,
-  //         "price": 1,
-  //         "discount": 1,
-  //         "description": "Description",
-  //         "displayUrl": "https://picsum.photos/200",
-  //         "freshTill": 0,
-  //         "count": 0,
-  //         "productImagesDTOS": [
-  //             {
-  //                 "id": 0,
-  //                 "url": "https://picsum.photos/200"
-  //             },
-  //             {
-  //                 "id": 1,
-  //                 "url": "https://picsum.photos/200"
-  //             }
-  //         ],
-  //         "gst_dto": {
-  //             "id": 0,
-  //             "cgst": 0,
-  //             "sgst": 0,
-  //             "igst": 0,
-  //             "description": "description"
-  //         }
-  //     };
-  //     axios.post(url, data)
-  //         .then(function (response) {
-  //             console.log(response);
-  //         })
-  //         .catch(function (error) {
-  //             console.log(error);
-  //         })
-  //         .then(function () {
-  //             // always executed
-  //         });
-  // }, [])
+  const pageArray = [];
+  for (let index = 0; index < totalPages; index++) {
+    pageArray.push(index + 1);
+  }
+
+  console.log(totalPages, pageArray);
+
   return (
     <Box w="100%" p="4">
       <Box flex="1" flexDirection="row" mt="8">
@@ -222,33 +169,56 @@ export default function Products() {
             </Menu>
           </Box>
         </Flex>
-        <Box h={isSmallerThan600 ? "300px" : "400px"}>
+        <Box h={isSmallerThan600 ? "300px" : "300px"}>
           <ReactCharts type={"normal"} />
         </Box>
         {/* <Chart/> */}
       </Box>
-
-      <Box overflowX="auto">
+      <Flex mt="4" mr="4">
+        <Text fontSize="large" fontWeight="semibold" color="#4C4C66">
+          Products
+        </Text>
+        <Spacer />
+        <Menu>
+          <MenuButton
+            as={Button}
+            rightIcon={<BsChevronDown />}
+            borderColor="#E2E2E8"
+            p="2"
+          >
+            {currentPage}
+          </MenuButton>
+          <MenuList fontSize="sm" onSelect={(e) => console.log(e.target.value)}>
+            {pageArray.map((page) => {
+              console.log(page);
+              return (
+                <MenuItem onClick={() => setCurrentPage(page)}>{page}</MenuItem>
+              );
+            })}
+          </MenuList>
+        </Menu>
+      </Flex>
+      <Box overflow="auto" className="hide-scroll">
         <Table variant="simple">
           <Thead>
             <Tr>
-              <Th color="#828194">Receiver</Th>
-              <Th color="#828194">Days</Th>
-              <Th color="#828194">Status</Th>
-              <Th color="#828194">Date</Th>
-              <Th color="#828194">Amount</Th>
+              <Th color="blackAlpha.500">productName</Th>
+              <Th color="blackAlpha.500">weight</Th>
+              <Th color="blackAlpha.500">quantity</Th>
+              <Th color="blackAlpha.500">price</Th>
+              <Th color="blackAlpha.500">discount</Th>
+              <Th color="blackAlpha.500">freshTill</Th>
+              <Th color="blackAlpha.500">count</Th>
+              <Th color="blackAlpha.500">calories</Th>
+              <Th color="blackAlpha.500">proteins</Th>
+              <Th color="blackAlpha.500">fats</Th>
+              <Th color="blackAlpha.500">curbs</Th>
             </Tr>
           </Thead>
           <Tbody>
-            {orderData.length < 1
+            {products.length < 1
               ? "No Data found :("
-              : orderData.map((order, key) => {
-                  const orderStatusColour =
-                    order.status === "Delivered"
-                      ? "#53C3AA"
-                      : order.status === "Pending"
-                      ? "#EEA662"
-                      : "#FC6984";
+              : products.map((product, key) => {
                   return (
                     <Tr fontSize="sm" className="order-table-row">
                       <Td>
@@ -257,31 +227,124 @@ export default function Products() {
                             size="xs"
                             borderRadius="5"
                             name="Andrew"
-                            src={order.profileSrc}
+                            src={product.displayUrl}
                           />
-                          <Text ml="3" color="#828194" fontSize="large">
-                            {order.receiver}
+                          <Text ml="3" color="#828194" whiteSpace="nowrap">
+                            {product.productName}
                           </Text>
                         </Flex>
                       </Td>
-                      <Td color="#B7B7C2" fontSize="large">
-                        {order.days}
-                      </Td>
-                      <Td color={orderStatusColour} fontSize="large">
-                        {order.status}
-                      </Td>
-                      <Td color="#828194" fontSize="large" whiteSpace="nowrap">
-                        {order.date}
-                      </Td>
-                      <Td color="#53C3AA" fontSize="large" whiteSpace="nowrap">
-                        $ {order.amount}
-                      </Td>
+                      <Td color="blackAlpha.700">{product.weight}</Td>
+                      <Td color="blackAlpha.700">{product.quantity}</Td>
+                      <Td color="blackAlpha.700">{product.price}</Td>
+                      <Td color="blackAlpha.700">{product.discount}</Td>
+                      <Td color="blackAlpha.700">{product.freshTill}</Td>
+                      <Td color="blackAlpha.700">{product.count}</Td>
+                      <Td color="blackAlpha.700">{product.calories}</Td>
+                      <Td color="blackAlpha.700">{product.proteins}</Td>
+                      <Td color="blackAlpha.700">{product.fats}</Td>
+                      <Td color="blackAlpha.700">{product.curbs}</Td>
                     </Tr>
                   );
                 })}
           </Tbody>
         </Table>
       </Box>
+      Trending Products
+      <Stack spacing="20px" ml="4" pt="4">
+        <Flex alignItems="center">
+          <Flex
+            alignItems="center"
+            justifyContent="center"
+            h="50px"
+            w="50px"
+            borderRadius="5"
+            bgGradient="linear(to-r, #FF7979, #FCAE73)"
+            className="delivery-icon"
+          >
+            <GrDeliver />
+          </Flex>
+          <Flex
+            flexDirection="column"
+            justifyContent="center"
+            w="100%"
+            h="48px"
+            ml="4"
+          >
+            <Slider
+              aria-label="slider-ex-1"
+              defaultValue={21}
+              isReadOnly={true}
+              mt="2"
+            >
+              <SliderTrack height="3" borderRadius="lg">
+                <SliderFilledTrack
+                  borderRadius="lg"
+                  bgGradient="linear(to-r, #FF7979, #FCAE73)"
+                />
+              </SliderTrack>
+            </Slider>
+            <Text mt="2" fontSize="md" color="#B7B7C2">
+              Deliveries
+            </Text>
+          </Flex>
+          <Text
+            alignSelf="flex-start"
+            ml="2"
+            color="#828194"
+            fontSize="md"
+            mt="1"
+          >
+            {21}%
+          </Text>
+        </Flex>
+        <Flex alignItems="center">
+          <Flex
+            alignItems="center"
+            justifyContent="center"
+            h="50px"
+            w="50px"
+            borderRadius="5"
+            bgGradient="linear(to-r, #24DABE, #45AFEE)"
+            className="shopping-cart-icon"
+          >
+            <FaShoppingCart />
+          </Flex>
+          <Flex
+            flexDirection="column"
+            justifyContent="center"
+            w="100%"
+            h="48px"
+            ml="4"
+          >
+            <Slider
+              aria-label="slider-ex-1"
+              defaultValue={86}
+              isReadOnly={true}
+              mt="2"
+            >
+              <SliderTrack height="3" borderRadius="lg">
+                <SliderFilledTrack
+                  borderRadius="lg"
+                  bgGradient="linear(to-r, #24DABE, #45AFEE)"
+                />
+              </SliderTrack>
+            </Slider>
+            <Text mt="2" fontSize="md" color="#B7B7C2">
+              Pending
+            </Text>
+          </Flex>
+          <Text
+            alignSelf="flex-start"
+            ml="2"
+            color="#828194"
+            fontSize="md"
+            mt="1"
+          >
+            {86}%
+          </Text>
+        </Flex>
+      </Stack>
     </Box>
   );
 }
