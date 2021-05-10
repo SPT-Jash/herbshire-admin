@@ -6,7 +6,13 @@ import { Select } from "@chakra-ui/select";
 import { Tag, TagCloseButton, TagLabel } from "@chakra-ui/tag";
 import { useToast } from "@chakra-ui/toast";
 import axios from "axios";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { Context } from "../Data/Context";
 import FormInput from "../Views/FormInput";
 
@@ -77,8 +83,7 @@ export default function AddProducts() {
     const price = formData.price.value;
     const discount = formData.discount.value;
     const weight = formData.weight.value;
-    const displayUrl = uploadedImages[0];
-    // const count = formData.count.value;
+    const count = formData.count.value;
     const calories = formData.calories.value;
     const proteins = formData.proteins.value;
     const fats = formData.fats.value;
@@ -179,10 +184,10 @@ export default function AddProducts() {
     axios
       .post(url, formData, config)
       .then((res) => {
-        console.log(res.data);
-        setUploadedImages([...res.data]);
+        console.log("Res image: ", [...res.data]);
+        const responseImageUrls = res.data;
         toastMessage("success", "Images Uploaded !");
-        addProduct(data);
+        addProduct(data, responseImageUrls);
       })
       .catch((reason) => {
         console.log(reason);
@@ -203,7 +208,7 @@ export default function AddProducts() {
     setImages([...tempImages]);
   };
 
-  const addProduct = (data) => {
+  const addProduct = (data, tempImages) => {
     const url_product_add = "https://api.herbshire.in/product";
     const config = {
       headers: {
@@ -214,7 +219,6 @@ export default function AddProducts() {
     };
 
     let productImagesDTOS = [];
-    const tempImages = uploadedImages;
     tempImages.forEach((image, id) => {
       productImagesDTOS.push({
         id,
@@ -226,11 +230,11 @@ export default function AddProducts() {
 
     const formData = form.current;
 
-    console.log(data);
+    console.log("Add Product data: ", data);
     axios
       .post(url_product_add, data, config)
       .then(function (response) {
-        console.log(response);
+        console.log("Add product response: ", response);
         toastMessage("success", "Product Added !");
         formData.reset();
         setImages([]);
@@ -319,6 +323,7 @@ export default function AddProducts() {
 
           <Flex>
             {/* <FormInput name="count" label="count" type="number" /> */}
+            <FormInput name="count" label="count" type="number" />
             <FormInput name="quantity" label="quantity" type="number" />
             <FormInput name="price" label="price" type="number" />
             <FormInput name="discount" label="discount" type="number" />
