@@ -44,9 +44,10 @@ export default function AddProducts() {
       .catch((r) => console.log(r));
   }, []);
 
-  const toastMessage = (status, msg) => {
+  const toastMessage = (status, title, description) => {
     toast({
-      description: msg,
+      title: title,
+      description: description ? description : "",
       status: status,
       duration: 9000,
       isClosable: true,
@@ -71,24 +72,28 @@ export default function AddProducts() {
       if (!duplicate) tempImages.push(file);
     }
     setImages([...tempImages]);
-    console.log(tempImages);
+    console.log("Add media", tempImages);
     return;
   };
-  const checkFormData = () => {
+  const checkFormData = useCallback(() => {
     const formData = form.current;
 
-    const productName = formData.productName.value;
-    const freshTill = formData.freshTill.value;
-    const quantity = formData.quantity.value;
-    const price = formData.price.value;
-    const discount = formData.discount.value;
-    const weight = formData.weight.value;
-    const count = formData.count.value;
-    const calories = formData.calories.value;
-    const proteins = formData.proteins.value;
-    const fats = formData.fats.value;
-    const curbs = formData.curbs.value;
-    const description = formData.description.value;
+    const productName = formData.productName.value
+      ? formData.productName.value
+      : "";
+    const freshTill = formData.freshTill.value ? formData.freshTill.value : "";
+    const quantity = formData.quantity.value ? formData.quantity.value : "";
+    const price = formData.price.value ? formData.price.value : "";
+    const discount = formData.discount.value ? formData.discount.value : "";
+    const weight = formData.weight.value ? formData.weight.value : "";
+    const count = formData.count.value ? formData.count.value : "";
+    const calories = formData.calories.value ? formData.calories.value : "";
+    const proteins = formData.proteins.value ? formData.proteins.value : "";
+    const fats = formData.fats.value ? formData.fats.value : "";
+    const curbs = formData.curbs.value ? formData.curbs.value : "";
+    const description = formData.description.value
+      ? formData.description.value
+      : "";
     const gst_dto = gstList[formData.gst_dto.value];
 
     if (productName.trim() === "") {
@@ -117,6 +122,10 @@ export default function AddProducts() {
     }
 
     if (calories.trim() === "") {
+      toastMessage("error", "calories Cannot be null !");
+      return false;
+    }
+    if (count.trim() === "") {
       toastMessage("error", "calories Cannot be null !");
       return false;
     }
@@ -161,7 +170,7 @@ export default function AddProducts() {
       gst_dto,
     };
     return data;
-  };
+  }, [gstList, images]);
   const handelFormSubmit = (event) => {
     event.preventDefault();
     const data = checkFormData();
@@ -215,6 +224,7 @@ export default function AddProducts() {
         Authorization: `Bearer ${auth.user.token}`,
         Accept: "*/*",
         "content-type": "application/json",
+        "access-control-allow-origin": "*",
       },
     };
 
@@ -231,6 +241,25 @@ export default function AddProducts() {
     const formData = form.current;
 
     console.log("Add Product data: ", data);
+
+    // var myHeaders = new Headers();
+    // myHeaders.append("Authorization", `Bearer ${auth.user.token}`);
+    // myHeaders.append("Content-Type", "application/json");
+
+    // var raw = JSON.stringify(data);
+
+    // var requestOptions = {
+    //   method: "POST",
+    //   headers: myHeaders,
+    //   body: raw,
+    //   redirect: "follow",
+    // };
+
+    // fetch("http://api.herbshire.in/product", requestOptions)
+    //   .then((response) => response.text())
+    //   .then((result) => console.log(result))
+    //   .catch((error) => console.log("Add product error", error.response));
+
     axios
       .post(url_product_add, data, config)
       .then(function (response) {
@@ -240,9 +269,10 @@ export default function AddProducts() {
         setImages([]);
         setUploadedImages([]);
       })
-      .catch(function (error) {
-        console.log(error);
-        toastMessage("error", "Product Not Added !");
+      .catch((error) => {
+        const msg = error.response.data.message;
+        console.error("Add Product response : ", msg);
+        toastMessage("error", "Product Not Added !", msg);
         deleteUploadedImages(tempImages);
       })
       .then(function () {

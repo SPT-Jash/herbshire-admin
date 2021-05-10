@@ -23,6 +23,8 @@ import {
   Slider,
   SliderTrack,
   SliderFilledTrack,
+  HStack,
+  useToast,
 } from "@chakra-ui/react";
 import React, { useContext, useEffect, useState } from "react";
 import ReactCharts from "../Views/ReactCharts";
@@ -32,6 +34,7 @@ import { Link } from "react-router-dom";
 import { GrDeliver } from "react-icons/gr";
 import { FaShoppingCart } from "react-icons/fa";
 import { Context } from "../Data/Context";
+import { MdDeleteForever, MdEdit } from "react-icons/md";
 
 export default function Products() {
   const { auth } = useContext(Context);
@@ -39,6 +42,21 @@ export default function Products() {
   const [products, setProducts] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
+  const toast = useToast();
+  // const [productUpdateButtonHover, setProductUpdateButtonHover] = useState(-1);
+  // const [productDeleteButtonHover, setProductDeleteButtonHover] = useState(-1);
+
+  const toastMessage = (status, title, description) => {
+    toast({
+      title: title,
+      description: description ? description : "",
+      status: status,
+      duration: 9000,
+      isClosable: true,
+      position: "bottom-right",
+    });
+  };
+
   useEffect(() => {
     const url = "https://api.herbshire.in/product";
     const config = {
@@ -74,6 +92,32 @@ export default function Products() {
   }
 
   console.log(totalPages, pageArray);
+
+  const HandleProductDelete = (key) => {
+    const id = products[key].id;
+    const url_product_delete =
+      "https://api.herbshire.in/product" + `?productID=${id}`;
+    const config = {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
+      },
+    };
+    axios
+      .delete(url_product_delete, config)
+      .then((res) => {
+        const resData = res.data;
+        if (resData.success) {
+          toastMessage("success", `${resData.body.productName} Deleted !`);
+          const tempProducts = products;
+          tempProducts.splice(key, 1);
+          setProducts([...tempProducts]);
+        }
+      })
+      .catch((reason) => {
+        console.log(reason);
+        toastMessage("error", "Product Not Deleted !");
+      });
+  };
 
   return (
     <Box w="100%" p="4">
@@ -213,6 +257,7 @@ export default function Products() {
               <Th color="blackAlpha.500">proteins</Th>
               <Th color="blackAlpha.500">fats</Th>
               <Th color="blackAlpha.500">curbs</Th>
+              <Th color="blackAlpha.500">Actions</Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -244,6 +289,18 @@ export default function Products() {
                       <Td color="blackAlpha.700">{product.proteins}</Td>
                       <Td color="blackAlpha.700">{product.fats}</Td>
                       <Td color="blackAlpha.700">{product.curbs}</Td>
+                      <Td as={HStack}>
+                        <Button bg="transparent" color="green.400">
+                          <MdEdit size="20px" />
+                        </Button>
+                        <Button
+                          bg="transparent"
+                          color="red.400"
+                          onClick={() => HandleProductDelete(key)}
+                        >
+                          <MdDeleteForever size="25px" color="red" />
+                        </Button>
+                      </Td>
                     </Tr>
                   );
                 })}
