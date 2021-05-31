@@ -27,8 +27,9 @@ export default function Routes() {
         <Route path="/subscription" component={Subscription} />
         <Route path="/deliveries" component={Delivries} />
         <Route path="/customers" component={Customers} />
-        <Route path="/products" component={Products} />
+        <Route path="/products" exact component={Products} />
         <Route path="/add-products" component={AddProducts} />
+        <Route path="/update-product" component={AddProducts} />
         <Route render={() => <h1>404: page not found</h1>} />
       </Switch>
     );

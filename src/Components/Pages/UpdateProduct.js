@@ -34,6 +34,32 @@ export default function AddProducts() {
     const config = {
       headers: {
         Authorization: `Bearer ${auth.user.token}`,
+      },
+      params: {
+        filter: {},
+        ascSort: true,
+        pageSize: 1,
+        pageNumber: 1,
+      },
+    };
+    axios
+      .get(PRODUCT_URL, config)
+      .then(function (response) {
+        const data = response.data.body.content;
+        console.log("Update product", data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
+      .then(function () {
+        // always executed
+      });
+  }, []);
+
+  useEffect(() => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
         Accept: "*/*",
         "Content-Type": "application/json",
       },
