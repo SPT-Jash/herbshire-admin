@@ -5,7 +5,7 @@ export const Context = createContext("");
 export const ContextProvider = (props) => {
   const [selectedNavItem, setSelectedNavItem] = useState();
   const [auth, setAuth] = useState();
-
+  
   useEffect(() => {
     const authData = JSON.parse(localStorage.getItem("auth"));
     console.log("Auth: " + authData);
