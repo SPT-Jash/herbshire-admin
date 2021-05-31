@@ -9,6 +9,7 @@ import { Box } from "@chakra-ui/layout";
 import { useToast } from "@chakra-ui/toast";
 import axios from "axios";
 import React, { useContext, useRef, useState } from "react";
+import { OTP_URL } from "../Config/Apis";
 import { Context } from "../Data/Context";
 
 export default function Login() {
@@ -32,7 +33,7 @@ export default function Login() {
     const number = event.target.number.value;
     event.target.number.value = "";
     phone.current = number;
-    const url = "https://api.herbshire.in/otp";
+
     const config = {
       headers: {
         Accept: "Application/json",
@@ -42,7 +43,7 @@ export default function Login() {
 
     axios
       .get(
-        url,
+        OTP_URL,
         {
           params: {
             username: number,
@@ -64,7 +65,7 @@ export default function Login() {
     event.preventDefault();
     const otp = event.target.number.value;
     console.log(phone.current, otp);
-    const url = "https://api.herbshire.in/otp";
+    const url = OTP_URL;
     const config = {
       headers: {
         Accept: "Application/json",
@@ -83,6 +84,10 @@ export default function Login() {
       .then((res) => {
         const data = res.data.body;
         console.log(data);
+        if (data.userStatus !== "EXISTINGUSER") {
+          toastMessage("error", "User does not exist !");
+          return;
+        }
         if (data.otpStatus === "VALID") {
           toastMessage("success", data.otpStatus + " otp!");
           setAuth(data);

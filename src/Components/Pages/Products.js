@@ -35,6 +35,7 @@ import { GrDeliver } from "react-icons/gr";
 import { FaShoppingCart } from "react-icons/fa";
 import { Context } from "../Data/Context";
 import { MdDeleteForever, MdEdit } from "react-icons/md";
+import { PRODUCT_DELETE_URL, PRODUCT_URL } from "../Config/Apis";
 
 export default function Products() {
   const { auth } = useContext(Context);
@@ -58,7 +59,7 @@ export default function Products() {
   };
 
   useEffect(() => {
-    const url = "https://api.herbshire.in/product";
+    const url = PRODUCT_URL;
     const config = {
       headers: {
         Authorization: `Bearer ${auth.user.token}`,
@@ -95,15 +96,13 @@ export default function Products() {
 
   const HandleProductDelete = (key) => {
     const id = products[key].id;
-    const url_product_delete =
-      "https://api.herbshire.in/product" + `?productID=${id}`;
     const config = {
       headers: {
         Authorization: `Bearer ${auth.user.token}`,
       },
     };
     axios
-      .delete(url_product_delete, config)
+      .delete(PRODUCT_DELETE_URL + id, config)
       .then((res) => {
         const resData = res.data;
         if (resData.success) {
@@ -113,9 +112,18 @@ export default function Products() {
           setProducts([...tempProducts]);
         }
       })
-      .catch((reason) => {
-        console.log(reason);
-        toastMessage("error", "Product Not Deleted !");
+      .catch((error) => {
+        const errorMessage = error.response.data.message;
+        console.log(errorMessage);
+        if (errorMessage === "Foreign key violation") {
+          toastMessage(
+            "error",
+            "Product Not Deleted !",
+            "Product is subscribed by users."
+          );
+        } else {
+          toastMessage("error", "Product Not Deleted !");
+        }
       });
   };
 
@@ -290,7 +298,12 @@ export default function Products() {
                       <Td color="blackAlpha.700">{product.fats}</Td>
                       <Td color="blackAlpha.700">{product.curbs}</Td>
                       <Td as={HStack}>
-                        <Button bg="transparent" color="green.400">
+                        <Button
+                          bg="transparent"
+                          color="green.400"
+                          as={Link}
+                          to="/update-product"
+                        >
                           <MdEdit size="20px" />
                         </Button>
                         <Button

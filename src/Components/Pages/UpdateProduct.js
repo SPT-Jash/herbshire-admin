@@ -22,13 +22,39 @@ import {
 import { Context } from "../Data/Context";
 import FormInput from "../Views/FormInput";
 
-export default function AddProducts() {
+export default function UpdateProduct() {
   const { auth } = useContext(Context);
   const form = useRef();
   const [images, setImages] = useState([]);
   const [uploadedImages, setUploadedImages] = useState([]);
   const [gstList, setGstList] = useState([]);
   const toast = useToast();
+
+  useEffect(() => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
+      },
+      params: {
+        filter: {},
+        ascSort: true,
+        pageSize: 1,
+        pageNumber: 1,
+      },
+    };
+    axios
+      .get(PRODUCT_URL, config)
+      .then(function (response) {
+        const data = response.data.body.content;
+        console.log("Update product", data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
+      .then(function () {
+        // always executed
+      });
+  }, []);
 
   useEffect(() => {
     const config = {
