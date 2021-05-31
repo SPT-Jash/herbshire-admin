@@ -35,6 +35,7 @@ import { GrDeliver } from "react-icons/gr";
 import { FaShoppingCart } from "react-icons/fa";
 import { Context } from "../Data/Context";
 import { MdDeleteForever, MdEdit } from "react-icons/md";
+import { PRODUCT_DELETE_URL } from "../Apis";
 
 export default function Products() {
   const { auth } = useContext(Context);
@@ -94,16 +95,14 @@ export default function Products() {
   console.log(totalPages, pageArray);
 
   const HandleProductDelete = (key) => {
-    const id = products[key].id;
-    const url_product_delete =
-      "https://api.herbshire.in/product" + `?productID=${id}`;
+    const id = products[key].id;    
     const config = {
       headers: {
         Authorization: `Bearer ${auth.user.token}`,
       },
     };
     axios
-      .delete(url_product_delete, config)
+      .delete(PRODUCT_DELETE_URL+id, config)
       .then((res) => {
         const resData = res.data;
         if (resData.success) {
@@ -113,9 +112,18 @@ export default function Products() {
           setProducts([...tempProducts]);
         }
       })
-      .catch((reason) => {
-        console.log(reason);
-        toastMessage("error", "Product Not Deleted !");
+      .catch((error) => {
+        const errorMessage = error.response.data.message;
+        console.log(errorMessage);
+        if (errorMessage === "Foreign key violation") {
+          toastMessage(
+            "error",
+            "Product Not Deleted !",
+            "Product is subscribed by users."
+          );
+        } else {
+          toastMessage("error", "Product Not Deleted !");
+        }
       });
   };
 

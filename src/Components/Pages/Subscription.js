@@ -172,60 +172,9 @@ export default function Subscription() {
                     </Menu>
                 </Flex>
 
-                <Box >
+                <Box overflow="auto" className="hide-scroll">
                     {
-                        isSmallerThan700 ?
-                            <Flex>
-                                <Table variant="simple" size="sm" w="auto">
-                                    <Thead>
-                                        <Tr>
-                                            <Th color="#828194">Receiver</Th>
-                                        </Tr>
-                                    </Thead>
-                                    <Tbody>
-                                        {subscriptionData.map((subscription, key) => {
-                                            return (
-                                                <Tr h="50px" key={key}>
-                                                    <Td>
-                                                        <Flex alignItems="flex-end">
-                                                            <Avatar size="xs" borderRadius="5" name="Andrew" src={subscription.profileSrc} />
-                                                            <Text ml="3" color="#828194">{subscription.receiver}</Text>
-                                                        </Flex>
-                                                    </Td>
-                                                </Tr>
-                                            )
-                                        })}
-                                    </Tbody>
-                                </Table>
-                                <Box overflowX="auto">
-
-                                    <Table variant="simple" size="sm">
-                                        <Thead>
-                                            <Tr>
-                                                <Th color="#828194">Subscription</Th>
-                                                <Th color="#828194">Date</Th>
-                                                <Th color="#828194">Frequency</Th>
-                                                <Th color="#828194">Amount</Th>
-                                            </Tr>
-                                        </Thead>
-                                        <Tbody>
-                                            {subscriptionData.map((subscription, key) => {
-                                                return (
-                                                    <Tr h="50px" className="order-table-row" key={key}>
-                                                        <Td color="#B7B7C2">{subscription.period}</Td>
-                                                        <Td color="#B7B7C2" whiteSpace="nowrap">{subscription.date}</Td>
-                                                        <Td color="#B7B7C2">{subscription.frequency}</Td>
-                                                        <Td color="#53C3AA" whiteSpace="nowrap">$ {subscription.amount}</Td>
-                                                    </Tr>
-                                                )
-                                            })}
-                                        </Tbody>
-                                    </Table>
-                                </Box>
-                            </Flex>
-
-                            :
-
+                        
                             <Table variant="simple">
                                 <Thead>
                                     <Tr>

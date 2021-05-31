@@ -13,6 +13,7 @@ import React, {
   useRef,
   useState,
 } from "react";
+import { DELETE_FILE_URL, GST_URL, PRODUCT_URL, UPLOAD_FILE_URL } from "../Apis";
 import { Context } from "../Data/Context";
 import FormInput from "../Views/FormInput";
 
@@ -24,8 +25,7 @@ export default function AddProducts() {
   const [gstList, setGstList] = useState([]);
   const toast = useToast();
 
-  useEffect(() => {
-    const url = "https://api.herbshire.in/gst";
+  useEffect(() => {    
     const config = {
       headers: {
         Authorization: `Bearer ${auth.user.token}`,
@@ -35,7 +35,7 @@ export default function AddProducts() {
     };
 
     axios
-      .get(url, config)
+      .get(GST_URL, config)
       .then((res) => {
         const list = res.data.body.content;
         console.log(list);
@@ -94,7 +94,7 @@ export default function AddProducts() {
     const description = formData.description.value
       ? formData.description.value
       : "";
-    const gst_dto = gstList[formData.gst_dto.value];
+    const gst = gstList[formData.gst.value];
 
     if (productName.trim() === "") {
       toastMessage("error", "Product Name Cannot be null !");
@@ -145,7 +145,7 @@ export default function AddProducts() {
       toastMessage("error", "description Cannot be null !");
       return false;
     }
-    if (!gst_dto) {
+    if (!gst) {
       toastMessage("error", "Tax Cannot be null !");
       return false;
     }
@@ -167,17 +167,18 @@ export default function AddProducts() {
       proteins,
       fats,
       curbs,
-      gst_dto,
+      gst,
     };
     return data;
   }, [gstList, images]);
+
   const handelFormSubmit = (event) => {
     event.preventDefault();
     const data = checkFormData();
     if (!data) {
       return;
     }
-    const url = "https://api.herbshire.in/api/storage/uploadMultipleFile";
+    
     const config = {
       headers: {
         Authorization: `Bearer ${auth.user.token}`,
@@ -191,7 +192,7 @@ export default function AddProducts() {
     });
     console.log("Auth: ", auth.user.token);
     axios
-      .post(url, formData, config)
+      .post(UPLOAD_FILE_URL, formData, config)
       .then((res) => {
         console.log("Res image: ", [...res.data]);
         const responseImageUrls = res.data;
@@ -217,8 +218,7 @@ export default function AddProducts() {
     setImages([...tempImages]);
   };
 
-  const addProduct = (data, tempImages) => {
-    const url_product_add = "https://api.herbshire.in/product";
+  const addProduct = (data, tempImages) => {    
     const config = {
       headers: {
         Authorization: `Bearer ${auth.user.token}`,
@@ -261,7 +261,7 @@ export default function AddProducts() {
     //   .catch((error) => console.log("Add product error", error.response));
 
     axios
-      .post(url_product_add, data, config)
+      .post(PRODUCT_URL, data, config)
       .then(function (response) {
         console.log("Add product response: ", response);
         toastMessage("success", "Product Added !");
@@ -280,9 +280,7 @@ export default function AddProducts() {
       });
   };
 
-  const deleteUploadedImages = (images) => {
-    const deleteFile_url = "https://api.herbshire.in/api/storage/deleteFile";
-
+  const deleteUploadedImages = (images) => {    
     console.log(uploadedImages);
     images.forEach((image) => {
       var myHeaders = new Headers();
@@ -298,7 +296,7 @@ export default function AddProducts() {
         redirect: "follow",
       };
 
-      fetch(deleteFile_url, requestOptions)
+      fetch(DELETE_FILE_URL, requestOptions)
         .then((response) => {
           response.text();
           toastMessage("info", "Image deteled !");
@@ -367,7 +365,7 @@ export default function AddProducts() {
               >
                 Tax
               </Text>
-              <Select name="gst_dto" placeholder="Select option">
+              <Select name="gst" placeholder="Select option">
                 {gstList.map((gst, key) => {
                   return (
                     <option key={key} value={key}>
