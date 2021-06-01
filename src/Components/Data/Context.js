@@ -6,6 +6,7 @@ export const ContextProvider = (props) => {
   const [selectedNavItem, setSelectedNavItem] = useState();
   const [auth, setAuth] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [viewAddress, setviewAddress] = useState(false);
 
   useEffect(() => {
     const authData = JSON.parse(localStorage.getItem("auth"));
@@ -25,6 +26,8 @@ export const ContextProvider = (props) => {
         setAuth,
         isLoading,
         setIsLoading,
+        viewAddress,
+        setviewAddress
       }}
     >
       {props.children}
