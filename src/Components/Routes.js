@@ -11,9 +11,19 @@ import Login from "./Pages/Login";
 import { Context } from "./Data/Context";
 import AddCustomer from "./Pages/AddCustomer";
 import UpdateProduct from "./Pages/UpdateProduct";
-export default function Routes() {
-  const { auth } = useContext(Context);
+import { Center, Spinner } from "@chakra-ui/react";
 
+export default function Routes() {
+  const { auth, isLoading } = useContext(Context);
+
+  if (!auth && isLoading) {
+    return (
+      <Center>
+        <Spinner />
+      </Center>
+    );
+  }
+  console.log(auth);
   if (!auth) {
     return (
       <Switch>

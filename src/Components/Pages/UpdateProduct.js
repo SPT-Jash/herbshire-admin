@@ -1,5 +1,5 @@
 import { Button } from "@chakra-ui/button";
-import { FormLabel } from "@chakra-ui/form-control";
+
 import { Input } from "@chakra-ui/input";
 import { Box, Center, Divider, Flex, Text } from "@chakra-ui/layout";
 import { Select } from "@chakra-ui/select";
@@ -30,31 +30,33 @@ export default function UpdateProduct() {
   const [gstList, setGstList] = useState([]);
   const toast = useToast();
 
-  useEffect(() => {
-    const config = {
-      headers: {
-        Authorization: `Bearer ${auth.user.token}`,
-      },
-      params: {
-        filter: {},
-        ascSort: true,
-        pageSize: 1,
-        pageNumber: 1,
-      },
-    };
-    axios
-      .get(PRODUCT_URL, config)
-      .then(function (response) {
-        const data = response.data.body.content;
-        console.log("Update product", data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      })
-      .then(function () {
-        // always executed
-      });
-  }, []);
+  // useEffect(() => {
+  //   const config = {
+  //     headers: {
+  //       Authorization: `Bearer ${auth.user.token}`,
+  //     },
+  //     params: {
+  //       filter: {
+  //         productName: "like-p",
+  //       },
+  //       ascSort: true,
+  //       pageSize: 10,
+  //       pageNumber: 1,
+  //     },
+  //   };
+  //   axios
+  //     .get(PRODUCT_URL, config)
+  //     .then(function (response) {
+  //       const data = response.data.body;
+  //       console.log("Update product", data);
+  //     })
+  //     .catch(function (error) {
+  //       console.log(error);
+  //     })
+  //     .then(function () {
+  //       // always executed
+  //     });
+  // }, []);
 
   useEffect(() => {
     const config = {
@@ -73,7 +75,7 @@ export default function UpdateProduct() {
         setGstList(list);
       })
       .catch((r) => console.log(r));
-  }, []);
+  }, [auth]);
 
   const toastMessage = (status, title, description) => {
     toast({
@@ -93,13 +95,6 @@ export default function UpdateProduct() {
     for (let index = 0; index < files.length; index++) {
       const file = files[index];
       let duplicate = false;
-      // tempImages.forEach((images) => {
-      //   if (images.name === file.name) {
-      //     console.log("Same Name");
-      //     duplicate = true;
-      //   }
-      // });
-      // if (duplicate) toastMessage("error", "Can't add files with same name!");
       if (!duplicate) tempImages.push(file);
     }
     setImages([...tempImages]);
@@ -239,12 +234,6 @@ export default function UpdateProduct() {
   const removeImage = (id) => {
     const tempImages = images;
     const deletedImage = tempImages.splice(id, 1);
-    // let newImages = [];
-    // oldImages.forEach((images) => {
-    //   if (images.name !== name) {
-    //     newImages.push(images);
-    //   }
-    // });
     toastMessage("warning", `${deletedImage[0].name} deleted !`);
     setImages([...tempImages]);
   };
@@ -272,24 +261,6 @@ export default function UpdateProduct() {
     const formData = form.current;
 
     console.log("Add Product data: ", data);
-
-    // var myHeaders = new Headers();
-    // myHeaders.append("Authorization", `Bearer ${auth.user.token}`);
-    // myHeaders.append("Content-Type", "application/json");
-
-    // var raw = JSON.stringify(data);
-
-    // var requestOptions = {
-    //   method: "POST",
-    //   headers: myHeaders,
-    //   body: raw,
-    //   redirect: "follow",
-    // };
-
-    // fetch("http://api.herbshire.in/product", requestOptions)
-    //   .then((response) => response.text())
-    //   .then((result) => console.log(result))
-    //   .catch((error) => console.log("Add product error", error.response));
 
     axios
       .post(PRODUCT_URL, data, config)

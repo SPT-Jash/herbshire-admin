@@ -1,12 +1,10 @@
 import "./sidenav.css";
 import { Button } from "@chakra-ui/button";
 import { useDisclosure } from "@chakra-ui/hooks";
-import { Input } from "@chakra-ui/input";
 import { Flex } from "@chakra-ui/layout";
 import {
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
@@ -188,7 +186,7 @@ export default function NavForMobile() {
           >
             <DrawerHeader>
               <Flex>
-                <img src={logo} />
+                <img src={logo} alt="logo" />
                 <Text fontSize="larger" ml="2" mt="2">
                   HerbShire
                 </Text>
