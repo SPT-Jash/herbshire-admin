@@ -11,6 +11,7 @@ import { Table, Tbody, Td, Thead, Tr, Th } from "@chakra-ui/table";
 import { Avatar, AvatarGroup } from "@chakra-ui/avatar";
 import axios from "axios";
 import { SUBSCRIPTION_SEARCH_URL } from "../Config/Apis";
+import { Link } from "react-router-dom";
 export default function Subscription() {
   const { setSelectedNavItem, auth } = useContext(Context);
   setSelectedNavItem("subscription");
@@ -19,7 +20,7 @@ export default function Subscription() {
   const [isSmallerThan900] = useMediaQuery("(max-width: 900px)");
   const [isSmallerThan925] = useMediaQuery("(max-width: 925px)");
 
-  const [subscriptionData, setSubscriptionData] = useState([]);
+  // const [subscriptionData, setSubscriptionData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
   const newSubscribers = [
@@ -31,6 +32,13 @@ export default function Subscription() {
     { profileSrc: "https://bit.ly/dan-abramov", name: "Andrew" },
     { profileSrc: "https://bit.ly/dan-abramov", name: "Andrew" },
     { profileSrc: "https://bit.ly/dan-abramov", name: "Andrew" },
+  ];
+
+  const subscriptionData = [
+    { profileSrc: "https://bit.ly/dan-abramov", receiver: "Andrew", period: "period", date:"10-04-2021", frequency:"2", amount: 20 },
+    { profileSrc: "https://bit.ly/dan-abramov", receiver: "Andrew", period: "period", date:"10-04-2021", frequency:"2", amount: 20 },
+    { profileSrc: "https://bit.ly/dan-abramov", receiver: "Andrew", period: "period", date:"10-04-2021", frequency:"2", amount: 20 },
+    { profileSrc: "https://bit.ly/dan-abramov", receiver: "Andrew", period: "period", date:"10-04-2021", frequency:"2", amount: 20 }
   ];
 
   useEffect(() => {
@@ -143,7 +151,10 @@ export default function Subscription() {
                 }
               })}
             </AvatarGroup>
-          </Flex>
+          </Flex><br/>
+          <Button backgroundColor="blue.200" as={Link} to="/add-subscription">
+            Add Subscriber
+          </Button>
         </Box>
       </Stack>
 

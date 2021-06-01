@@ -132,7 +132,7 @@ export default function Products() {
       <Box flex="1" flexDirection="row" mt="8">
         <Flex>
           <Text mb="2" fontSize="sm" fontWeight="semibold">
-            ALL CUSTOMERS
+            ALL PRODUCTS
           </Text>
           <Spacer />
           <Button backgroundColor="blue.200" as={Link} to="/add-products">
