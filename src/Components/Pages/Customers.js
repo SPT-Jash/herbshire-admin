@@ -1,10 +1,10 @@
+import React, { useState } from 'react'
+import { Link } from "react-router-dom";
 import { Button } from '@chakra-ui/button';
 import { Box, Center, Divider, Flex, HStack, Spacer, Text } from '@chakra-ui/layout';
 import { useMediaQuery } from '@chakra-ui/media-query';
 import { Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/menu';
 import { BsChevronDown } from "react-icons/bs";
-import { Link } from "react-router-dom";
-import React, { useState } from 'react'
 import ReactCharts from '../Views/ReactCharts';
 import { Table, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/table';
 import { Avatar } from '@chakra-ui/avatar';
@@ -16,13 +16,10 @@ const Customers = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
 
-
     const pageArray = [];
     for (let index = 0; index < totalPages; index++) {
         pageArray.push(index + 1);
     }
-
-    console.log(totalPages, pageArray);
 
 
     return (
