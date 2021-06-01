@@ -13,21 +13,23 @@ import avater from '../images/tt_avatar_small.jpg'
 import axios from "axios";
 import { SERVER_URL } from "../Config/Apis";
 import { Context } from "../Data/Context";
+import ViewAddress from '../Popup/ViewAddress';
 
 
 
 const Customers = () => {
-    const { auth } = useContext(Context);
+    const { auth, viewAddress, setviewAddress } = useContext(Context);
     const [isSmallerThan600] = useMediaQuery("(max-width: 600px)");
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
     const [UserDetail, setUserDetail] = useState([]);
-
+    const [addressDetail, setaddressDetail] = useState([])
 
     const pageArray = [];
     for (let index = 0; index < totalPages; index++) {
         pageArray.push(index + 1);
     }
+
 
     useEffect(() => {
         const url = SERVER_URL + 'user/search';
@@ -58,9 +60,17 @@ const Customers = () => {
             });
     }, [currentPage]);
 
+    const onViewAddress = (add) => {
+        setviewAddress(true)
+        setaddressDetail(add)
+    }
+
 
     return (
         <>
+            {
+                viewAddress && <ViewAddress add={addressDetail} view="true" />
+            }
             <Box w="100%" p="4">
                 <Box flex="1" flexDirection="row" mt="8">
                     <Flex>
@@ -192,9 +202,11 @@ const Customers = () => {
                         <Tr>
                             <Th color="blackAlpha.500">Customer</Th>
                             <Th color="blackAlpha.500">Customer Name</Th>
-                            <Th color="blackAlpha.500">phone</Th>
-                            <Th color="blackAlpha.500">email</Th>
-                            <Th color="blackAlpha.500">addressList</Th>
+                            <Th color="blackAlpha.500">Phone</Th>
+                            <Th color="blackAlpha.500">Email</Th>
+                            <Th color="blackAlpha.500">Subscribe</Th>
+                            <Th color="blackAlpha.500">Address List</Th>
+                            <Th color="blackAlpha.500">Order List</Th>
                             <Th color="blackAlpha.500">Action</Th>
                         </Tr>
                     </Thead>
@@ -220,7 +232,13 @@ const Customers = () => {
                                         <Td color="blackAlpha.700">{customer.fullName}</Td>
                                         <Td color="blackAlpha.700">{customer.phone}</Td>
                                         <Td color="blackAlpha.700">{customer.email}</Td>
-                                        <Td color="blackAlpha.700">Address</Td>
+                                        <Td color="blackAlpha.700">{customer.subscribe}</Td>
+                                        <Td color="blackAlpha.700">
+                                            <Button onClick={(add) => onViewAddress(customer.addressList)}>View Address</Button>
+                                        </Td>
+                                        <Td color="blackAlpha.700">
+                                            <Button>View Order</Button>
+                                        </Td>
                                         <Td as={HStack}>
                                             <Button bg="transparent" color="green.400">
                                                 <MdEdit size="20px" />

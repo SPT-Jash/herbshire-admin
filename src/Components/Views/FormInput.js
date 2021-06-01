@@ -2,7 +2,7 @@ import { Input } from "@chakra-ui/input";
 import { Box, Text } from "@chakra-ui/layout";
 import React from "react";
 
-export default function FormInput({ label, name, type }) {
+export default function FormInput({ label, name, type, value, onChange }) {
   return (
     <Box m="2">
       <Text m="2" fontSize="md" fontWeight="semibold" color="blackAlpha.800">
@@ -14,6 +14,8 @@ export default function FormInput({ label, name, type }) {
         placeholder={label.toUpperCase()}
         type={type}
         borderRadius="8"
+        value={value}
+        onChange={onChange}
       />
     </Box>
   );
