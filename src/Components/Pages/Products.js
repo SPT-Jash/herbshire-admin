@@ -76,7 +76,7 @@ export default function Products() {
       .then(function (response) {
         const data = response.data.body.content;
         setTotalPages(response.data.body.totalPages);
-        console.log(data);
+        console.log(response);
         setProducts(data);
       })
       .catch(function (error) {
