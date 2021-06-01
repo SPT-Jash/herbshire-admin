@@ -11,8 +11,11 @@ import { Table, Tbody, Td, Thead, Tr, Th } from "@chakra-ui/table";
 import { Avatar, AvatarGroup } from "@chakra-ui/avatar";
 import axios from "axios";
 import { SUBSCRIPTION_SEARCH_URL } from "../Config/Apis";
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router";
+
+
 export default function Subscription() {
+  const history = useHistory();
   const { setSelectedNavItem, auth } = useContext(Context);
   setSelectedNavItem("subscription");
 
@@ -33,6 +36,9 @@ export default function Subscription() {
     { profileSrc: "https://bit.ly/dan-abramov", name: "Andrew" },
     { profileSrc: "https://bit.ly/dan-abramov", name: "Andrew" },
   ];
+  const onAddSubsc = () => {
+    history.push('/add-subscription')
+  }
 
   const subscriptionData = [
     { profileSrc: "https://bit.ly/dan-abramov", receiver: "Andrew", period: "period", date:"10-04-2021", frequency:"2", amount: 20 },
@@ -151,10 +157,10 @@ export default function Subscription() {
                 }
               })}
             </AvatarGroup>
-          </Flex><br/>
-          <Button backgroundColor="blue.200" as={Link} to="/add-subscription">
-            Add Subscriber
-          </Button>
+          </Flex>
+          <Flex mt="5">
+            <Button onClick={onAddSubsc}>Add Subscription</Button>
+          </Flex>
         </Box>
       </Stack>
 

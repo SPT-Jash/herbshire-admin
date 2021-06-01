@@ -1,6 +1,5 @@
 import React, { useMemo } from "react";
 import { Chart } from "react-charts";
-import { Box } from "@chakra-ui/react";
 
 export default function ReactCharts({ type, lineColor }) {
   const data = useMemo(

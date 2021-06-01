@@ -1,20 +1,27 @@
+import React, { useContext, useEffect, useState } from 'react'
+import { Link } from "react-router-dom";
 import { Button } from '@chakra-ui/button';
 import { Box, Center, Divider, Flex, HStack, Spacer, Text } from '@chakra-ui/layout';
 import { useMediaQuery } from '@chakra-ui/media-query';
 import { Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/menu';
 import { BsChevronDown } from "react-icons/bs";
-import { Link } from "react-router-dom";
-import React, { useState } from 'react'
 import ReactCharts from '../Views/ReactCharts';
 import { Table, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/table';
 import { Avatar } from '@chakra-ui/avatar';
 import { MdDeleteForever, MdEdit } from 'react-icons/md';
 import avater from '../images/tt_avatar_small.jpg'
+import axios from "axios";
+import { SERVER_URL } from "../Config/Apis";
+import { Context } from "../Data/Context";
+
+
 
 const Customers = () => {
+    const { auth } = useContext(Context);
     const [isSmallerThan600] = useMediaQuery("(max-width: 600px)");
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
+    const [UserDetail, setUserDetail] = useState([]);
 
 
     const pageArray = [];
@@ -22,7 +29,34 @@ const Customers = () => {
         pageArray.push(index + 1);
     }
 
-    console.log(totalPages, pageArray);
+    useEffect(() => {
+        const url = SERVER_URL + 'user/search';
+        const config = {
+            headers: {
+                Authorization: `Bearer ${auth.user.token}`,
+            },
+            params: {
+                filter: {},
+                ascSort: true,
+                pageSize: 10,
+                pageNumber: currentPage,
+            },
+        };
+        axios
+            .get(url, config)
+            .then(function (response) {
+                const data = response.data.body.content;
+                setTotalPages(response.data.body.totalPages);
+                console.log(data);
+                setUserDetail(data);
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
+            .then(function () {
+                // always executed
+            });
+    }, [currentPage]);
 
 
     return (
@@ -126,6 +160,7 @@ const Customers = () => {
                     {/* <Chart/> */}
                 </Box>
             </Box>
+
             <Flex mt="4" mr="4">
                 <Text fontSize="large" fontWeight="semibold" color="#4C4C66">
                     Customers
@@ -150,11 +185,12 @@ const Customers = () => {
                     </MenuList>
                 </Menu>
             </Flex>
+
             <Box overflow="auto" className="hide-scroll">
                 <Table variant="simple">
                     <Thead>
                         <Tr>
-                            <Th color="blackAlpha.500">Customer Id</Th>
+                            <Th color="blackAlpha.500">Customer</Th>
                             <Th color="blackAlpha.500">Customer Name</Th>
                             <Th color="blackAlpha.500">phone</Th>
                             <Th color="blackAlpha.500">email</Th>
@@ -163,37 +199,43 @@ const Customers = () => {
                         </Tr>
                     </Thead>
                     <Tbody>
-                        <Tr fontSize="sm" className="order-table-row">
-                            <Td>
-                                <Flex>
-                                    <Avatar
-                                        size="xs"
-                                        borderRadius="5"
-                                        name="Andrew"
-                                        src={avater}
-                                    />
-                                    <Text ml="3" color="#828194" whiteSpace="nowrap">
-                                        1234567
-                                    </Text>
-                                </Flex>
-                            </Td>
-                            <Td color="blackAlpha.700">Customer Name</Td>
-                            <Td color="blackAlpha.700">1234567890</Td>
-                            <Td color="blackAlpha.700">@gmail.com</Td>
-                            <Td color="blackAlpha.700">Address</Td>
-                            <Td as={HStack}>
-                                <Button bg="transparent" color="green.400">
-                                    <MdEdit size="20px" />
-                                </Button>
-                                <Button
-                                    bg="transparent"
-                                    color="red.400"
-                                // onClick={() => HandleProductDelete(key)}
-                                >
-                                    <MdDeleteForever size="25px" color="red" />
-                                </Button>
-                            </Td>
-                        </Tr>
+                        {UserDetail.length < 1
+                            ? "No Data found :("
+                            : UserDetail.map((customer, key) => {
+                                return (
+                                    <Tr fontSize="sm" className="order-table-row">
+                                        <Td>
+                                            <Flex>
+                                                <Avatar
+                                                    size="xs"
+                                                    borderRadius="5"
+                                                    name="Andrew"
+                                                    src={avater}
+                                                />
+                                                <Text ml="3" color="#828194" whiteSpace="nowrap">
+                                                    {key + 1}
+                                                </Text>
+                                            </Flex>
+                                        </Td>
+                                        <Td color="blackAlpha.700">{customer.fullName}</Td>
+                                        <Td color="blackAlpha.700">{customer.phone}</Td>
+                                        <Td color="blackAlpha.700">{customer.email}</Td>
+                                        <Td color="blackAlpha.700">Address</Td>
+                                        <Td as={HStack}>
+                                            <Button bg="transparent" color="green.400">
+                                                <MdEdit size="20px" />
+                                            </Button>
+                                            <Button
+                                                bg="transparent"
+                                                color="red.400"
+                                            // onClick={() => HandleProductDelete(key)}
+                                            >
+                                                <MdDeleteForever size="25px" color="red" />
+                                            </Button>
+                                        </Td>
+                                    </Tr>
+                                );
+                            })}
                     </Tbody>
                 </Table>
             </Box>

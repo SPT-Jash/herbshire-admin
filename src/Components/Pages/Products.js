@@ -76,7 +76,7 @@ export default function Products() {
       .then(function (response) {
         const data = response.data.body.content;
         setTotalPages(response.data.body.totalPages);
-        console.log(data);
+        console.log(response);
         setProducts(data);
       })
       .catch(function (error) {
@@ -85,14 +85,12 @@ export default function Products() {
       .then(function () {
         // always executed
       });
-  }, [currentPage]);
+  }, [currentPage, auth]);
 
   const pageArray = [];
   for (let index = 0; index < totalPages; index++) {
     pageArray.push(index + 1);
   }
-
-  console.log(totalPages, pageArray);
 
   const HandleProductDelete = (key) => {
     const id = products[key].id;
