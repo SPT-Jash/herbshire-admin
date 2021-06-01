@@ -9,6 +9,8 @@ import AddProducts from "./Pages/AddProducts";
 import Subscription from "./Pages/Subscription";
 import Login from "./Pages/Login";
 import { Context } from "./Data/Context";
+import AddOrder from "./Pages/AddOrder";
+import AddSubscription from "./Pages/AddSuscription";
 import AddCustomer from "./Pages/AddCustomer";
 import UpdateProduct from "./Pages/UpdateProduct";
 import { Center, Spinner } from "@chakra-ui/react";
@@ -36,7 +38,9 @@ export default function Routes() {
       <Switch>
         <Route path="/" exact component={Dashboard} />
         <Route path="/orders" component={Orders} />
+        <Route path="/add-order" component={AddOrder}/>
         <Route path="/subscription" component={Subscription} />
+        <Route path="/add-subscription" component={AddSubscription}/>
         <Route path="/deliveries" component={Delivries} />
         <Route path="/customers" component={Customers} />
         <Route path="/products" exact component={Products} />

@@ -1,5 +1,5 @@
 import "./pages.css";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Context } from "../Data/Context";
 import { Box, Flex, Spacer, Text, Stack, Center } from "@chakra-ui/layout";
 import { useMediaQuery } from "@chakra-ui/media-query";
@@ -10,6 +10,7 @@ import { Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/menu";
 import { Button } from "@chakra-ui/button";
 import { Table, Tbody, Td, Thead, Tr, Th } from "@chakra-ui/table";
 import { Avatar } from "@chakra-ui/avatar";
+import { Link } from "react-router-dom";
 
 export default function Order() {
   const { setSelectedNavItem } = useContext(Context);
@@ -78,7 +79,16 @@ export default function Order() {
 
   return (
     <Box w="90%">
-      <Text fontSize="sm">Orders</Text>
+      <Flex>
+        <Text mb="2" fontSize="sm" fontWeight="semibold">
+          Orders
+        </Text>
+        <Spacer />
+        <Button backgroundColor="blue.200" as={Link} to="/add-order">
+          Add Order
+        </Button>
+      </Flex>
+
       <Stack
         direction={isSmallerThan900 ? "column" : "row"}
         spacing="40px"
@@ -120,7 +130,7 @@ export default function Order() {
         </Text>
         <Spacer />
         <Center mr="4">
-          <img src={Vector} width="30px" alt="orders" />
+          <img src={Vector} width="30px" />
         </Center>
         <Menu>
           <MenuButton
