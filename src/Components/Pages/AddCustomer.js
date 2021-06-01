@@ -1,7 +1,7 @@
 import { Button } from "@chakra-ui/button";
 import { Box, Divider, Flex, Grid, Text } from "@chakra-ui/layout";
 import { Textarea } from "@chakra-ui/textarea";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import FormInput from "../Views/FormInput";
 import axios from "axios";
 import { SERVER_URL } from "../Config/Apis";

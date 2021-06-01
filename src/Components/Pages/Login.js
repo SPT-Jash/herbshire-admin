@@ -114,7 +114,7 @@ export default function Login() {
       <Box>
         <form onSubmit={validateOtp}>
           <FormControl id="otp">
-            <FormLabel>Enter OTO</FormLabel>
+            <FormLabel>Enter OTP</FormLabel>
             <Input type="number" name="number" />
             <Button type="submit">Submit OTP</Button>
           </FormControl>

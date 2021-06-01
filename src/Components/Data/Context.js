@@ -7,6 +7,7 @@ export const ContextProvider = (props) => {
   const [auth, setAuth] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [viewAddress, setviewAddress] = useState(false);
+  const [viewOrder, setviewOrder] = useState(false);
 
   useEffect(() => {
     const authData = JSON.parse(localStorage.getItem("auth"));
@@ -27,7 +28,9 @@ export const ContextProvider = (props) => {
         isLoading,
         setIsLoading,
         viewAddress,
-        setviewAddress
+        setviewAddress,
+        viewOrder,
+        setviewOrder
       }}
     >
       {props.children}

@@ -170,7 +170,7 @@ export default function Order() {
                   ? "#EEA662"
                   : "#FC6984";
               return (
-                <Tr fontSize="sm" className="order-table-row">
+                <Tr fontSize="sm" className="order-table-row" key={key}>
                   <Td>
                     <Flex>
                       <Avatar

@@ -14,16 +14,18 @@ import axios from "axios";
 import { SERVER_URL } from "../Config/Apis";
 import { Context } from "../Data/Context";
 import ViewAddress from '../Popup/ViewAddress';
+import ViewOrder from '../Popup/ViewOrder';
 
 
 
 const Customers = () => {
-    const { auth, viewAddress, setviewAddress } = useContext(Context);
+    const { auth, viewAddress, setviewAddress, viewOrder, setviewOrder } = useContext(Context);
     const [isSmallerThan600] = useMediaQuery("(max-width: 600px)");
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
     const [UserDetail, setUserDetail] = useState([]);
-    const [addressDetail, setaddressDetail] = useState([])
+    const [addressDetail, setaddressDetail] = useState([]);
+    const [ordersDetail, setordersDetail] = useState([]);
 
     const pageArray = [];
     for (let index = 0; index < totalPages; index++) {
@@ -49,7 +51,7 @@ const Customers = () => {
             .then(function (response) {
                 const data = response.data.body.content;
                 setTotalPages(response.data.body.totalPages);
-                console.log(data);
+                console.log(data, "data");
                 setUserDetail(data);
             })
             .catch(function (error) {
@@ -65,11 +67,19 @@ const Customers = () => {
         setaddressDetail(add)
     }
 
+    const onViewOrder = (add) => {
+        setviewOrder(true)
+        setordersDetail(add)
+    }
+
 
     return (
         <>
             {
                 viewAddress && <ViewAddress add={addressDetail} view="true" />
+            }
+            {
+                viewOrder && <ViewOrder add={ordersDetail} view="true"/>
             }
             <Box w="100%" p="4">
                 <Box flex="1" flexDirection="row" mt="8">
@@ -215,7 +225,7 @@ const Customers = () => {
                             ? "No Data found :("
                             : UserDetail.map((customer, key) => {
                                 return (
-                                    <Tr fontSize="sm" className="order-table-row">
+                                    <Tr fontSize="sm" className="order-table-row" key={key}>
                                         <Td>
                                             <Flex>
                                                 <Avatar
@@ -237,7 +247,7 @@ const Customers = () => {
                                             <Button onClick={(add) => onViewAddress(customer.addressList)}>View Address</Button>
                                         </Td>
                                         <Td color="blackAlpha.700">
-                                            <Button>View Order</Button>
+                                            <Button onClick={(add) => onViewOrder(customer.ordersList)}>View Order</Button>
                                         </Td>
                                         <Td as={HStack}>
                                             <Button bg="transparent" color="green.400">

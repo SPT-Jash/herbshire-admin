@@ -23,7 +23,7 @@ export default function Subscription() {
   const [isSmallerThan900] = useMediaQuery("(max-width: 900px)");
   const [isSmallerThan925] = useMediaQuery("(max-width: 925px)");
 
-  // const [subscriptionData, setSubscriptionData] = useState([]);
+  const [subscriptionData, setSubscriptionData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
   const newSubscribers = [
@@ -40,12 +40,6 @@ export default function Subscription() {
     history.push('/add-subscription')
   }
 
-  const subscriptionData = [
-    { profileSrc: "https://bit.ly/dan-abramov", receiver: "Andrew", period: "period", date:"10-04-2021", frequency:"2", amount: 20 },
-    { profileSrc: "https://bit.ly/dan-abramov", receiver: "Andrew", period: "period", date:"10-04-2021", frequency:"2", amount: 20 },
-    { profileSrc: "https://bit.ly/dan-abramov", receiver: "Andrew", period: "period", date:"10-04-2021", frequency:"2", amount: 20 },
-    { profileSrc: "https://bit.ly/dan-abramov", receiver: "Andrew", period: "period", date:"10-04-2021", frequency:"2", amount: 20 }
-  ];
 
   useEffect(() => {
     // const config = {
