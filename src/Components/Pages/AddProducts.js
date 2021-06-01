@@ -1,5 +1,4 @@
 import { Button } from "@chakra-ui/button";
-import { FormLabel } from "@chakra-ui/form-control";
 import { Input } from "@chakra-ui/input";
 import { Box, Center, Divider, Flex, Text } from "@chakra-ui/layout";
 import { Select } from "@chakra-ui/select";
@@ -47,7 +46,7 @@ export default function AddProducts() {
         setGstList(list);
       })
       .catch((r) => console.log(r));
-  }, []);
+  }, [auth]);
 
   const toastMessage = (status, title, description) => {
     toast({
