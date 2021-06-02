@@ -1,7 +1,7 @@
 import "./pages.css";
 import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../Data/Context";
-import { Box, Flex, Spacer, Text, Stack } from "@chakra-ui/layout";
+import { Box, Flex, Spacer, Text, Stack, HStack } from "@chakra-ui/layout";
 import { useMediaQuery } from "@chakra-ui/media-query";
 import ReactCharts from "../Views/ReactCharts";
 import { BsChevronDown } from "react-icons/bs";
@@ -10,11 +10,14 @@ import { Button } from "@chakra-ui/button";
 import { Table, Tbody, Td, Thead, Tr, Th } from "@chakra-ui/table";
 import { Avatar, AvatarGroup } from "@chakra-ui/avatar";
 import axios from "axios";
-import { SUBSCRIPTION_SEARCH_URL } from "../Config/Apis";
+import { SERVER_URL } from "../Config/Apis";
 import { useHistory } from "react-router";
+import avater from '../images/tt_avatar_small.jpg'
+import { MdDeleteForever, MdEdit } from "react-icons/md";
 
 
-export default function Subscription() {
+
+const Subscription = () => {
   const history = useHistory();
   const { setSelectedNavItem, auth } = useContext(Context);
   setSelectedNavItem("subscription");
@@ -25,6 +28,13 @@ export default function Subscription() {
 
   const [subscriptionData, setSubscriptionData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+
+
+  const pageArray = [];
+  for (let index = 0; index < totalPages; index++) {
+    pageArray.push(index + 1);
+  }
 
   const newSubscribers = [
     { profileSrc: "https://bit.ly/dan-abramov", name: "Andrew" },
@@ -42,31 +52,32 @@ export default function Subscription() {
 
 
   useEffect(() => {
-    // const config = {
-    //   headers: {
-    //     Authorization: `Bearer ${auth.user.token}`,
-    //   },
-    //   params: {
-    //     filter: {},
-    //     ascSort: true,
-    //     pageSize: 10,
-    //     pageNumber: currentPage,
-    //   },
-    // };
-    // axios
-    //   .get(SUBSCRIPTION_SEARCH_URL, config)
-    //   .then(function (response) {
-    //     const data = response.data.body.content;
-    //     setTotalPages(response.data.body.totalPages);
-    //     console.log(data);
-    //     setProducts(data);
-    //   })
-    //   .catch(function (error) {
-    //     console.log(error);
-    //   })
-    //   .then(function () {
-    //     // always executed
-    //   });
+    const url = SERVER_URL + 'subscription/search';
+    const config = {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
+      },
+      params: {
+        filter: {},
+        ascSort: true,
+        pageSize: 10,
+        pageNumber: currentPage,
+      },
+    };
+    axios
+      .get(url, config)
+      .then(function (response) {
+        const data = response.data.body.content;
+        setTotalPages(response.data.body.totalPages);
+        console.log(data, "data");
+        setSubscriptionData(data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
+      .then(function () {
+        // always executed
+      });
   }, []);
 
   return (
@@ -164,7 +175,6 @@ export default function Subscription() {
             SUBSCRIBERS
           </Text>
           <Spacer />
-          {/* <Center mr="4"><img src={Vector} width="30px" /></Center> */}
           <Menu>
             <MenuButton
               as={Button}
@@ -172,13 +182,15 @@ export default function Subscription() {
               borderColor="#E2E2E8"
               p="2"
             >
-              Sort
+              {currentPage}
             </MenuButton>
-            <MenuList fontSize="sm">
-              <MenuItem>Days</MenuItem>
-              <MenuItem>Week</MenuItem>
-              <MenuItem>Month</MenuItem>
-              <MenuItem>Year</MenuItem>
+            <MenuList fontSize="sm" onSelect={(e) => console.log(e.target.value)}>
+              {pageArray.map((page) => {
+                console.log(page);
+                return (
+                  <MenuItem onClick={() => setCurrentPage(page)}>{page}</MenuItem>
+                );
+              })}
             </MenuList>
           </Menu>
         </Flex>
@@ -188,45 +200,57 @@ export default function Subscription() {
             <Table variant="simple">
               <Thead>
                 <Tr>
-                  <Th color="#828194">Receiver</Th>
-                  <Th color="#828194">Subscription</Th>
-                  <Th color="#828194">Date</Th>
-                  <Th color="#828194">Frequency</Th>
-                  <Th color="#828194">Amount</Th>
+                  <Th color="#828194">Sr.No</Th>
+                  <Th color="#828194">Subscription Name</Th>
+                  <Th color="#828194">Description</Th>
+                  <Th color="#828194">Status</Th>
+                  <Th color="#828194">Products List</Th>
+                  <Th color="#828194">Subscription List</Th>
+                  <Th color="#828194">Action</Th>
                 </Tr>
               </Thead>
               <Tbody>
-                {subscriptionData.map((subscription, key) => {
-                  return (
-                    <Tr fontSize="sm" className="order-table-row" key={key}>
-                      <Td>
-                        <Flex>
-                          <Avatar
-                            size="xs"
-                            borderRadius="5"
-                            name="Andrew"
-                            src={subscription.profileSrc}
-                          />
-                          <Text ml="3" color="#828194" fontSize="large">
-                            {subscription.receiver}
-                          </Text>
-                        </Flex>
-                      </Td>
-                      <Td color="#B7B7C2" fontSize="large">
-                        {subscription.period}
-                      </Td>
-                      <Td color="#B7B7C2" fontSize="large" whiteSpace="nowrap">
-                        {subscription.date}
-                      </Td>
-                      <Td color="#B7B7C2" fontSize="large">
-                        {subscription.frequency}
-                      </Td>
-                      <Td color="#53C3AA" fontSize="large" whiteSpace="nowrap">
-                        $ {subscription.amount}
-                      </Td>
-                    </Tr>
-                  );
-                })}
+                {subscriptionData.length < 1
+                  ? "No Data found :("
+                  : subscriptionData.map((customer, key) => {
+                    return (
+                      <Tr fontSize="sm" className="order-table-row" key={key}>
+                        <Td>
+                          <Flex>
+                            <Avatar
+                              size="xs"
+                              borderRadius="5"
+                              name="Andrew"
+                              src={customer.imageUrl}
+                            />
+                            <Text ml="3" color="#828194" whiteSpace="nowrap">
+                              {key + 1}
+                            </Text>
+                          </Flex>
+                        </Td>
+                        <Td color="blackAlpha.700">{customer.name}</Td>
+                        <Td color="blackAlpha.700">{customer.description}</Td>
+                        <Td color="blackAlpha.700">{customer.active}</Td>
+                        <Td color="blackAlpha.700">
+                          <Button>Product List</Button>
+                        </Td>
+                        <Td color="blackAlpha.700">
+                          <Button>Subscription List</Button>
+                        </Td>
+                        <Td as={HStack}>
+                          <Button bg="transparent" color="green.400">
+                            <MdEdit size="20px" />
+                          </Button>
+                          <Button
+                            bg="transparent"
+                            color="red.400"
+                          >
+                            <MdDeleteForever size="25px" color="red" />
+                          </Button>
+                        </Td>
+                      </Tr>
+                    );
+                  })}
               </Tbody>
             </Table>
           }
@@ -235,3 +259,5 @@ export default function Subscription() {
     </Box>
   );
 }
+
+export default Subscription;
