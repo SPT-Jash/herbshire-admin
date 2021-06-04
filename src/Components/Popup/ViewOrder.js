@@ -25,18 +25,18 @@ const ViewOrder = (props) => {
 
     return (
         <>
-            <Modal isOpen={viewOrder} onClose={handleClose}>
-                <ModalOverlay />
+            <Modal isOpen={viewOrder} onClose={handleClose} size="3xl">
+                <ModalOverlay/>
                 <ModalContent>
                     <ModalHeader>View order</ModalHeader>
                     <ModalCloseButton />
-                    <ModalBody>
+                    <ModalBody width="3xl">
                         <Grid templateColumns="repeat(2, 1fr)" gap={2}>
                             {props.add < 1
                                 ? "No Data found :("
                                 : props.add.map((order, index) => {
                                     return (
-                                        <Box w="100%" h="280" key={index} style={{ padding: "10px", border: "1px solid #ddd", borderRadius: "5px", marginRight: "5px", marginBottom: "5px" }}>
+                                        <Box w="100%" h="180" key={index} style={{ padding: "10px", border: "1px solid #ddd", borderRadius: "5px", marginRight: "5px", marginBottom: "5px" }}>
                                             {order.ordersDetailsList.map((orderDetail, index) => {
                                                 return(
                                                     <div key={index}>

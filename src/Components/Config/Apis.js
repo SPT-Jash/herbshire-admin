@@ -6,4 +6,3 @@ export const DELETE_FILE_URL = SERVER_URL + "api/storage/deleteFile";
 export const GST_URL = SERVER_URL + "gst";
 export const SUBSCRIPTION_SEARCH_URL = SERVER_URL + "subscription/search";
 export const OTP_URL = SERVER_URL + "otp";
-

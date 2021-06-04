@@ -166,7 +166,7 @@ export default function AddProducts() {
       discount,
       description,
       freshTill,
-      count: 0,
+      count,
       calories,
       proteins,
       fats,
@@ -194,6 +194,7 @@ export default function AddProducts() {
     images.forEach((file) => {
       formData.append("file", file);
     });
+    
     console.log("Auth: ", auth.user.token);
     axios
       .post(UPLOAD_FILE_URL, formData, config)
@@ -246,26 +247,27 @@ export default function AddProducts() {
 
     console.log("Add Product data: ", data);
 
-    // var myHeaders = new Headers();
-    // myHeaders.append("Authorization", `Bearer ${auth.user.token}`);
-    // myHeaders.append("Content-Type", "application/json");
-
-    // var raw = JSON.stringify(data);
-
-    // var requestOptions = {
-    //   method: "POST",
-    //   headers: myHeaders,
-    //   body: raw,
-    //   redirect: "follow",
-    // };
-
-    // fetch("http://api.herbshire.in/product", requestOptions)
-    //   .then((response) => response.text())
-    //   .then((result) => console.log(result))
-    //   .catch((error) => console.log("Add product error", error.response));
+    const body = {
+      "productName": data.productName,
+      "weight": +data.weight,
+      "quantity": +data.quantity,
+      "price": +data.price,
+      "discount": +data.discount,
+      "description": data.description,
+      "freshTill": +data.freshTill,
+      "count": +data.count,
+      "calories": +data.calories,
+      "proteins": +data.proteins,
+      "fats": +data.fats,
+      "curbs": +data.curbs,
+      "displayUrl": data.displayUrl,
+      "productImagesList": data.productImagesDTOS,
+      "gst": data.gst
+    }
+    console.log("body", body)
 
     axios
-      .post(PRODUCT_URL, data, config)
+      .post(PRODUCT_URL, config, body)
       .then(function (response) {
         console.log("Add product response: ", response);
         toastMessage("success", "Product Added !");

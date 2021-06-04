@@ -43,6 +43,7 @@ export default function Products() {
   const [products, setProducts] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
+  const [available, setAvailable] = useState(true);
   const toast = useToast();
   // const [productUpdateButtonHover, setProductUpdateButtonHover] = useState(-1);
   // const [productDeleteButtonHover, setProductDeleteButtonHover] = useState(-1);
@@ -124,6 +125,10 @@ export default function Products() {
         }
       });
   };
+
+  const avaliableHandler = (key) => {
+    setAvailable(prev => !prev);
+  }
 
   return (
     <Box w="100%" p="4">
@@ -248,7 +253,7 @@ export default function Products() {
           </MenuList>
         </Menu>
       </Flex>
-      <Box overflow="auto" className="hide-scroll">
+      <Box overflow="auto">
         <Table variant="simple">
           <Thead>
             <Tr>
@@ -270,8 +275,9 @@ export default function Products() {
             {products.length < 1
               ? "No Data found :("
               : products.map((product, key) => {
+
                   return (
-                    <Tr fontSize="sm" className="order-table-row">
+                    <Tr fontSize="sm" className="order-table-row" key={key}>
                       <Td>
                         <Flex>
                           <Avatar
@@ -296,6 +302,8 @@ export default function Products() {
                       <Td color="blackAlpha.700">{product.fats}</Td>
                       <Td color="blackAlpha.700">{product.curbs}</Td>
                       <Td as={HStack}>
+                        <Button onClick={() => (avaliableHandler(key))}>
+                          {available ? "Unavailable" : "Available"}</Button>
                         <Button
                           bg="transparent"
                           color="green.400"
