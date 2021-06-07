@@ -66,7 +66,28 @@ export default function UpdateProduct() {
 
 
   const onUpdateProduct = () => {
-
+    const url = SERVER_URL + "product";
+    const config = {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
+      }
+    };
+    const body ={
+      
+    }
+    axios
+      .patch(url, config, body)
+      .then(function (response) {
+        seteditProductDetail(response.data.body)
+        setUploadedImages(response.data.body.displayUrl)
+        console.log(editProductDetail, "dataxcvbuimp");
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
+      .then(function () {
+        // always executed
+      });
   }
 
   useEffect(() => {
