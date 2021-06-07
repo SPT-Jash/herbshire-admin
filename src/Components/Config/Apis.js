@@ -1,5 +1,5 @@
 export const SERVER_URL = "https://api.herbshire.in/";
-export const PRODUCT_URL = SERVER_URL + "product";
+export const PRODUCT_URL = SERVER_URL + "product/search";
 export const PRODUCT_DELETE_URL = SERVER_URL + "product?productID=";
 export const UPLOAD_FILE_URL = SERVER_URL + "api/storage/uploadMultipleFile";
 export const DELETE_FILE_URL = SERVER_URL + "api/storage/deleteFile";

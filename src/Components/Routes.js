@@ -36,7 +36,7 @@ export default function Routes() {
         <Route path="/products" exact component={Products} />
         <Route path="/add-products" component={AddProducts} />
         <Route path="/add-customer" component={AddCustomer} />
-        <Route path="/update-product" component={UpdateProduct} />
+        <Route path="/update-product/:id" component={UpdateProduct} />
         <Route render={() => <h1>404: page not found</h1>} />
       </Switch>
     );

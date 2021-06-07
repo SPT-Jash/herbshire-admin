@@ -30,7 +30,7 @@ import React, { useContext, useEffect, useState } from "react";
 import ReactCharts from "../Views/ReactCharts";
 import { BsChevronDown } from "react-icons/bs";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { GrDeliver } from "react-icons/gr";
 import { FaShoppingCart } from "react-icons/fa";
 import { Context } from "../Data/Context";
@@ -38,6 +38,8 @@ import { MdDeleteForever, MdEdit } from "react-icons/md";
 import { PRODUCT_DELETE_URL, PRODUCT_URL } from "../Config/Apis";
 
 export default function Products() {
+
+  const history = useHistory();
   const { auth } = useContext(Context);
   const [isSmallerThan600] = useMediaQuery("(max-width: 600px)");
   const [products, setProducts] = useState([]);
@@ -128,6 +130,10 @@ export default function Products() {
 
   const avaliableHandler = (key) => {
     setAvailable(prev => !prev);
+  }
+
+  const editProduct = (id) =>{
+    history.push(`/update-product/${id}`);
   }
 
   return (
@@ -307,8 +313,7 @@ export default function Products() {
                         <Button
                           bg="transparent"
                           color="green.400"
-                          as={Link}
-                          to="/update-product"
+                          onClick={(id) => editProduct(product.id)}
                         >
                           <MdEdit size="20px" />
                         </Button>
