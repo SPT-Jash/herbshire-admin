@@ -1,5 +1,6 @@
 import "./pages.css";
 import React, { useContext, useEffect, useState } from "react";
+import ShowMoreText from "react-show-more-text";
 import { Context } from "../Data/Context";
 import { Box, Flex, Spacer, Text, Stack, HStack } from "@chakra-ui/layout";
 import { useMediaQuery } from "@chakra-ui/media-query";
@@ -19,8 +20,14 @@ import ViewSubscription from "../Popup/ViewSubscription";
 
 const Subscription = () => {
   const history = useHistory();
-  const { setSelectedNavItem, auth, viewProduct, setViewProduct, viewSubscription, setViewSubscription } =
-    useContext(Context);
+  const {
+    setSelectedNavItem,
+    auth,
+    viewProduct,
+    setViewProduct,
+    viewSubscription,
+    setViewSubscription,
+  } = useContext(Context);
   setSelectedNavItem("subscription");
 
   // const [isSmallerThan700] = useMediaQuery("(max-width: 700px)")
@@ -92,12 +99,12 @@ const Subscription = () => {
     setSubscriptionDetails(add);
   };
 
-  
-
   return (
     <>
       {viewProduct && <ViewProduct add={productDetails} view="true" />}
-      {viewSubscription && <ViewSubscription add={subscriptionDetails} view="true" />}
+      {viewSubscription && (
+        <ViewSubscription add={subscriptionDetails} view="true" />
+      )}
       <Box w="100%">
         <Stack direction={isSmallerThan925 ? "column" : "row"} mt="4">
           <Flex direction="column" mt="4">
@@ -260,7 +267,16 @@ const Subscription = () => {
                             </Td>
                             <Td color="blackAlpha.700">{customer.name}</Td>
                             <Td color="blackAlpha.700">
-                              {customer.description}
+                            
+                              <ShowMoreText
+                                lines={2}
+                                more="Show more"
+                                less="Show less"
+                                expanded={false}
+                                width={200}
+                              >
+                               {customer.description}
+                              </ShowMoreText>
                             </Td>
                             <Td color="blackAlpha.700">{customer.active}</Td>
                             <Td color="blackAlpha.700">

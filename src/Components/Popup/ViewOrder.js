@@ -36,7 +36,7 @@ const ViewOrder = (props) => {
                                 ? "No Data found :("
                                 : props.add.map((order, index) => {
                                     return (
-                                        <Box w="100%" h="180" key={index} style={{ padding: "10px", border: "1px solid #ddd", borderRadius: "5px", marginRight: "5px", marginBottom: "5px" }}>
+                                        <Box w="100%" h="230" key={index} style={{ padding: "10px", border: "1px solid #ddd", borderRadius: "5px", marginRight: "5px", marginBottom: "5px" }}>
                                             {order.ordersDetailsList.map((orderDetail, index) => {
                                                 return(
                                                     <div key={index}>
