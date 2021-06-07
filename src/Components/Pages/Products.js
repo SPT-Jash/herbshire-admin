@@ -43,8 +43,8 @@ export default function Products() {
   const [products, setProducts] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const [available, setAvailable] = useState(true);
   const toast = useToast();
+  const [refrest, setrefrest] = useState();
   // const [productUpdateButtonHover, setProductUpdateButtonHover] = useState(-1);
   // const [productDeleteButtonHover, setProductDeleteButtonHover] = useState(-1);
 
@@ -60,7 +60,7 @@ export default function Products() {
   };
 
   useEffect(() => {
-    const url = PRODUCT_URL;
+    const url = PRODUCT_URL + "/search";
     const config = {
       headers: {
         Authorization: `Bearer ${auth.user.token}`,
@@ -86,7 +86,7 @@ export default function Products() {
       .then(function () {
         // always executed
       });
-  }, [currentPage, auth]);
+  }, [currentPage, auth, refrest]);
 
   const pageArray = [];
   for (let index = 0; index < totalPages; index++) {
@@ -126,9 +126,40 @@ export default function Products() {
       });
   };
 
-  const avaliableHandler = (key) => {
-    setAvailable(prev => !prev);
-  }
+  const countHandler = (id) => {
+    if (products[id].count) {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${auth.user.token}`,
+          Accept: "*/*",
+          "content-type": "application/json",
+          "access-control-allow-origin": "*",
+        },
+      };
+
+      const count = 0;
+      const body = { ...products[id], count: count };
+      console.log("body inside handler", body);
+
+      axios
+        .put(PRODUCT_URL, body, config)
+        .then(function (response) {
+          console.log("response: ", response);
+          toastMessage("success", "successfully you make product unavailable");
+          setrefrest({});
+        })
+        .catch((error) => {
+          const msg = error.response.data.message;
+          console.error("Add Product response : ", msg);
+          toastMessage("error", "failed to make product unavailable", msg);
+        })
+        .then(function () {
+          // always executed
+        });
+    } else {
+      toastMessage("info", "it is already unavailable");
+    }
+  };
 
   return (
     <Box w="100%" p="4">
@@ -275,7 +306,6 @@ export default function Products() {
             {products.length < 1
               ? "No Data found :("
               : products.map((product, key) => {
-
                   return (
                     <Tr fontSize="sm" className="order-table-row" key={key}>
                       <Td>
@@ -302,8 +332,9 @@ export default function Products() {
                       <Td color="blackAlpha.700">{product.fats}</Td>
                       <Td color="blackAlpha.700">{product.curbs}</Td>
                       <Td as={HStack}>
-                        <Button onClick={() => (avaliableHandler(key))}>
-                          {available ? "Unavailable" : "Available"}</Button>
+                        <Button onClick={() => countHandler(key)}>
+                          {product.count ? "UnAvailable" : "Available"}
+                        </Button>
                         <Button
                           bg="transparent"
                           color="green.400"
