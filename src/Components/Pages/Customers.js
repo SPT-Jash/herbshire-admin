@@ -26,7 +26,7 @@ import ViewOrder from "../Popup/ViewOrder";
 import { useToast } from "@chakra-ui/toast";
 
 const Customers = () => {
-    const toast = useToast();
+  const toast = useToast();
   const { auth, viewAddress, setviewAddress, viewOrder, setviewOrder } =
     useContext(Context);
   const [isSmallerThan600] = useMediaQuery("(max-width: 600px)");
@@ -91,26 +91,27 @@ const Customers = () => {
     setordersDetail(add);
   };
 
-  const HandleCustomerDelete = (key) => {
-    const url = SERVER_URL + "user";
-    const id = UserDetail[key].id;
-    const config = {
-      headers: {
-        Authorization: `Bearer ${auth.user.token}`,
-      },
-    };
-    axios
-      .delete(url, config)
-      .then((res) => {
-        console.log(res);
-        if (res.success === 200) {
-          toastMessage("success", "user deleted successfuly!");
-        }
-      })
-      .catch((error) => {
-        toastMessage("error", "user Not Deleted !");
-      });
-  };
+  // const HandleCustomerDelete = (key) => {
+  //   console.log(key , 'customer key');
+  //   const url = SERVER_URL + "user";
+  //   const id = UserDetail[key].id;
+  //   // const config = {
+  //   //   headers: {
+  //   //     Authorization: `Bearer ${auth.user.token}`,
+  //   //   },
+  //   // };
+  //   axios
+  //     .delete(url, config)
+  //     .then((res) => {
+  //       console.log(res);
+  //       if (res.success === 200) {
+  //         toastMessage("success", "user deleted successfuly!");
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       toastMessage("error", "user Not Deleted !");
+  //     });
+  // };
 
   return (
     <>
@@ -257,61 +258,61 @@ const Customers = () => {
               <Th color="blackAlpha.500">Subscribe</Th>
               <Th color="blackAlpha.500">Address List</Th>
               <Th color="blackAlpha.500">Order List</Th>
-              <Th color="blackAlpha.500">Action</Th>
+              {/* <Th color="blackAlpha.500">Action</Th> */}
             </Tr>
           </Thead>
           <Tbody>
             {UserDetail.length < 1
               ? "No Data found :("
               : UserDetail.map((customer, key) => {
-                  return (
-                    <Tr fontSize="sm" className="order-table-row" key={key}>
-                      <Td>
-                        <Flex>
-                          <Avatar
-                            size="xs"
-                            borderRadius="5"
-                            name="Andrew"
-                            src={avater}
-                          />
-                          <Text ml="3" color="#828194" whiteSpace="nowrap">
-                            {key + 1}
-                          </Text>
-                        </Flex>
-                      </Td>
-                      <Td color="blackAlpha.700">{customer.fullName}</Td>
-                      <Td color="blackAlpha.700">{customer.phone}</Td>
-                      <Td color="blackAlpha.700">{customer.email}</Td>
-                      <Td color="blackAlpha.700">{customer.subscribe}</Td>
-                      <Td color="blackAlpha.700">
-                        <Button
-                          onClick={(add) => onViewAddress(customer.addressList)}
-                        >
-                          View Address
+                return (
+                  <Tr fontSize="sm" className="order-table-row" key={key}>
+                    <Td>
+                      <Flex>
+                        <Avatar
+                          size="xs"
+                          borderRadius="5"
+                          name="Andrew"
+                          src={avater}
+                        />
+                        <Text ml="3" color="#828194" whiteSpace="nowrap">
+                          {key + 1}
+                        </Text>
+                      </Flex>
+                    </Td>
+                    <Td color="blackAlpha.700">{customer.fullName}</Td>
+                    <Td color="blackAlpha.700">{customer.phone}</Td>
+                    <Td color="blackAlpha.700">{customer.email}</Td>
+                    <Td color="blackAlpha.700">{customer.subscribe}</Td>
+                    <Td color="blackAlpha.700">
+                      <Button
+                        onClick={(add) => onViewAddress(customer.addressList)}
+                      >
+                        View Address
                         </Button>
-                      </Td>
-                      <Td color="blackAlpha.700">
-                        <Button
-                          onClick={(add) => onViewOrder(customer.ordersList)}
-                        >
-                          View Order
+                    </Td>
+                    <Td color="blackAlpha.700">
+                      <Button
+                        onClick={(add) => onViewOrder(customer.ordersList)}
+                      >
+                        View Order
                         </Button>
-                      </Td>
-                      <Td as={HStack}>
-                        <Button bg="transparent" color="green.400">
-                          <MdEdit size="20px" />
-                        </Button>
-                        <Button
-                          bg="transparent"
-                          color="red.400"
-                          onClick={() => HandleCustomerDelete(key)}
-                        >
-                          <MdDeleteForever size="25px" color="red" />
-                        </Button>
-                      </Td>
-                    </Tr>
-                  );
-                })}
+                    </Td>
+                    {/* <Td as={HStack}>
+                      <Button bg="transparent" color="green.400">
+                        <MdEdit size="20px" />
+                      </Button>
+                      <Button
+                        bg="transparent"
+                        color="red.400"
+                        onClick={(key) => HandleCustomerDelete(customer.id)}
+                      >
+                        <MdDeleteForever size="25px" color="red" />
+                      </Button>
+                    </Td> */}
+                  </Tr>
+                );
+              })}
           </Tbody>
         </Table>
       </Box>
