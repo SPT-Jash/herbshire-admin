@@ -176,7 +176,7 @@ const Subscription = () => {
                     return (
                       <Avatar
                         size="md"
-                        mr="2"
+                        mr="2"   
                         name={subscriber.name}
                         src={subscriber.profileSrc}
                       />
@@ -188,7 +188,7 @@ const Subscription = () => {
               </AvatarGroup>
             </Flex>
             <Flex mt="5">
-              <Button onClick={onAddSubsc}>Add Subscription</Button>
+              <Button backgroundColor="blue.200" onClick={onAddSubsc}>Add Subscription</Button>
             </Flex>
           </Box>
         </Stack>
@@ -274,6 +274,7 @@ const Subscription = () => {
                                 less="Show less"
                                 expanded={false}
                                 width={200}
+                                anchorClass="more-anchor"
                               >
                                {customer.description}
                               </ShowMoreText>

@@ -52,9 +52,7 @@ const AddSubscription = () => {
   }
 
   const uptoList = [
-    { value: 1, label: "ONE_WEEK" },
-    { value: 2, label: "ONE_MONTH" },
-    { value: 3, label: "ONE_YEAR" },
+    { value: 1, label: "ONE_MONTH" }
   ];
   const frequencyList = [
     { value: 1, label: "ONCE_A_WEEK" },
@@ -147,7 +145,7 @@ const AddSubscription = () => {
       subscriptionPricesList: [
         {
           price: +price,
-          upto: upto[0],
+          upto: upto,
           frequency: frequency[0],
           deliveryDays: delivery_days,
         },
@@ -158,7 +156,6 @@ const AddSubscription = () => {
     axios
       .post(url, body, config)
       .then(function (response) {
-        const data = response;
         console.log(response, "response");
         if (response.status === 200) {
           toastMessage("success", "Subscription Added successful.");
@@ -167,7 +164,7 @@ const AddSubscription = () => {
       })
       .catch(function (error) {
         console.log(error);
-        toastMessage("eroor", "Subscription not added");
+        toastMessage("error", "Subscription not added");
         deleteUploadedImages(image);
       })
       .then(function () {
@@ -509,8 +506,7 @@ const AddSubscription = () => {
                   <Select
                     placeholder="Select Option"
                     options={uptoList}
-                    onChange={(e) => setUpto(e.map((x) => x.label))}
-                    isMulti
+                    onChange={(e) => setUpto(e.label)}
                   />
                 </div>
               </Box>

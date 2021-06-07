@@ -236,7 +236,6 @@ export default function AddProducts() {
     let productImagesDTOS = [];
     tempImages.forEach((image, id) => {
       productImagesDTOS.push({
-        id,
         url: image,
       });
     });
@@ -262,12 +261,12 @@ export default function AddProducts() {
       "curbs": +data.curbs,
       "displayUrl": data.displayUrl,
       "productImagesList": data.productImagesDTOS,
-      "gst": data.gst
+      "gst": {"id": data.gst.id}
     }
     console.log("body", body)
 
     axios
-      .post(PRODUCT_URL, config, body)
+      .post(PRODUCT_URL, body, config)
       .then(function (response) {
         console.log("Add product response: ", response);
         toastMessage("success", "Product Added !");
