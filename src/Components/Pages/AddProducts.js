@@ -12,6 +12,7 @@ import React, {
   useRef,
   useState,
 } from "react";
+import { useHistory } from "react-router";
 import {
   DELETE_FILE_URL,
   GST_URL,
@@ -24,6 +25,7 @@ import FormInput from "../Views/FormInput";
 export default function AddProducts() {
   const { auth } = useContext(Context);
   const form = useRef();
+  const history = useHistory();
   const [images, setImages] = useState([]);
   const [uploadedImages, setUploadedImages] = useState([]);
   const [gstList, setGstList] = useState([]);
@@ -194,7 +196,7 @@ export default function AddProducts() {
     images.forEach((file) => {
       formData.append("file", file);
     });
-    
+
     console.log("Auth: ", auth.user.token);
     axios
       .post(UPLOAD_FILE_URL, formData, config)
@@ -247,23 +249,23 @@ export default function AddProducts() {
     console.log("Add Product data: ", data);
 
     const body = {
-      "productName": data.productName,
-      "weight": +data.weight,
-      "quantity": +data.quantity,
-      "price": +data.price,
-      "discount": +data.discount,
-      "description": data.description,
-      "freshTill": +data.freshTill,
-      "count": +data.count,
-      "calories": +data.calories,
-      "proteins": +data.proteins,
-      "fats": +data.fats,
-      "curbs": +data.curbs,
-      "displayUrl": data.displayUrl,
-      "productImagesList": data.productImagesDTOS,
-      "gst": {"id": data.gst.id}
-    }
-    console.log("body", body)
+      productName: data.productName,
+      weight: +data.weight,
+      quantity: +data.quantity,
+      price: +data.price,
+      discount: +data.discount,
+      description: data.description,
+      freshTill: +data.freshTill,
+      count: +data.count,
+      calories: +data.calories,
+      proteins: +data.proteins,
+      fats: +data.fats,
+      curbs: +data.curbs,
+      displayUrl: data.displayUrl,
+      productImagesList: data.productImagesDTOS,
+      gst: { id: data.gst.id },
+    };
+    console.log("body", body);
 
     axios
       .post(PRODUCT_URL, body, config)
@@ -273,6 +275,7 @@ export default function AddProducts() {
         formData.reset();
         setImages([]);
         setUploadedImages([]);
+        history.push("/products");
       })
       .catch((error) => {
         const msg = error.response.data.message;

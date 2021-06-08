@@ -13,6 +13,7 @@ import AddOrder from "./Pages/AddOrder";
 import AddSubscription from "./Pages/AddSuscription";
 import AddCustomer from "./Pages/AddCustomer";
 import UpdateProduct from "./Pages/UpdateProduct";
+import UpdateSubscription from "./Pages/UpdateSubscription";
 export default function Routes() {
   const { auth } = useContext(Context);
 
@@ -31,6 +32,7 @@ export default function Routes() {
         <Route path="/add-order" component={AddOrder}/>
         <Route path="/subscription" component={Subscription} />
         <Route path="/add-subscription" component={AddSubscription}/>
+        <Route path="/update-subscription/:id" component={UpdateSubscription} />
         <Route path="/deliveries" component={Delivries} />
         <Route path="/customers" component={Customers} />
         <Route path="/products" exact component={Products} />

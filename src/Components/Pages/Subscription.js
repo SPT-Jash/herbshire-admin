@@ -17,9 +17,11 @@ import avater from "../images/tt_avatar_small.jpg";
 import { MdDeleteForever, MdEdit } from "react-icons/md";
 import ViewProduct from "../Popup/ViewProduct";
 import ViewSubscription from "../Popup/ViewSubscription";
+import { useToast } from "@chakra-ui/toast";
 
 const Subscription = () => {
   const history = useHistory();
+  const toast = useToast();
   const {
     setSelectedNavItem,
     auth,
@@ -56,6 +58,17 @@ const Subscription = () => {
     { profileSrc: "https://bit.ly/dan-abramov", name: "Andrew" },
     { profileSrc: "https://bit.ly/dan-abramov", name: "Andrew" },
   ];
+
+  const toastMessage = (status, msg) => {
+    toast({
+      description: msg,
+      status: status,
+      duration: 9000,
+      isClosable: true,
+      position: "bottom-right",
+    });
+  };
+
   const onAddSubsc = () => {
     history.push("/add-subscription");
   };
@@ -98,6 +111,37 @@ const Subscription = () => {
     setViewSubscription(true);
     setSubscriptionDetails(add);
   };
+
+  const subDeleteHandle = (key) => {
+    const url = SERVER_URL + "subscription?id=";
+
+    const id = subscriptionData[key].id;
+    
+    const config = {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
+      },
+    };
+    axios
+      .delete(url + id, config)
+      .then((res) => {
+        console.log("response", res);
+        if (res.data.code === 200) {
+          toastMessage("success", "Subscription deleted successfully");
+          const tempSub = subscriptionData;
+          tempSub.splice(key, 1);
+          setSubscriptionData([...tempSub]);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        toastMessage("error", "Subscription not deleted");
+      });
+  };
+
+  const editSubHandler = (id) =>{
+    history.push(`/update-subscription/${id}`);
+  }
 
   return (
     <>
@@ -176,7 +220,7 @@ const Subscription = () => {
                     return (
                       <Avatar
                         size="md"
-                        mr="2"   
+                        mr="2"
                         name={subscriber.name}
                         src={subscriber.profileSrc}
                       />
@@ -188,7 +232,9 @@ const Subscription = () => {
               </AvatarGroup>
             </Flex>
             <Flex mt="5">
-              <Button backgroundColor="blue.200" onClick={onAddSubsc}>Add Subscription</Button>
+              <Button backgroundColor="blue.200" onClick={onAddSubsc}>
+                Add Subscription
+              </Button>
             </Flex>
           </Box>
         </Stack>
@@ -267,7 +313,6 @@ const Subscription = () => {
                             </Td>
                             <Td color="blackAlpha.700">{customer.name}</Td>
                             <Td color="blackAlpha.700">
-                            
                               <ShowMoreText
                                 lines={2}
                                 more="Show more"
@@ -276,7 +321,7 @@ const Subscription = () => {
                                 width={200}
                                 anchorClass="more-anchor"
                               >
-                               {customer.description}
+                                {customer.description}
                               </ShowMoreText>
                             </Td>
                             <Td color="blackAlpha.700">{customer.active}</Td>
@@ -301,10 +346,14 @@ const Subscription = () => {
                               </Button>
                             </Td>
                             <Td as={HStack}>
-                              <Button bg="transparent" color="green.400">
+                              <Button bg="transparent" color="green.400" onClick={() => editSubHandler(customer.id)}>
                                 <MdEdit size="20px" />
                               </Button>
-                              <Button bg="transparent" color="red.400">
+                              <Button
+                                bg="transparent"
+                                color="red.400"
+                                onClick={() => subDeleteHandle(key)}
+                              >
                                 <MdDeleteForever size="25px" color="red" />
                               </Button>
                             </Td>

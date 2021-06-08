@@ -62,7 +62,7 @@ export default function Products() {
   };
 
   useEffect(() => {
-    const url = PRODUCT_URL;
+    const url = PRODUCT_URL + "/search";
     const config = {
       headers: {
         Authorization: `Bearer ${auth.user.token}`,
@@ -339,7 +339,7 @@ export default function Products() {
                       <Td color="blackAlpha.700">{product.curbs}</Td>
                       <Td as={HStack}>
                         <Button onClick={() => countHandler(key)}>
-                          {product.count ? "UnAvailable" : "Available"}
+                          {product.count ? "Unavailable" : "Available"}
                         </Button>
                         <Button
                           bg="transparent"

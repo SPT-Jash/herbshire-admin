@@ -166,7 +166,7 @@ export default function UpdateProduct() {
             name="freshTill"
             label="fresh Till"
             type="text"
-            value={editProductDetail.productName}
+            value={editProductDetail.freshTill}
             onChange={(e) => {
               seteditfreshTill({
                 ...editProductDetail,
