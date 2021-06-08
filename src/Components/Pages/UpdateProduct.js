@@ -14,7 +14,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { useParams } from "react-router";
+import { useHistory, useParams } from "react-router";
 import {
   DELETE_FILE_URL,
   GST_URL,
@@ -27,26 +27,14 @@ import FormInput from "../Views/FormInput";
 
 export default function UpdateProduct() {
   const { id } = useParams();
+  const history = useHistory();
   const { auth } = useContext(Context);
   const form = useRef();
   const [images, setImages] = useState([]);
-  const [editProductDetail, seteditProductDetail] = useState([]);
+  const [editProductDetail, seteditProductDetail] = useState({});
   const [uploadedImages, setUploadedImages] = useState([]);
   const [gstList, setGstList] = useState([]);
   const toast = useToast();
-  // all porduct update names..
-  const [editProductNamme, seteditProductNamme] = useState();
-  const [editfreshTill, seteditfreshTill] = useState();
-  const [editcount, seteditcount] = useState();
-  const [editquantity, seteditquantity] = useState();
-  const [editprice, seteditprice] = useState();
-  const [editdiscount, seteditdiscount] = useState();
-  const [editweight, seteditweight] = useState();
-  const [editcalories, seteditcalories] = useState();
-  const [editproteins, seteditproteins] = useState();
-  const [editfats, seteditfats] = useState();
-  const [editcurbs, seteditcurbs] = useState();
-  const [editdescription, seteditdescription] = useState();
 
 
 
@@ -66,21 +54,23 @@ export default function UpdateProduct() {
 
 
   const onUpdateProduct = () => {
+    // edit product
     const url = SERVER_URL + "product";
     const config = {
       headers: {
         Authorization: `Bearer ${auth.user.token}`,
       }
     };
-    const body ={
-      
-    }
     axios
-      .patch(url, config, body)
+      .put(url, editProductDetail, config)
       .then(function (response) {
-        seteditProductDetail(response.data.body)
-        setUploadedImages(response.data.body.displayUrl)
-        console.log(editProductDetail, "dataxcvbuimp");
+        console.log(response, 'response');
+        if (response.status === 200) {
+          history.push(`/products`);
+          toastMessage("success", "Product Edit Successful.");
+        } else {
+          toastMessage("error", "Error while Editing Product!");
+        }
       })
       .catch(function (error) {
         console.log(error);
@@ -89,8 +79,10 @@ export default function UpdateProduct() {
         // always executed
       });
   }
+  console.log(editProductDetail, "dataxcvbuimp");
 
   useEffect(() => {
+    // get product detail
     const url = SERVER_URL + "product";
     const config = {
       headers: {
@@ -105,7 +97,6 @@ export default function UpdateProduct() {
       .then(function (response) {
         seteditProductDetail(response.data.body)
         setUploadedImages(response.data.body.displayUrl)
-        console.log(editProductDetail, "dataxcvbuimp");
       })
       .catch(function (error) {
         console.log(error);
@@ -113,6 +104,15 @@ export default function UpdateProduct() {
       .then(function () {
         // always executed
       });
+
+    axios
+      .get(GST_URL, config)
+      .then((res) => {
+        const list = res.data.body.content;
+        console.log(list);
+        setGstList(list);
+      })
+      .catch((r) => console.log(r));
   }, []);
 
 
@@ -148,6 +148,18 @@ export default function UpdateProduct() {
         borderRadius="5"
         borderColor="blackAlpha.300"
       >
+        <FormInput
+          name="productName"
+          label="product Name"
+          type="text"
+          value={editProductDetail.id}
+          onChange={(e) => {
+            seteditProductDetail({
+              ...editProductDetail,
+              id: e.target.value
+            })
+          }}
+        />
 
         <Flex flexWrap="wrap">
           <FormInput
@@ -156,7 +168,7 @@ export default function UpdateProduct() {
             type="text"
             value={editProductDetail.productName}
             onChange={(e) => {
-              seteditProductNamme({
+              seteditProductDetail({
                 ...editProductDetail,
                 productName: e.target.value
               })
@@ -165,12 +177,12 @@ export default function UpdateProduct() {
           <FormInput
             name="freshTill"
             label="fresh Till"
-            type="text"
+            type="number"
             value={editProductDetail.freshTill}
             onChange={(e) => {
-              seteditfreshTill({
+              seteditProductDetail({
                 ...editProductDetail,
-                productName: e.target.value
+                freshTill: e.target.value
               })
             }}
           />
@@ -186,7 +198,7 @@ export default function UpdateProduct() {
             type="number"
             value={editProductDetail.count}
             onChange={(e) => {
-              seteditcount({
+              seteditProductDetail({
                 ...editProductDetail,
                 count: e.target.value
               })
@@ -199,7 +211,7 @@ export default function UpdateProduct() {
             type="number"
             value={editProductDetail.quantity}
             onChange={(e) => {
-              seteditquantity({
+              seteditProductDetail({
                 ...editProductDetail,
                 quantity: e.target.value
               })
@@ -211,8 +223,7 @@ export default function UpdateProduct() {
             type="number"
             value={editProductDetail.price}
             onChange={(e) => {
-
-              seteditprice({
+              seteditProductDetail({
                 ...editProductDetail,
                 price: e.target.value
               })
@@ -224,7 +235,7 @@ export default function UpdateProduct() {
             type="number"
             value={editProductDetail.discount}
             onChange={(e) => {
-              seteditdiscount({
+              seteditProductDetail({
                 ...editProductDetail,
                 discount: e.target.value
               })
@@ -236,7 +247,7 @@ export default function UpdateProduct() {
             type="number"
             value={editProductDetail.weight}
             onChange={(e) => {
-              seteditweight({
+              seteditProductDetail({
                 ...editProductDetail,
                 weight: e.target.value
               })
@@ -272,7 +283,7 @@ export default function UpdateProduct() {
             type="text"
             value={editProductDetail.calories}
             onChange={(e) => {
-              seteditcalories({
+              seteditProductDetail({
                 ...editProductDetail,
                 calories: e.target.value
               })
@@ -284,7 +295,7 @@ export default function UpdateProduct() {
             type="text"
             value={editProductDetail.proteins}
             onChange={(e) => {
-              seteditproteins({
+              seteditProductDetail({
                 ...editProductDetail,
                 proteins: e.target.value
               })
@@ -296,7 +307,7 @@ export default function UpdateProduct() {
             type="text"
             value={editProductDetail.fats}
             onChange={(e) => {
-              seteditfats({
+              seteditProductDetail({
                 ...editProductDetail,
                 fats: e.target.value
               })
@@ -308,7 +319,7 @@ export default function UpdateProduct() {
             type="text"
             value={editProductDetail.curbs}
             onChange={(e) => {
-              seteditcurbs({
+              seteditProductDetail({
                 ...editProductDetail,
                 curbs: e.target.value
               })
@@ -325,7 +336,7 @@ export default function UpdateProduct() {
             type="text"
             value={editProductDetail.description}
             onChange={(e) => {
-              seteditdescription({
+              seteditProductDetail({
                 ...editProductDetail,
                 description: e.target.value
               })
