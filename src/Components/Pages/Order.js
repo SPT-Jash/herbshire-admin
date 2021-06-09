@@ -16,6 +16,8 @@ import axios from "axios";
 import ViewAddress from "../Popup/ViewAddress";
 import ViewOrder from "../Popup/ViewOrder";
 import { MdDeleteForever } from "react-icons/md";
+import Moment from 'react-moment';
+import 'moment-timezone';
 
 export default function Order() {
   const {
@@ -140,23 +142,23 @@ export default function Order() {
             <img src={Vector} width="30px" />
           </Center>
           <Menu>
-          <MenuButton
-            as={Button}
-            rightIcon={<BsChevronDown />}
-            borderColor="#E2E2E8"
-            p="2"
-          >
-            {currentPage}
-          </MenuButton>
-          <MenuList fontSize="sm" onSelect={(e) => console.log(e.target.value)}>
-            {pageArray.map((page) => {
-              console.log(page);
-              return (
-                <MenuItem onClick={() => setCurrentPage(page)}>{page}</MenuItem>
-              );
-            })}
-          </MenuList>
-        </Menu>
+            <MenuButton
+              as={Button}
+              rightIcon={<BsChevronDown />}
+              borderColor="#E2E2E8"
+              p="2"
+            >
+              {currentPage}
+            </MenuButton>
+            <MenuList fontSize="sm" onSelect={(e) => console.log(e.target.value)}>
+              {pageArray.map((page) => {
+                console.log(page);
+                return (
+                  <MenuItem onClick={() => setCurrentPage(page)}>{page}</MenuItem>
+                );
+              })}
+            </MenuList>
+          </Menu>
         </Flex>
 
         <Box overflowX="auto">
@@ -183,8 +185,8 @@ export default function Order() {
                   order.paymentStatus === "COMPLETED"
                     ? "#53C3AA"
                     : order.paymentStatus === "PENDING"
-                    ? "#EEA662"
-                    : "#FC6984";
+                      ? "#EEA662"
+                      : "#FC6984";
                 return (
                   <Tr fontSize="sm" className="order-table-row" key={key}>
                     <Td>
@@ -204,7 +206,7 @@ export default function Order() {
                       {order.paymentStatus}
                     </Td>
                     <Td color="#828194" fontSize="larg">
-                      {order.date}
+                      <Moment format="DD/MM/YYYY">{order.timestamp}</Moment>
                     </Td>
                     <Td color="#53C3AA" fontSize="large">
                       $ {(order.amount).toFixed(2)}

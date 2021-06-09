@@ -163,7 +163,7 @@ export default function Products() {
     }
   };
 
-  const editProduct = (id) =>{
+  const editProduct = (id) => {
     history.push(`/update-product/${id}`);
   }
 
@@ -312,53 +312,53 @@ export default function Products() {
             {products.length < 1
               ? "No Data found :("
               : products.map((product, key) => {
-                  return (
-                    <Tr fontSize="sm" className="order-table-row" key={key}>
-                      <Td>
-                        <Flex>
-                          <Avatar
-                            size="xs"
-                            borderRadius="5"
-                            name="Andrew"
-                            src={product.displayUrl}
-                          />
-                          <Text ml="3" color="#828194" whiteSpace="nowrap">
-                            {product.productName}
-                          </Text>
-                        </Flex>
-                      </Td>
-                      <Td color="blackAlpha.700">{product.weight}</Td>
-                      <Td color="blackAlpha.700">{product.quantity}</Td>
-                      <Td color="blackAlpha.700">{product.price}</Td>
-                      <Td color="blackAlpha.700">{product.discount}</Td>
-                      <Td color="blackAlpha.700">{product.freshTill}</Td>
-                      <Td color="blackAlpha.700">{product.count}</Td>
-                      <Td color="blackAlpha.700">{product.calories}</Td>
-                      <Td color="blackAlpha.700">{product.proteins}</Td>
-                      <Td color="blackAlpha.700">{product.fats}</Td>
-                      <Td color="blackAlpha.700">{product.curbs}</Td>
-                      <Td as={HStack}>
-                        <Button onClick={() => countHandler(key)}>
-                          {product.count ? "Unavailable" : "Available"}
-                        </Button>
-                        <Button
-                          bg="transparent"
-                          color="green.400"
-                          onClick={(id) => editProduct(product.id)}
-                        >
-                          <MdEdit size="20px" />
-                        </Button>
-                        <Button
-                          bg="transparent"
-                          color="red.400"
-                          onClick={() => HandleProductDelete(key)}
-                        >
-                          <MdDeleteForever size="25px" color="red" />
-                        </Button>
-                      </Td>
-                    </Tr>
-                  );
-                })}
+                return (
+                  <Tr fontSize="sm" className="order-table-row" key={key}>
+                    <Td>
+                      <Flex>
+                        <Avatar
+                          size="xs"
+                          borderRadius="5"
+                          name="Andrew"
+                          src={product.displayUrl}
+                        />
+                        <Text ml="3" color="#828194" whiteSpace="nowrap">
+                          {product.productName}
+                        </Text>
+                      </Flex>
+                    </Td>
+                    <Td color="blackAlpha.700">{product.weight}</Td>
+                    <Td color="blackAlpha.700">{product.quantity}</Td>
+                    <Td color="blackAlpha.700">{product.price}</Td>
+                    <Td color="blackAlpha.700">{product.discount}</Td>
+                    <Td color="blackAlpha.700">{product.freshTill}</Td>
+                    <Td color="blackAlpha.700">{product.count}</Td>
+                    <Td color="blackAlpha.700">{product.calories}</Td>
+                    <Td color="blackAlpha.700">{product.proteins}</Td>
+                    <Td color="blackAlpha.700">{product.fats}</Td>
+                    <Td color="blackAlpha.700">{product.curbs}</Td>
+                    <Td as={HStack}>
+                      <Button onClick={() => countHandler(key)}>
+                        {product.count ? "Unavailable" : "Available"}
+                      </Button>
+                      <Button
+                        bg="transparent"
+                        color="green.400"
+                        onClick={(id) => editProduct(product.id)}
+                      >
+                        <MdEdit size="20px" />
+                      </Button>
+                      <Button
+                        bg="transparent"
+                        color="red.400"
+                        onClick={() => HandleProductDelete(key)}
+                      >
+                        <MdDeleteForever size="25px" color="red" />
+                      </Button>
+                    </Td>
+                  </Tr>
+                );
+              })}
           </Tbody>
         </Table>
       </Box>
