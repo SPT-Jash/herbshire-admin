@@ -54,16 +54,18 @@ const ViewAddress = (props) => {
                       </Text>
                       <br />
                       <Flex gridColumnGap="2.5">
-                        <BiMap style={{margin: "auto" }} />
-                          {address.addressLine1} , {address.addressLine2}, {address.city}
+                        <BiMap style={{ margin: "auto" }} />
+                        {address.addressLine1} , {address.addressLine2},{" "}
+                        {address.city}
                       </Flex>
-                      <Text marginLeft="35px">{address.state}, {address.country}-{address.pincode}</Text><br/>
-                      <Text>
-                        <Flex gridColumnGap="2.5">
-                          <BiPhoneCall style={{ marginTop: "5px" }}/>
-                          {address.deliveryPhoneNumber}
-                        </Flex>
+                      <Text marginLeft="35px">
+                        {address.state}, {address.country}-{address.pincode}
                       </Text>
+                      <br />
+                      <Flex gridColumnGap="2.5">
+                        <BiPhoneCall style={{ marginTop: "5px" }} />
+                        {address.deliveryPhoneNumber}
+                      </Flex>
                     </Box>
                   );
                 })}

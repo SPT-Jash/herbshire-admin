@@ -18,6 +18,8 @@ import {
   Table,
   Td,
   Center,
+  Tbody,
+  Thead,
 } from "@chakra-ui/react";
 
 const ViewSubscription = (props) => {
@@ -53,30 +55,34 @@ const ViewSubscription = (props) => {
           <ModalCloseButton />
           <ModalBody width="3xl">
             <Table border="1px solid #e2e8f0">
-              <Tr>
-                <Th>Price</Th>
-                <Th>Upto</Th>
-                <Th>Frequency</Th>
-                <Th>Delivery Days</Th>
-              </Tr>
-              {props.add < 1
-                ? "No Data found :("
-                : props.add.map((sub, index) => {
-                    return (
-                      // <Box w="100%" h="100%" key={index} style={{ padding: "10px", border: "1px solid #ddd", borderRadius: "5px", marginRight: "5px", marginBottom: "5px" }}>
-                      <Tr color="gray">
-                        <Td>{sub.price}</Td>
-                        <Td>{sub.upto}</Td>
-                        <Td>{sub.frequency}</Td>
-                        <Td>
-                          {sub.deliveryDays
-                            .split("-")
-                            .map((day) => subDay(day))}
-                        </Td>
-                      </Tr>
-                      // </Box>
-                    );
-                  })}
+              <Thead>
+                <Tr>
+                  <Th>Price</Th>
+                  <Th>Upto</Th>
+                  <Th>Frequency</Th>
+                  <Th>Delivery Days</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {props.add < 1
+                  ? "No Data found :("
+                  : props.add.map((sub, index) => {
+                      return (
+                        // <Box w="100%" h="100%" key={index} style={{ padding: "10px", border: "1px solid #ddd", borderRadius: "5px", marginRight: "5px", marginBottom: "5px" }}>
+                        <Tr color="gray" key={index}>
+                          <Td>{sub.price}</Td>
+                          <Td>{sub.upto}</Td>
+                          <Td>{sub.frequency}</Td>
+                          <Td>
+                            {sub.deliveryDays
+                              .split("-")
+                              .map((day) => subDay(day))}
+                          </Td>
+                        </Tr>
+                        // </Box>
+                      );
+                    })}
+              </Tbody>
             </Table>
           </ModalBody>
         </ModalContent>
