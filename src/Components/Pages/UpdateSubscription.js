@@ -72,11 +72,11 @@ const UpdateSubscription = () => {
       },
     };
     axios
-    .get(url, config)
+      .get(url, config)
       .then(function (response) {
         // console.log(response);
         setEditSubDetail(response.data.body);
-        setproductList(response.data.body.productsList)
+        setproductList(response.data.body.productsList);
         setSub(response.data.body.subscriptionPricesList[0]);
         setImage([]);
         console.log(editSubDetail, "edit");
@@ -88,19 +88,19 @@ const UpdateSubscription = () => {
         // always executed
       });
 
-      const url2 = PRODUCT_URL + "/search";
-      const config2 = {
-        headers: {
-          Authorization: `Bearer ${auth.user.token}`,
-        },
-        params: {
-          filter: {},
-          ascSort: true,
-          pageSize: 100000,
-          pageNumber: 1,
-        },
-      };
-      axios
+    const url2 = PRODUCT_URL + "/search";
+    const config2 = {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
+      },
+      params: {
+        filter: {},
+        ascSort: true,
+        pageSize: 100000,
+        pageNumber: 1,
+      },
+    };
+    axios
       .get(url2, config2)
       .then(function (response) {
         const data = response.data.body.content;
@@ -143,6 +143,17 @@ const UpdateSubscription = () => {
     setproductList([...tempProduct]);
   };
 
+  const removeStatus = () => {
+    toastMessage("warning", "Status deleted !");
+    setEditSubDetail((prev) => ({ ...prev, active: null }));
+  };
+
+  const removeFrequency = () => {
+    toastMessage("warning", "Frequency deleted !");
+    setSub((prev) => ({ ...prev, frequency: null }));
+    // setEditSubDetail({...editSubDetail, subscriptionPricesList: sub})
+  };
+
   const SelectedImage = (
     <Flex display="block">
       {image.map((img, key) => (
@@ -161,13 +172,6 @@ const UpdateSubscription = () => {
       ))}
     </Flex>
   );
-
-  const freHandler = () => {
-    const fre = frequencyList.find(
-      (fre) => fre.label === sub.frequency
-    )
-    return fre;
-  }
 
   return (
     <Box>
@@ -205,8 +209,6 @@ const UpdateSubscription = () => {
               <div style={{ fontSize: "1.1rem", width: "10rem" }}>
                 <Select
                   name="status"
-                  placeholder={editSubDetail.active ? "Active" : "Inactive"}
-                  defaultValue={statusList[0]}
                   options={statusList}
                   onChange={(e) =>
                     e.label === "Active"
@@ -215,6 +217,25 @@ const UpdateSubscription = () => {
                   }
                 />
               </div>
+            </Box>
+            <Box ml="4">
+              {editSubDetail.active !== null && (
+                <Tag
+                  size="lg"
+                  h="50px"
+                  borderRadius="10px"
+                  variant="solid"
+                  colorScheme="green"
+                  m="2"
+                >
+                  <TagLabel>
+                    {editSubDetail.active
+                      ? "Active"
+                      : editSubDetail.active !== null && "Inactive"}
+                  </TagLabel>
+                  <TagCloseButton onClick={() => removeStatus()} />
+                </Tag>
+              )}
             </Box>
           </Flex>
           <Grid m="2">
@@ -290,16 +311,16 @@ const UpdateSubscription = () => {
                 List of Product
               </Text>
               <div style={{ fontSize: "1.3rem", width: "15rem" }}>
-              <Select
-                    isMulti
-                    options={productsList}
-                    name="product"
-                    onChange={(e) => setProductId(e.map((x) => x.value))}
-                  />
+                <Select
+                  isMulti
+                  options={productsList}
+                  name="product"
+                  onChange={(e) => setProductId(e.map((x) => x.value))}
+                />
               </div>
             </Box>
             <Box ml="4">
-            {productList.map((list, key) => (
+              {productList.map((list, key) => (
                 <Tag
                   size="lg"
                   h="50px"
@@ -310,14 +331,13 @@ const UpdateSubscription = () => {
                   m="2"
                 >
                   <TagLabel>{list.productName}</TagLabel>
-                  <TagCloseButton onClick={() => removeProduct(key)}/>
+                  <TagCloseButton onClick={() => removeProduct(key)} />
                 </Tag>
               ))}
             </Box>
           </Flex>
           <Text mb="4">Subscription Price</Text>
           <Divider mt="4" mb="4" />
-          {/* {console.log(editSubDetail.subscriptionPricesList[0])} */}
           <Flex>
             <FormInput
               label="Price"
@@ -335,17 +355,8 @@ const UpdateSubscription = () => {
               >
                 Frequency
               </Text>
-              {/* {console.log(frequencyList.find(
-                    (fre) => fre.label === sub.frequency
-                  ),"fre")} */}
               <div style={{ fontSize: "1.3rem", width: "16rem" }}>
-                <Select
-                  isMulti
-                  options={frequencyList}
-                  name="frequency"
-                  placeholder={sub.frequency}
-                  defaultValue={freHandler}
-                />
+                <Select isMulti options={frequencyList} name="frequency" />
               </div>
             </Box>
             <Box m="3">
@@ -358,7 +369,11 @@ const UpdateSubscription = () => {
                 Up To
               </Text>
               <div style={{ fontSize: "1.3rem", width: "15rem" }}>
-                <Select placeholder="Select Option" options={uptoList} defaultValue={uptoList[0]} />
+                <Select
+                  placeholder="Select Option"
+                  options={uptoList}
+                  defaultValue={uptoList[0]}
+                />
               </div>
             </Box>
             <Box m="3">
@@ -376,7 +391,42 @@ const UpdateSubscription = () => {
             </Box>
           </Flex>
 
-          <Button type="submit">Add New Subscription</Button>
+          <Flex marginLeft="15rem">
+            <Box ml="4">
+              {sub.frequency !== null && (
+                <Tag
+                  size="lg"
+                  h="50px"
+                  borderRadius="10px"
+                  variant="solid"
+                  colorScheme="green"
+                  m="2"
+                >
+                  <TagLabel>{sub.frequency}</TagLabel>
+                  <TagCloseButton onClick={() => removeFrequency()} />
+                </Tag>
+              )}
+            </Box>
+            <Box ml="23rem">
+              {sub.deliveryDays.split("-").map((day, key) => {
+                return (
+                  <Tag
+                  key={key}
+                  size="lg"
+                  h="50px"
+                  borderRadius="10px"
+                  variant="solid"
+                  colorScheme="green"
+                  m="2"
+                >
+                  <TagLabel>{day}</TagLabel>
+                  <TagCloseButton  />
+                </Tag>
+                );
+              })}
+            </Box>
+          </Flex>
+          <Button type="submit">Edit Subscription</Button>
         </form>
       </Box>
     </Box>
