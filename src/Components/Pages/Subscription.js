@@ -324,7 +324,7 @@ const Subscription = () => {
                                 {customer.description}
                               </ShowMoreText>
                             </Td>
-                            <Td color="blackAlpha.700">{customer.active}</Td>
+                            <Td color="blackAlpha.700">{customer.active? "Active" : "Inactive"}</Td>
                             <Td color="blackAlpha.700">
                               <Button
                                 onClick={(add) =>

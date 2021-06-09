@@ -81,7 +81,7 @@ const AddSubscription = () => {
   //get product
 
   useEffect(() => {
-    const url = PRODUCT_URL;
+    const url = PRODUCT_URL + "/search";
     const config = {
       headers: {
         Authorization: `Bearer ${auth.user.token}`,

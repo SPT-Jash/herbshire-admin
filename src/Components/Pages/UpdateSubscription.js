@@ -18,20 +18,35 @@ const UpdateSubscription = () => {
   const form = useRef();
   const [image, setImage] = useState([]);
   const [editSubDetail, setEditSubDetail] = useState([]);
-  const [editName, setEditName] = useState();
-  const [editStatus, setEditStatus] = useState();
-  const [editDescription, setEditDescription] = useState("");
+  const [sub, setSub] = useState([]);
   const toast = useToast();
 
   const statusList = [
     { value: 1, label: "Active" },
-    { value: 2, label: "Inavtive" },
+    { value: 2, label: "Inactive" },
   ];
   const productsList = [];
 
+  // {
+  //   products.map((pro, key) => {
+  //     productsList.push({ value: pro.id, label: pro.productName });
+  //   });
+  // }
+
   const uptoList = [{ value: 1, label: "ONE_MONTH" }];
-  const frequencyList = [];
-  const delivery_days = [];
+  const frequencyList = [
+    { value: 1, label: "ONCE_A_WEEK" },
+    { value: 2, label: "TWICE_A_WEEK" },
+  ];
+  const delivery_days = [
+    { value: 1, label: "Monday" },
+    { value: 2, label: "Tuesday" },
+    { value: 3, label: "Wensday" },
+    { value: 4, label: "Thursday" },
+    { value: 5, label: "Friday" },
+    { value: 6, label: "Saturday" },
+    { value: 7, label: "Sunday" },
+  ];
 
   const toastMessage = (status, msg) => {
     toast({
@@ -56,8 +71,11 @@ const UpdateSubscription = () => {
     axios
       .get(url, config)
       .then(function (response) {
-        console.log(response);
+        // console.log(response);
         setEditSubDetail(response.data.body);
+        setSub(response.data.body.subscriptionPricesList[0]);
+        setImage([]);
+        console.log(editSubDetail, "edit");
       })
       .catch(function (error) {
         console.log(error);
@@ -108,8 +126,16 @@ const UpdateSubscription = () => {
     </Flex>
   );
 
+  const freHandler = () => {
+    const fre = frequencyList.find(
+      (fre) => fre.label === sub.frequency
+    )
+    return fre;
+  }
+
   return (
     <Box>
+      {console.log(editSubDetail, "edit", sub)}
       <Text m="2" fontSize="lg" fontWeight="semibold">
         Edit Subscription
       </Text>
@@ -125,12 +151,12 @@ const UpdateSubscription = () => {
             <FormInput
               label="Name Of Subscription"
               type="text"
-              value={editName}
+              value={editSubDetail.name}
               onChange={(e) =>
-                setEditName({ ...editSubDetail, name: e.target.value })
+                setEditSubDetail((prev) => ({ ...prev, name: e.target.value }))
               }
             />
-            
+
             <Box m="3">
               <Text
                 m="2"
@@ -144,11 +170,12 @@ const UpdateSubscription = () => {
                 <Select
                   name="status"
                   placeholder={editSubDetail.active ? "Active" : "Inactive"}
+                  defaultValue={statusList[0]}
                   options={statusList}
                   onChange={(e) =>
                     e.label === "Active"
-                      ? setEditStatus({ ...editSubDetail, active: true })
-                      : setEditStatus({ ...editSubDetail, active: false })
+                      ? setEditSubDetail({ ...editSubDetail, active: true })
+                      : setEditSubDetail({ ...editSubDetail, active: false })
                   }
                 />
               </div>
@@ -167,7 +194,7 @@ const UpdateSubscription = () => {
               mb="3"
               value={editSubDetail.description}
               onChange={(e) =>
-                setEditDescription({
+                setEditSubDetail({
                   ...editSubDetail,
                   description: e.target.value,
                 })
@@ -227,14 +254,21 @@ const UpdateSubscription = () => {
                 List of Product
               </Text>
               <div style={{ fontSize: "1.3rem", width: "15rem" }}>
-                <Select isMulti options={productsList} name="product" />
+                <Select options={productsList} name="product" isMulti />
               </div>
             </Box>
           </Flex>
           <Text mb="4">Subscription Price</Text>
           <Divider mt="4" mb="4" />
+          {/* {console.log(editSubDetail.subscriptionPricesList[0])} */}
           <Flex>
-            <FormInput label="Price" type="text" name="price" />
+            <FormInput
+              label="Price"
+              type="text"
+              name="price"
+              value={sub.price}
+              onChange={(e) => setSub(e.target.value)}
+            />
             <Box m="3">
               <Text
                 m="2"
@@ -244,8 +278,17 @@ const UpdateSubscription = () => {
               >
                 Frequency
               </Text>
+              {/* {console.log(frequencyList.find(
+                    (fre) => fre.label === sub.frequency
+                  ),"fre")} */}
               <div style={{ fontSize: "1.3rem", width: "16rem" }}>
-                <Select isMulti options={frequencyList} name="frequency" />
+                <Select
+                  isMulti
+                  options={frequencyList}
+                  name="frequency"
+                  placeholder={sub.frequency}
+                  defaultValue={freHandler}
+                />
               </div>
             </Box>
             <Box m="3">
@@ -258,7 +301,7 @@ const UpdateSubscription = () => {
                 Up To
               </Text>
               <div style={{ fontSize: "1.3rem", width: "15rem" }}>
-                <Select placeholder="Select Option" options={uptoList} />
+                <Select placeholder="Select Option" options={uptoList} defaultValue={uptoList[0]} />
               </div>
             </Box>
             <Box m="3">

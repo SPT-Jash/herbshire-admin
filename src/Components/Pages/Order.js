@@ -1,5 +1,5 @@
 import "./pages.css";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../Data/Context";
 import { Box, Flex, Spacer, Text, Stack, Center } from "@chakra-ui/layout";
 import { useMediaQuery } from "@chakra-ui/media-query";
@@ -11,73 +11,57 @@ import { Button } from "@chakra-ui/button";
 import { Table, Tbody, Td, Thead, Tr, Th } from "@chakra-ui/table";
 import { Avatar } from "@chakra-ui/avatar";
 import { Link } from "react-router-dom";
+import { SERVER_URL } from "../Config/Apis";
+import axios from "axios";
+import ViewAddress from "../Popup/ViewAddress";
+import ViewOrder from "../Popup/ViewOrder";
 
 export default function Order() {
-  const { setSelectedNavItem } = useContext(Context);
+  const { setSelectedNavItem, auth, viewAddress, setviewAddress,viewOrder, setviewOrder } = useContext(Context);
   setSelectedNavItem("orders");
-
-  const orderData = [
-    {
-      profileSrc: "https://bit.ly/dan-abramov",
-      receiver: "Andrew",
-      days: "Today",
-      status: "Pending",
-      date: "01 Apr 2020",
-      amount: "75.65",
-    },
-    {
-      profileSrc: "https://bit.ly/dan-abramov",
-      receiver: "Andrew",
-      days: "Today",
-      status: "Cancel",
-      date: "01 Apr 2020",
-      amount: "75",
-    },
-    {
-      profileSrc: "https://bit.ly/dan-abramov",
-      receiver: "Andrew",
-      days: "Today",
-      status: "Pending",
-      date: "01 Apr 2020",
-      amount: "75.65",
-    },
-    {
-      profileSrc: "https://bit.ly/dan-abramov",
-      receiver: "Andrew",
-      days: "Today",
-      status: "Delivered",
-      date: "01 Apr 2020",
-      amount: "75",
-    },
-    {
-      profileSrc: "https://bit.ly/dan-abramov",
-      receiver: "Andrew",
-      days: "Today",
-      status: "Delivered",
-      date: "01 Apr 2020",
-      amount: "75.65",
-    },
-    {
-      profileSrc: "https://bit.ly/dan-abramov",
-      receiver: "Andrew",
-      days: "Today",
-      status: "Delivered",
-      date: "01 Apr 2020",
-      amount: "75",
-    },
-    {
-      profileSrc: "https://bit.ly/dan-abramov",
-      receiver: "Andrew",
-      days: "Today",
-      status: "Pending",
-      date: "01 Apr 2020",
-      amount: "75.65",
-    },
-  ];
-
   const [isSmallerThan900] = useMediaQuery("(max-width: 900px)");
+  const [orderData, setOrderData] = useState([]);
+  const [addressDetail, setaddressDetail] = useState([]);
+  const [ordersDetail, setordersDetail] = useState([]);
+
+  useEffect(() => {
+    const url = SERVER_URL + "order/admin/get_all";
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
+      },
+    };
+
+    axios
+      .get(url, config)
+      .then(function (response) {
+        if (response.status === 200) {
+          setOrderData(response.data.body);
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
+      .then(function () {
+        // always executed
+      });
+  }, [auth]);
+
+  const onViewAddress = (add) => {
+    setviewAddress(true);
+    setaddressDetail([add]);
+  };
+
+  const onViewOrder = (add) => {
+    setviewOrder(true);
+    setordersDetail([add]);
+  };
 
   return (
+    <>
+    {viewAddress && <ViewAddress add={addressDetail} view="true" />}
+    {viewOrder && <ViewOrder add={ordersDetail} view="true" />}
     <Box w="90%">
       <Flex>
         <Text mb="2" fontSize="sm" fontWeight="semibold">
@@ -155,18 +139,20 @@ export default function Order() {
           <Thead>
             <Tr>
               <Th color="#828194">Receiver</Th>
-              <Th color="#828194">Days</Th>
               <Th color="#828194">Status</Th>
               <Th color="#828194">Date</Th>
               <Th color="#828194">Amount</Th>
+              <Th color="#828194">Address</Th>
+              <Th color="#828134">Order</Th>
             </Tr>
           </Thead>
           <Tbody>
             {orderData.map((order, key) => {
+              {console.log(order, "order")}
               const orderStatusColour =
-                order.status === "Delivered"
+                order.paymentStatus === "COMPLETED"
                   ? "#53C3AA"
-                  : order.status === "Pending"
+                  : order.paymentStatus === "PENDING"
                   ? "#EEA662"
                   : "#FC6984";
               return (
@@ -180,21 +166,28 @@ export default function Order() {
                         src={order.profileSrc}
                       />
                       <Text ml="3" color="#828194" fontSize="large">
-                        {order.receiver}
+                        {order.address.fullName}
                       </Text>
                     </Flex>
                   </Td>
-                  <Td color="#B7B7C2" fontSize="large">
-                    {order.days}
-                  </Td>
                   <Td color={orderStatusColour} fontSize="large">
-                    {order.status}
+                    {order.paymentStatus}
                   </Td>
-                  <Td color="#828194" fontSize="large" whiteSpace="nowrap">
+                  <Td color="#828194" fontSize="larg">
                     {order.date}
                   </Td>
-                  <Td color="#53C3AA" fontSize="large" whiteSpace="nowrap">
+                  <Td color="#53C3AA" fontSize="large">
                     $ {order.amount}
+                  </Td>
+                  <Td color="#000" fontSize="large">
+                    <Button onClick={(add) => onViewAddress(order.address)}>
+                      View Address
+                    </Button>
+                  </Td>
+                  <Td color="#000" fontSize="large">
+                    <Button onClick={(add) => onViewOrder(order)}>
+                      View Order
+                    </Button>
                   </Td>
                 </Tr>
               );
@@ -203,5 +196,6 @@ export default function Order() {
         </Table>
       </Box>
     </Box>
+    </>
   );
 }
