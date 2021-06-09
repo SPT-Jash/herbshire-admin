@@ -89,7 +89,7 @@ const AddSubscription = () => {
       params: {
         filter: {},
         ascSort: true,
-        pageSize: 10,
+        pageSize: 100000,
         pageNumber: 1,
       },
     };

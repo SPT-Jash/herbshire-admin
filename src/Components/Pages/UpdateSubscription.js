@@ -7,7 +7,7 @@ import { Input } from "@chakra-ui/input";
 import axios from "axios";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
-import { SERVER_URL } from "../Config/Apis";
+import { SERVER_URL, PRODUCT_URL } from "../Config/Apis";
 import { Context } from "../Data/Context";
 import FormInput from "../Views/FormInput";
 import Select from "react-select";
@@ -20,18 +20,21 @@ const UpdateSubscription = () => {
   const [editSubDetail, setEditSubDetail] = useState([]);
   const [sub, setSub] = useState([]);
   const toast = useToast();
+  const [productList, setproductList] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [productId, setProductId] = useState([]);
 
   const statusList = [
     { value: 1, label: "Active" },
     { value: 2, label: "Inactive" },
   ];
-  const productsList = [];
 
-  // {
-  //   products.map((pro, key) => {
-  //     productsList.push({ value: pro.id, label: pro.productName });
-  //   });
-  // }
+  const productsList = [];
+  {
+    products.map((pro, key) => {
+      productsList.push({ value: pro.id, label: pro.productName });
+    });
+  }
 
   const uptoList = [{ value: 1, label: "ONE_MONTH" }];
   const frequencyList = [
@@ -69,13 +72,39 @@ const UpdateSubscription = () => {
       },
     };
     axios
-      .get(url, config)
+    .get(url, config)
       .then(function (response) {
         // console.log(response);
         setEditSubDetail(response.data.body);
+        setproductList(response.data.body.productsList)
         setSub(response.data.body.subscriptionPricesList[0]);
         setImage([]);
         console.log(editSubDetail, "edit");
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
+      .then(function () {
+        // always executed
+      });
+
+      const url2 = PRODUCT_URL + "/search";
+      const config2 = {
+        headers: {
+          Authorization: `Bearer ${auth.user.token}`,
+        },
+        params: {
+          filter: {},
+          ascSort: true,
+          pageSize: 100000,
+          pageNumber: 1,
+        },
+      };
+      axios
+      .get(url2, config2)
+      .then(function (response) {
+        const data = response.data.body.content;
+        setProducts(data);
       })
       .catch(function (error) {
         console.log(error);
@@ -105,6 +134,13 @@ const UpdateSubscription = () => {
     const deletedImage = tempImages.splice(id, 1);
     toastMessage("warning", `${deletedImage[0].name} deleted !`);
     setImage([...tempImages]);
+  };
+
+  const removeProduct = (key) => {
+    const tempProduct = productList;
+    const deletedProduct = tempProduct.splice(key, 1);
+    toastMessage("warning", `${deletedProduct[0].productName} deleted !`);
+    setproductList([...tempProduct]);
   };
 
   const SelectedImage = (
@@ -254,8 +290,29 @@ const UpdateSubscription = () => {
                 List of Product
               </Text>
               <div style={{ fontSize: "1.3rem", width: "15rem" }}>
-                <Select options={productsList} name="product" isMulti />
+              <Select
+                    isMulti
+                    options={productsList}
+                    name="product"
+                    onChange={(e) => setProductId(e.map((x) => x.value))}
+                  />
               </div>
+            </Box>
+            <Box ml="4">
+            {productList.map((list, key) => (
+                <Tag
+                  size="lg"
+                  h="50px"
+                  key={key}
+                  borderRadius="10px"
+                  variant="solid"
+                  colorScheme="green"
+                  m="2"
+                >
+                  <TagLabel>{list.productName}</TagLabel>
+                  <TagCloseButton onClick={() => removeProduct(key)}/>
+                </Tag>
+              ))}
             </Box>
           </Flex>
           <Text mb="4">Subscription Price</Text>
