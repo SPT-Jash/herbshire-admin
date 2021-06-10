@@ -1,6 +1,12 @@
 import { Button } from "@chakra-ui/button";
 import { Input } from "@chakra-ui/input";
 import { Box, Center, Divider, Flex, Text } from "@chakra-ui/layout";
+import { PopoverBody } from "@chakra-ui/popover";
+import { PopoverCloseButton } from "@chakra-ui/popover";
+import { PopoverArrow } from "@chakra-ui/popover";
+import { PopoverTrigger } from "@chakra-ui/popover";
+import { PopoverContent } from "@chakra-ui/popover";
+import { Popover } from "@chakra-ui/popover";
 import { Select } from "@chakra-ui/select";
 import { Tag, TagCloseButton, TagLabel } from "@chakra-ui/tag";
 import { useToast } from "@chakra-ui/toast";
@@ -21,6 +27,7 @@ import {
 } from "../Config/Apis";
 import { Context } from "../Data/Context";
 import FormInput from "../Views/FormInput";
+import {AiFillInfoCircle} from 'react-icons/ai';
 
 export default function AddProducts() {
   const { auth } = useContext(Context);
@@ -29,6 +36,7 @@ export default function AddProducts() {
   const [images, setImages] = useState([]);
   const [uploadedImages, setUploadedImages] = useState([]);
   const [gstList, setGstList] = useState([]);
+  const [open, setOpen] = useState(false);
   const toast = useToast();
 
   useEffect(() => {
@@ -108,6 +116,10 @@ export default function AddProducts() {
     }
     if (freshTill.trim() === "") {
       toastMessage("error", "freshTill Cannot be null !");
+      return false;
+    }
+    if(freshTill.trim() > "10"){
+      toastMessage("error", "freshTill can not more than 10 ")
       return false;
     }
     if (quantity.trim() === "") {
@@ -352,7 +364,37 @@ export default function AddProducts() {
         >
           <Flex flexWrap="wrap">
             <FormInput name="productName" label="product Name" type="text" />
-            <FormInput name="freshTill" label="fresh Till" type="text" />
+            <Box m="2">
+              <Text
+                m="2"
+                fontSize="md"
+                fontWeight="semibold"
+                color="blackAlpha.800"
+              >
+                {"fresh Till".toUpperCase()}
+              </Text>
+              <Popover isOpen={open} onClose={() => setOpen(false)}>
+              <PopoverTrigger>
+              <Input
+                m="2"
+                name="freshTill"
+                placeholder={"fresh Till".toUpperCase()}
+                type="number"
+                borderRadius="8"
+                onChange={(e) => (e.target.value > 10 && setOpen(true))}
+              />
+               </PopoverTrigger>
+               <PopoverContent width="13rem" bg="#3182ce" color="#FFF">
+                <PopoverArrow />
+                <PopoverCloseButton />
+                <PopoverBody fontSize="1rem" display="flex"><AiFillInfoCircle style={{marginTop: "auto", marginBottom: "auto", marginRight: "5px"}}/>not more than 10</PopoverBody>
+              </PopoverContent>
+            </Popover>
+            </Box>
+            {/*
+                <FormInput name="freshTill" label="fresh Till" type="number" />
+             
+               */}
           </Flex>
 
           <Divider mt="4" mb="4" />

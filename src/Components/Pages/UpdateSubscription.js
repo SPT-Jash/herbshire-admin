@@ -154,6 +154,10 @@ const UpdateSubscription = () => {
     // setEditSubDetail({...editSubDetail, subscriptionPricesList: sub})
   };
 
+  const removeDay = (key) => {
+    
+  }
+
   const SelectedImage = (
     <Flex display="block">
       {image.map((img, key) => (
@@ -420,7 +424,7 @@ const UpdateSubscription = () => {
                   m="2"
                 >
                   <TagLabel>{day}</TagLabel>
-                  <TagCloseButton  />
+                  <TagCloseButton onClick={() => removeDay(key)} />
                 </Tag>
                 );
               })}

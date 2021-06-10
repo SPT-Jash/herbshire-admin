@@ -16,8 +16,7 @@ import axios from "axios";
 import ViewAddress from "../Popup/ViewAddress";
 import ViewOrder from "../Popup/ViewOrder";
 import { MdDeleteForever } from "react-icons/md";
-import Moment from 'react-moment';
-import 'moment-timezone';
+// import Moment from "react-moment";
 
 export default function Order() {
   const {
@@ -81,6 +80,40 @@ export default function Order() {
   const onViewOrder = (add) => {
     setviewOrder(true);
     setordersDetail([add]);
+  };
+
+  const deleteOrderHandler = (key) => {
+    const url = SERVER_URL + "order/admin/cancel";
+    const order_id = orderData[key].id;
+    // const amount = parseInt(orderData[key].amount.toFixed());
+
+    console.log(order_id);
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
+      },
+    };
+
+    const body = {
+      id: order_id,
+    };
+    
+    console.log("header", config, body);
+    axios
+      .delete(url, body, config)
+      .then((res) => {
+        console.log(res);
+        // if (res.data.success) {
+        //   console.log(res.data);
+        //   const tempOrder = orderData;
+        //   tempOrder.splice(key, 1);
+        //   setOrderData([...tempOrder]);
+        // }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
@@ -150,11 +183,16 @@ export default function Order() {
             >
               {currentPage}
             </MenuButton>
-            <MenuList fontSize="sm" onSelect={(e) => console.log(e.target.value)}>
+            <MenuList
+              fontSize="sm"
+              onSelect={(e) => console.log(e.target.value)}
+            >
               {pageArray.map((page) => {
                 console.log(page);
                 return (
-                  <MenuItem onClick={() => setCurrentPage(page)}>{page}</MenuItem>
+                  <MenuItem onClick={() => setCurrentPage(page)}>
+                    {page}
+                  </MenuItem>
                 );
               })}
             </MenuList>
@@ -169,9 +207,7 @@ export default function Order() {
                 <Th color="#828194">Status</Th>
                 <Th color="#828194">Date</Th>
                 <Th color="#828194">Amount</Th>
-                <Th color="#828194" w="1px">
-                  Address
-                </Th>
+                <Th color="#828194">Address</Th>
                 <Th color="#828194">Order</Th>
                 <Th>Action</Th>
               </Tr>
@@ -185,8 +221,8 @@ export default function Order() {
                   order.paymentStatus === "COMPLETED"
                     ? "#53C3AA"
                     : order.paymentStatus === "PENDING"
-                      ? "#EEA662"
-                      : "#FC6984";
+                    ? "#EEA662"
+                    : "#FC6984";
                 return (
                   <Tr fontSize="sm" className="order-table-row" key={key}>
                     <Td>
@@ -206,10 +242,10 @@ export default function Order() {
                       {order.paymentStatus}
                     </Td>
                     <Td color="#828194" fontSize="larg">
-                      <Moment format="DD/MM/YYYY">{order.timestamp}</Moment>
+                      {/* <Moment format="DD/MM/YYYY">{order.timestamp}</Moment> */}
                     </Td>
                     <Td color="#53C3AA" fontSize="large">
-                      $ {(order.amount).toFixed(2)}
+                      $ {order.amount.toFixed(2)}
                     </Td>
                     <Td color="#000" fontSize="large">
                       <Button onClick={(add) => onViewAddress(order.address)}>
@@ -222,7 +258,11 @@ export default function Order() {
                       </Button>
                     </Td>
                     <Td>
-                      <Button bg="transparent" color="red.400">
+                      <Button
+                        bg="transparent"
+                        color="red.400"
+                        onClick={() => deleteOrderHandler(key)}
+                      >
                         <MdDeleteForever size="25px" color="red" />
                       </Button>
                     </Td>
