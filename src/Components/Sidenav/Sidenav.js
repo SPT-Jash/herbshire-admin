@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import "./sidenav.css";
-import logo from "../../Logo.png";
+import logo from "../../Components/images/logo.png";
 import { MdDashboard } from "react-icons/md";
 import { GrCube, GrDeliver } from "react-icons/gr";
 import { FaCube, FaRegUser, FaShoppingCart } from "react-icons/fa";
@@ -34,7 +34,8 @@ export default function Sidenav() {
       <div className="sidenav">
         <a className="side-nav-title" href="#about">
           {" "}
-          <img src={logo} /> <div>Herb</div>Shire
+          <img src={logo} /> 
+          {/* <div>Herb</div>Shire */}
         </a>
         <NavLink
           className={"side-nav-content side-nav-content-selected"}
@@ -50,7 +51,8 @@ export default function Sidenav() {
     <div className="sidenav">
       <a className="side-nav-title" href="#about">
         {" "}
-        <img src={logo} /> <div>Herb</div>Shire
+        <img src={logo} /> 
+        {/* <div>Herb</div>Shire */}
       </a>
 
       <NavLink
