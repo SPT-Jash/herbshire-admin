@@ -53,23 +53,23 @@ const ViewProduct = (props) => {
                         </Text>
                         <Text>
                           <b>Quantity:</b>
-                          {product.quantity}
+                          {product.quantity}pieces
                         </Text>
                         <Text>
-                          <b>Discount:</b> {product.discount}
+                          <b>Discount:</b> {product.discount}%
                         </Text>
                       </Grid>
 
                       <Grid templateColumns="repeat(3, 1fr)">
                         <Text w="20rem">
                           <b>Price : </b>
-                          {product.price}
+                          ₹{product.price}
                         </Text>
                         <Text>
                           <b>Weight:</b> {product.weight}
                         </Text>
                         <Text>
-                          <b>Fresh Till :</b> {product.freshTill}
+                          <b>Fresh Till :</b> {product.freshTill} days
                         </Text>
                       </Grid>
 
@@ -102,9 +102,9 @@ const ViewProduct = (props) => {
                         <Text fontWeight="bold">CGST</Text>
                       </HStack>
                       <HStack spacing="30px">
-                        <Text marginLeft="7.5rem">{product.gst.igst}</Text>
-                        <Text style={{marginLeft: "3rem"}}>{product.gst.sgst}</Text>
-                        <Text style={{marginLeft: "3.5rem"}}>{product.gst.cgst}</Text>
+                        <Text marginLeft="7.5rem">{product.gst.igst}%</Text>
+                        <Text style={{marginLeft: "2.5rem"}}>{product.gst.sgst}%</Text>
+                        <Text style={{marginLeft: "2.5rem"}}>{product.gst.cgst}%</Text>
                       </HStack>
                     </Box>
                   );

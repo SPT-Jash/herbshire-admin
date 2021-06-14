@@ -16,6 +16,7 @@ import axios from "axios";
 import ViewAddress from "../Popup/ViewAddress";
 import ViewOrder from "../Popup/ViewOrder";
 import { MdDeleteForever } from "react-icons/md";
+import { useToast } from "@chakra-ui/react";
 // import Moment from "react-moment";
 
 export default function Order() {
@@ -34,6 +35,19 @@ export default function Order() {
   const [orderData, setOrderData] = useState([]);
   const [addressDetail, setaddressDetail] = useState([]);
   const [ordersDetail, setordersDetail] = useState([]);
+  const toast = useToast();
+
+
+  const toastMessage = (status, title, description) => {
+    toast({
+      title: title,
+      description: description ? description : "",
+      status: status,
+      duration: 1000,
+      isClosable: true,
+      position: "bottom-right",
+    });
+  };
 
   const pageArray = [];
   for (let index = 0; index < totalPages; index++) {
@@ -89,30 +103,28 @@ export default function Order() {
 
     console.log(order_id);
 
-    const config = {
-      headers: {
-        Authorization: `Bearer ${auth.user.token}`,
-      },
-    };
-
-    const body = {
-      id: order_id,
-    };
-    
-    console.log("header", config, body);
     axios
-      .delete(url, body, config)
+      .delete(url, {
+        data: { id: order_id },
+        headers: {
+          Authorization: `Bearer ${auth.user.token}`,
+          "Content-Type": "application/json",
+        },
+      })
       .then((res) => {
-        console.log(res);
-        // if (res.data.success) {
-        //   console.log(res.data);
-        //   const tempOrder = orderData;
-        //   tempOrder.splice(key, 1);
-        //   setOrderData([...tempOrder]);
-        // }
+        // console.log(res);
+        if (res.status === 200) {
+          console.log(res.data);
+          setOrderData([...orderData]);
+          toastMessage("success","Order cancel Succesfully")
+        }
+        else{
+          toastMessage("error","Order not cancelled");
+        }
       })
       .catch((error) => {
         console.log(error);
+        toastMessage("error","Order not cancelled");
       });
   };
 
@@ -199,17 +211,18 @@ export default function Order() {
           </Menu>
         </Flex>
 
-        <Box overflowX="auto">
+        <Box overflowX="auto" w="100%">
           <Table>
             <Thead w="sm">
               <Tr>
-                <Th color="#828194">Receiver</Th>
-                <Th color="#828194">Status</Th>
-                <Th color="#828194">Date</Th>
-                <Th color="#828194">Amount</Th>
-                <Th color="#828194">Address</Th>
-                <Th color="#828194">Order</Th>
-                <Th>Action</Th>
+                <Th color="#828194" textAlign="center">Receiver</Th>
+                <Th color="#828194" textAlign="center">Status</Th>
+                <Th color="#828194" textAlign="center">Place Order Date</Th>
+                <Th color="#828194" textAlign="center">Delivery Date</Th>
+                <Th color="#828194" textAlign="center">Amount</Th>
+                <Th color="#828194" textAlign="center">Address</Th>
+                <Th color="#828194" textAlign="center">Order</Th>
+                <Th color="#828194" textAlign="center">Action</Th>
               </Tr>
             </Thead>
             <Tbody>
@@ -241,11 +254,13 @@ export default function Order() {
                     <Td color={orderStatusColour} fontSize="large">
                       {order.paymentStatus}
                     </Td>
-                    <Td color="#828194" fontSize="larg">
+                    <Td color="#828194" fontSize="large"></Td>
+                    <Td color="#828194" fontSize="large">
+                      {order.deliveryDate}
                       {/* <Moment format="DD/MM/YYYY">{order.timestamp}</Moment> */}
                     </Td>
                     <Td color="#53C3AA" fontSize="large">
-                      $ {order.amount.toFixed(2)}
+                    ₹{order.amount.toFixed(2)}
                     </Td>
                     <Td color="#000" fontSize="large">
                       <Button onClick={(add) => onViewAddress(order.address)}>
@@ -259,11 +274,10 @@ export default function Order() {
                     </Td>
                     <Td>
                       <Button
-                        bg="transparent"
                         color="red.400"
                         onClick={() => deleteOrderHandler(key)}
                       >
-                        <MdDeleteForever size="25px" color="red" />
+                        cancel
                       </Button>
                     </Td>
                   </Tr>

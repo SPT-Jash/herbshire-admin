@@ -14,6 +14,7 @@ import Select from "react-select";
 import { Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/table";
 import { MdDeleteForever, MdEdit } from "react-icons/md";
 import EditSubscription from "../Popup/EditSubscriptionPrice";
+import { BsPlusSquare } from "react-icons/bs";
 
 const UpdateSubscription = () => {
   const { id } = useParams();
@@ -28,7 +29,6 @@ const UpdateSubscription = () => {
   const [subPriceList, setsubPriceList] = useState();
   const [subscriptionList, setsubscriptionList] = useState([]);
 
-
   const statusList = [
     { value: 1, label: "Active" },
     { value: 2, label: "Inactive" },
@@ -40,26 +40,6 @@ const UpdateSubscription = () => {
       productsListDisplay.push({ value: pro.id, label: pro.productName });
     });
   }
-  {
-    productId.map((id) => {
-      editSubDetail.productsList.push({ id: id });
-    });
-  }
-
-  const uptoList = [{ value: 1, label: "ONE_MONTH" }];
-  const frequencyList = [
-    { value: 1, label: "ONCE_A_WEEK" },
-    { value: 2, label: "TWICE_A_WEEK" },
-  ];
-  const delivery_days = [
-    { value: 1, label: "Monday" },
-    { value: 2, label: "Tuesday" },
-    { value: 3, label: "Wensday" },
-    { value: 4, label: "Thursday" },
-    { value: 5, label: "Friday" },
-    { value: 6, label: "Saturday" },
-    { value: 7, label: "Sunday" },
-  ];
 
   const toastMessage = (status, msg) => {
     toast({
@@ -77,14 +57,15 @@ const UpdateSubscription = () => {
     const config = {
       headers: {
         Authorization: `Bearer ${auth.user.token}`,
-      }
+      },
     };
+    console.log(editSubDetail, "update");
     axios
       .patch(url, editSubDetail, config)
       .then(function (response) {
-        console.log(response, 'response');
+        console.log(response, "response");
         if (response.status === 200) {
-          history.push(`/subscription`);
+          history.push("/subscription");
           toastMessage("success", "Product Edit Successful.");
         } else {
           toastMessage("error", "Error while Editing Product!");
@@ -96,9 +77,9 @@ const UpdateSubscription = () => {
       .then(function () {
         // always executed
       });
-  }
+  };
 
-  console.log(editSubDetail, 'editSubDetail');
+  console.log(editSubDetail, "editSubDetail");
 
   useEffect(() => {
     // GET SUBSCRIPTION BY ID
@@ -116,7 +97,7 @@ const UpdateSubscription = () => {
       .then(function (response) {
         // console.log(response);
         setEditSubDetail(response.data.body);
-        setsubscriptionList(response.data.body.subscriptionPricesList)
+        setsubscriptionList(response.data.body.subscriptionPricesList);
         setproductList(response.data.body.productsList);
       })
       .catch(function (error) {
@@ -153,7 +134,6 @@ const UpdateSubscription = () => {
       });
   }, [auth]);
 
-
   const removeImage = (id) => {
     const tempImages = image;
     const deletedImage = tempImages.splice(id, 1);
@@ -168,8 +148,8 @@ const UpdateSubscription = () => {
     setproductList([...tempProduct]);
   };
 
-  const onDeleteSub = (subPriceId) => {
-    let deleteUrl = SERVER_URL + 'subscription/price'
+  const onDeleteSub = (subPriceId, index) => {
+    let deleteUrl = SERVER_URL + "subscription/price";
     const deleteConfig = {
       headers: {
         Authorization: `Bearer ${auth.user.token}`,
@@ -181,30 +161,38 @@ const UpdateSubscription = () => {
     axios
       .delete(deleteUrl, deleteConfig)
       .then(function (response) {
-        console.log(response, 'delete responce');
+        console.log(response, "delete response");
         if (response.status === 200) {
+          const temp = subscriptionList;
+          temp.splice(index, 1);
+          setsubscriptionList([...temp]);
           toastMessage("success", "Subscription price list delete successful.");
         } else {
-          toastMessage("error", "Subscription price list delete fail.");
+          toastMessage("error", "Subscription price list not deleted.");
         }
       })
       .catch(function (error) {
-        console.log(error);
+        console.log(error.response.message);
+        toastMessage("error", "Subscription price list failed to delete.");
       })
       .then(function () {
         // always executed
       });
-  }
+  };
 
   const onEditSub = (subPriceId) => {
     seteditSubscription(true);
-    setsubPriceList(subPriceId)
-  }
+    setsubPriceList(subPriceId);
+  };
 
-
-  const removeDay = (key) => {
-    
-  }
+  const productChangeHandler = (e) => {
+    let p;
+    e.map((x) => {
+      p = products.filter((pro) => pro.id === x.value);
+    });
+    editSubDetail.productsList.push(p[0]);
+    console.log(p, "product");
+  };
 
   const SelectedImage = (
     <Flex display="block">
@@ -231,7 +219,7 @@ const UpdateSubscription = () => {
       <Box>
         <Text m="2" fontSize="lg" fontWeight="semibold">
           Edit Subscription
-      </Text>
+        </Text>
         <Box
           w="100%"
           p="4"
@@ -366,10 +354,11 @@ const UpdateSubscription = () => {
                   isMulti
                   options={productsListDisplay}
                   name="product"
-                  onChange={(e) => setProductId(e.map((x) => x.value))}
+                  onChange={(e) => productChangeHandler(e)}
                 />
               </div>
             </Box>
+
             <Box ml="4">
               {productList.map((list, key) => (
                 <Tag
@@ -391,7 +380,7 @@ const UpdateSubscription = () => {
           <Divider mt="4" mb="4" />
 
           <Box overflow="auto">
-            <Table variant="simple">
+            <Table variant="simple" fontSize="1rem">
               <Thead>
                 <Tr>
                   <Th color="blackAlpha.500">Price</Th>
@@ -402,7 +391,7 @@ const UpdateSubscription = () => {
                 </Tr>
               </Thead>
               <Tbody>
-                {subscriptionList ?
+                {subscriptionList ? (
                   subscriptionList.map((data, index) => (
                     <>
                       <Tr>
@@ -421,20 +410,34 @@ const UpdateSubscription = () => {
                           <Button
                             bg="transparent"
                             color="red.400"
-                            onClick={(subPriceId) => onDeleteSub(data.id)}
+                            onClick={(subPriceId) =>
+                              onDeleteSub(data.id, index)
+                            }
                           >
                             <MdDeleteForever size="25px" color="red" />
                           </Button>
                         </Td>
                       </Tr>
                     </>
-                  )) :
+                  ))
+                ) : (
                   <h2>Add address to proceed payment.</h2>
-                }
+                )}
               </Tbody>
             </Table>
+            {/* <Button
+                  color="#2A9F85"
+                  backgroundColor="transparent"
+                  fontSize="2rem"
+                  marginTop="3rem"
+                  // onClick={() => addHandler()}
+                >
+                  <BsPlusSquare />
+                </Button> */}
           </Box>
-          <Button type="submit" onClick={() => onUpdateSubscription()}>Edit Subscription</Button>
+          <Button type="submit" onClick={() => onUpdateSubscription()}>
+            Edit Subscription
+          </Button>
         </Box>
       </Box>
     </>

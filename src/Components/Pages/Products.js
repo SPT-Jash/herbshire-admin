@@ -88,7 +88,7 @@ export default function Products() {
       .then(function () {
         // always executed
       });
-  }, [currentPage, auth, refrest]);
+  }, [auth, currentPage, refrest]);
 
   const pageArray = [];
   for (let index = 0; index < totalPages; index++) {
@@ -328,17 +328,17 @@ export default function Products() {
                       </Flex>
                     </Td>
                     <Td color="blackAlpha.700">{product.weight}</Td>
-                    <Td color="blackAlpha.700">{product.quantity}</Td>
-                    <Td color="blackAlpha.700">{product.price}</Td>
-                    <Td color="blackAlpha.700">{product.discount}</Td>
-                    <Td color="blackAlpha.700">{product.freshTill}</Td>
+                    <Td color="blackAlpha.700">{product.quantity} pieces</Td>
+                    <Td color="blackAlpha.700">₹{product.price}</Td>
+                    <Td color="blackAlpha.700">{product.discount}%</Td>
+                    <Td color="blackAlpha.700">{product.freshTill} days</Td>
                     <Td color="blackAlpha.700">{product.count}</Td>
                     <Td color="blackAlpha.700">{product.calories}</Td>
                     <Td color="blackAlpha.700">{product.proteins}</Td>
                     <Td color="blackAlpha.700">{product.fats}</Td>
                     <Td color="blackAlpha.700">{product.curbs}</Td>
                     <Td as={HStack}>
-                      <Button onClick={() => countHandler(key)}>
+                      <Button onClick={() => countHandler(key)} disabled={product.count? false : true}>
                         {product.count ? "Unavailable" : "Available"}
                       </Button>
                       <Button

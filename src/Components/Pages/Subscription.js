@@ -134,7 +134,7 @@ const Subscription = () => {
         }
       })
       .catch((error) => {
-        console.log(error);
+        console.log(error.response);
         toastMessage("error", "Subscription not deleted");
       });
   };

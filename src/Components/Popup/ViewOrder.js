@@ -28,12 +28,12 @@ const ViewOrder = (props) => {
 
   return (
     <>
-      <Modal isOpen={viewOrder} onClose={handleClose} size="3xl">
+      <Modal isOpen={viewOrder} onClose={handleClose} size="5xl">
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader bgColor="#2A9F85">View order</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody width="3xl">
+          <ModalHeader bgColor="#2A9F85" color="#fff">View order</ModalHeader>
+          <ModalCloseButton bgColor="#fff" borderRadius="50%" color="#2A9F85"/>
+          <ModalBody textAlign="center">
             <Table border="1px solid #e2e8f0">
               <Thead>
                 <Tr>
@@ -43,6 +43,7 @@ const ViewOrder = (props) => {
                   <Th>Price</Th>
                   <Th>Mode Of Payment</Th>
                   <Th>Payment Status</Th>
+                  <Th>Delivery Date</Th>
                 </Tr>
               </Thead>
               <Tbody>
@@ -62,9 +63,10 @@ const ViewOrder = (props) => {
                               </>
                             );
                           })}
-                          <Td>{order.amount}</Td>
+                          <Td>₹{order.amount}</Td>
                           <Td>{order.paymentMethod}</Td>
                           <Td>{order.paymentStatus}</Td>
+                          <Td>{order.deliveryDate}</Td>
                         </Tr>
                       );
                     })}

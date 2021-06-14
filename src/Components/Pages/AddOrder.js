@@ -1,144 +1,295 @@
 import { Button } from "@chakra-ui/button";
-import { Input } from "@chakra-ui/input";
-import { Center } from "@chakra-ui/layout";
-import { Divider } from "@chakra-ui/layout";
-import { Box, Flex, Text } from "@chakra-ui/layout";
-import { Select } from "@chakra-ui/select";
-import { Tag, TagLabel } from "@chakra-ui/tag";
-import React, { useRef, useState } from "react";
+import { Divider, Grid } from "@chakra-ui/layout";
+import { Flex } from "@chakra-ui/layout";
+import { Text } from "@chakra-ui/layout";
+import { Box } from "@chakra-ui/layout";
+import { Textarea } from "@chakra-ui/react";
+import axios from "axios";
+import { useContext, useEffect, useState } from "react";
+import { BsPlusSquare } from "react-icons/bs";
+import Select from "react-select";
+import { PRODUCT_URL, SERVER_URL } from "../Config/Apis";
+import { Context } from "../Data/Context";
 import FormInput from "../Views/FormInput";
 
 const AddOrder = () => {
-    const form = useRef();
-    const [images, setImages] = useState([]);
-    const [gstList, setGstList] = useState([]);
+  const { auth } = useContext(Context);
+  const [users, setUsers] = useState([]);
+  const [userId, setUserId] = useState();
+  const [paymentMethod, setPaymentMethod] = useState("");
+  const [paymentStatus, setPaymentStatus] = useState("");
+  const [deliveryDate, setDeliveryDate] = useState("");
+  const [note, setNote] = useState("");
+  const [deliveryStatus, setDeliveryStatus] = useState("");
+  const [order, setOrder] = useState([{ product: "", quantity: "" }]);
+  const [products, setProducts] = useState([]);
 
-    const SelectedImages = (
-        <Flex display="block">
-          {images.map((img, key) => (
-            <Tag
-              size="lg"
-              h="50px"
-              key={key}
-              borderRadius="10px"
-              variant="solid"
-              colorScheme="green"
-              m="2"
-            >
-              <TagLabel>{img.name}</TagLabel>
-              {/* <TagCloseButton onClick={() => removeImage(key)} /> */}
-            </Tag>
-          ))}
-        </Flex>
-      );
+  const userList = [];
+  {
+    users.map(
+      (user) =>
+        user.addressList.length > 0 &&
+        userList.push({ value: user.id, label: user.fullName })
+    );
+  }
+
+  const paymentMethodList = [
+    { value: 1, label: "Cash" },
+    { value: 2, label: "Wallet" },
+    { value: 3, label: "Net Banking" },
+  ];
+
+  const paymentStatusList = [
+    { value: 1, label: "Complete" },
+    { value: 2, label: "Incomplete" },
+    { value: 3, label: "Paid" },
+  ];
+
+  const deliveryStatusList = [
+    { value: 1, label: "Pending" },
+    { value: 2, label: "Inprocess" },
+    { value: 3, label: "Delivered" },
+  ];
+
+  const productList = [];
+
+  {
+    products.map((pro, key) => {
+      productList.push({ value: pro.id, label: pro.productName });
+    });
+  }
+
+  useEffect(() => {
+    const url = SERVER_URL + "user/search";
+    const config = {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
+      },
+      params: {
+        filter: {},
+        ascSort: true,
+        pageSize: 1000,
+        pageNumber: 1,
+      },
+    };
+    axios
+      .get(url, config)
+      .then(function (response) {
+        const data = response.data.body.content;
+        console.log(data, "data");
+        setUsers(data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
+      .then(function () {
+        // always executed
+      });
+
+    const url1 = PRODUCT_URL + "/search";
+    const config1 = {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
+      },
+      params: {
+        filter: {},
+        ascSort: true,
+        pageSize: 100000,
+        pageNumber: 1,
+      },
+    };
+    axios
+      .get(url1, config1)
+      .then(function (response) {
+        const data = response.data.body.content;
+        setProducts(data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
+      .then(function () {
+        // always executed
+      });
+  }, [auth]);
+
+  const changeSelectHandler = (e, index) => {
+    const temp = [...order];
+    temp[index]["product"] = { id: e.value };
+    setOrder(temp);
+  };
+
+  const changeHandler = (e, index) => {
+    const temp = [...order];
+    temp[index]["quantity"] = +e.target.value;
+    setOrder(temp);
+  };
+
+  const addHandler = () => {
+    setOrder([...order, { product: "", quantity: "" }]);
+  };
+
+  const createOrderHandler = () => {
+    const user = users.filter((user) => user.id === userId);
+
+    const body = {
+      userId: userId,
+      paymentMethod: paymentMethod,
+      paymentStatus: paymentStatus,
+      deliveryDate: deliveryDate,
+      deliveryStatus: deliveryStatus,
+      note: note,
+      address: {
+        id: user[0].addressList[0].id,
+      },
+      ordersDetailsList: order,
+    };
+    console.log(body, "body", order);
+  };
 
   return (
-    <>
-      <Box>
-        <Text m="2" fontSize="lg" fontWeight="semibold">
-          ADD ORDER
-        </Text>
-        <Box
-          w="100%"
-          p="4"
-          borderWidth="thin"
-          borderRadius="5"
-          borderColor="blackAlpha.300"
-        >
-          <form
-            ref={form}
-            
-            encType="multipart/form-data"
+    <Box>
+      <Text m="2" fontSize="lg" fontWeight="semibold">
+        ADD ORDER
+      </Text>
+      {/* {console.log(users, "user")} */}
+      <Box
+        w="100%"
+        p="4"
+        borderWidth="thin"
+        borderRadius="5"
+        borderColor="blackAlpha.300"
+      >
+        <Box m="3">
+          <Text
+            m="2"
+            fontSize="md"
+            fontWeight="semibold"
+            color="blackAlpha.800"
           >
-            <Flex>
-              <FormInput name="orderName" label="order Name" type="text" />
-              <FormInput name="freshTill" label="fresh Till" type="text" />
-            </Flex>
-
-            <Divider mt="4" mb="4" />
-
-            <Flex>
-              {/* <FormInput name="count" label="count" type="number" /> */}
-              <FormInput name="count" label="count" type="number" />
-              <FormInput name="quantity" label="quantity" type="number" />
-              <FormInput name="price" label="price" type="number" />
-              <FormInput name="discount" label="discount" type="number" />
-              <FormInput name="weight" label="weight" type="number" />
-              <Box m="2">
-                <Text
-                  m="2"
-                  fontSize="md"
-                  fontWeight="semibold"
-                  color="blackAlpha.800"
-                >
-                  Tax
-                </Text>
-                <Select name="gst_dto" placeholder="Select option">
-                  {gstList.map((gst, key) => {
-                    return (
-                      <option key={key} value={key}>
-                        {gst.description}
-                      </option>
-                    );
-                  })}
-                </Select>
-              </Box>
-            </Flex>
-
-            <Divider mt="4" mb="4" />
-
-            <Flex>
-              <FormInput name="calories" label="calories" type="text" />
-              <FormInput name="proteins" label="proteins" type="text" />
-              <FormInput name="fats" label="fats" type="text" />
-              <FormInput name="curbs" label="curbs" type="text" />
-            </Flex>
-            <Divider mt="4" mb="4" />
-
-            <Flex>
-              <FormInput name="description" label="description" type="text" />
-            </Flex>
-
-            <Divider mt="4" mb="4" />
-
-            <Flex
-              w="300px"
-              borderRadius="5"
-              borderWidth="thin"
-              borderColor="blackAlpha.200"
-            >
-              <Center>
-                <Input
-                  placeholder="Image"
-                  type="file"
-                  opacity="0"
-                  w="300px"
-                  mt="3"
-                  borderWidth="thin"
-                  borderColor="blackAlpha.200"
-                  
-                  accept="images/*"
-                  multiple
-                />
-                <Text
-                  position="absolute"
-                  zIndex="-1"
-                  fontSize="lg"
-                  color="blackAlpha.500"
-                >
-                  {" "}
-                  File Upload{" "}
-                </Text>
-              </Center>
-            </Flex>
-
-            {SelectedImages}
-
-            <Button type="submit">Submit</Button>
-          </form>
+            User Name
+          </Text>
+          <div style={{ fontSize: "1.2rem", width: "14rem" }}>
+            <Select
+              name="user"
+              options={userList}
+              onChange={(e) => setUserId(e.value)}
+            />
+          </div>
         </Box>
+        <Divider mt="4" mb="4" />
+        <Grid m="2">
+          <Text
+            m="2"
+            fontSize="md"
+            fontWeight="semibold"
+            color="blackAlpha.800"
+          >
+            Note
+          </Text>
+          <Textarea
+            mb="3"
+            placeholder=""
+            onChange={(e) => setNote(e.target.value)}
+          />
+        </Grid>
+        <Divider mt="4" mb="4" />
+        {order.map((or, key) => (
+          <Flex>
+            <Box m="3">
+              <Text
+                m="2"
+                fontSize="md"
+                fontWeight="semibold"
+                color="blackAlpha.800"
+              >
+                Product
+              </Text>
+              <div style={{ fontSize: "1.3rem", width: "16rem" }}>
+                <Select
+                  options={productList}
+                  name="product"
+                  onChange={(e) => changeSelectHandler(e, key)}
+                />
+              </div>
+            </Box>
+            <FormInput
+              label="quantity"
+              type="number"
+              onChange={(e) => changeHandler(e, key)}
+            />
+            <Button
+              color="#2A9F85"
+              backgroundColor="transparent"
+              fontSize="1.5rem"
+              marginTop="3rem"
+              onClick={() => addHandler()}
+            >
+              <BsPlusSquare />
+            </Button>
+          </Flex>
+        ))}
+        <Divider mt="4" mb="4" />
+        <Flex>
+          <Box m="3">
+            <Text
+              m="2"
+              fontSize="md"
+              fontWeight="semibold"
+              color="blackAlpha.800"
+            >
+              Payment Method
+            </Text>
+            <div style={{ fontSize: "1.1rem", width: "10rem" }}>
+              <Select
+                options={paymentMethodList}
+                onChange={(e) => setPaymentMethod(e.label)}
+              />
+            </div>
+          </Box>
+          <Box m="3">
+            <Text
+              m="2"
+              fontSize="md"
+              fontWeight="semibold"
+              color="blackAlpha.800"
+            >
+              Payment Status
+            </Text>
+            <div style={{ fontSize: "1.1rem", width: "10rem" }}>
+              <Select
+                options={paymentStatusList}
+                onChange={(e) => setPaymentStatus(e.label)}
+              />
+            </div>
+          </Box>
+        </Flex>
+        <Divider mt="4" mb="4" />
+        <Flex>
+          <FormInput
+            label="Delivery Date"
+            type="date"
+            onChange={(e) => setDeliveryDate(e.target.value)}
+          />
+          <Box m="3">
+            <Text
+              m="2"
+              fontSize="md"
+              fontWeight="semibold"
+              color="blackAlpha.800"
+            >
+              Delivery Status
+            </Text>
+            <div style={{ fontSize: "1.1rem", width: "10rem" }}>
+              <Select
+                options={deliveryStatusList}
+                onChange={(e) => setDeliveryStatus(e.label)}
+              />
+            </div>
+          </Box>
+        </Flex>
+        <Button onClick={createOrderHandler}>Add Order</Button>
       </Box>
-    </>
+    </Box>
   );
 };
 

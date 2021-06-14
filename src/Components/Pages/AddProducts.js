@@ -371,7 +371,7 @@ export default function AddProducts() {
                 fontWeight="semibold"
                 color="blackAlpha.800"
               >
-                {"fresh Till".toUpperCase()}
+                {"fresh Till(in days)".toUpperCase()}
               </Text>
               <Popover isOpen={open} onClose={() => setOpen(false)}>
               <PopoverTrigger>
@@ -400,11 +400,10 @@ export default function AddProducts() {
           <Divider mt="4" mb="4" />
 
           <Flex flexWrap="wrap">
-            {/* <FormInput name="count" label="count" type="number" /> */}
             <FormInput name="count" label="count" type="number" />
-            <FormInput name="quantity" label="quantity" type="number" />
+            <FormInput name="quantity" label="quantity(in pieces)" type="number" />
             <FormInput name="price" label="price" type="number" />
-            <FormInput name="discount" label="discount" type="number" />
+            <FormInput name="discount" label="discount(in %)" type="number" />
             <FormInput name="weight" label="weight" type="number" />
             <Box m="2">
               <Text

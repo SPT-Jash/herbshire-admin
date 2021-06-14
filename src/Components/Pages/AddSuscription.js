@@ -71,11 +71,12 @@ const AddSubscription = () => {
     { value: 7, label: "Sunday" },
   ];
 
-  const toastMessage = (status, msg) => {
+  const toastMessage = (status,title, msg) => {
     toast({
-      description: msg,
+      title: title,
+      description: msg !== "null" ? msg : "",
       status: status,
-      duration: 9000,
+      duration: 3000,
       isClosable: true,
       position: "bottom-right",
     });
@@ -150,7 +151,7 @@ const AddSubscription = () => {
       })
       .catch(function (error) {
         console.log(error);
-        toastMessage("error", "Subscription not added");
+        toastMessage("error", "Subscription not added", `${error.response.data.message}`);
         deleteUploadedImages(image);
       })
       .then(function () {
@@ -239,7 +240,6 @@ const AddSubscription = () => {
         body: formdata,
         redirect: "follow",
       };
-
 
       fetch(DELETE_FILE_URL, requestOptions)
         .then((response) => {
@@ -434,7 +434,7 @@ const AddSubscription = () => {
               />
             </Grid>
 
-            <Flex>
+            <Flex flexWrap="wrap">
               <Box m="2">
                 <Text
                   m="2"
@@ -565,24 +565,25 @@ const AddSubscription = () => {
                 <Button
                   color="#2A9F85"
                   backgroundColor="transparent"
-                  fontSize="2rem"
+                  fontSize="1.5rem"
                   marginTop="3rem"
                   onClick={() => addHandler()}
                 >
                   <BsPlusSquare />
                 </Button>
-                <Button
-                  color="#2A9F85"
-                  backgroundColor="transparent"
-                  fontSize="2rem"
-                  marginTop="3rem"
-                  onClick={() => removeHandler(index)}
-                >
-                  <BsDashSquare />
-                </Button>
+                {index > 0 && (
+                  <Button
+                    color="#2A9F85"
+                    backgroundColor="transparent"
+                    fontSize="1.5rem"
+                    marginTop="3rem"
+                    onClick={() => removeHandler(index)}
+                  >
+                    <BsDashSquare />
+                  </Button>
+                )}
               </Flex>
             ))}
-            {console.log(subPrices, "sub")}
             <Button type="submit">Add New Subscription</Button>
           </form>
         </Box>

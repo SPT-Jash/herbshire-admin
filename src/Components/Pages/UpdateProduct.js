@@ -148,10 +148,9 @@ export default function UpdateProduct() {
         borderRadius="5"
         borderColor="blackAlpha.300"
       >
-        <FormInput
-          name="productName"
-          label="product Name"
-          type="text"
+        {/* <FormInput
+          name="productId"
+          type="hidden"
           value={editProductDetail.id}
           onChange={(e) => {
             seteditProductDetail({
@@ -159,7 +158,7 @@ export default function UpdateProduct() {
               id: e.target.value
             })
           }}
-        />
+        /> */}
 
         <Flex flexWrap="wrap">
           <FormInput
@@ -176,7 +175,7 @@ export default function UpdateProduct() {
           />
           <FormInput
             name="freshTill"
-            label="fresh Till"
+            label="fresh Till(in days)"
             type="number"
             value={editProductDetail.freshTill}
             onChange={(e) => {
@@ -207,7 +206,7 @@ export default function UpdateProduct() {
 
           <FormInput
             name="quantity"
-            label="quantity"
+            label="quantity(in pieces)"
             type="number"
             value={editProductDetail.quantity}
             onChange={(e) => {
@@ -219,7 +218,7 @@ export default function UpdateProduct() {
           />
           <FormInput
             name="price"
-            label="price"
+            label="price(in ₹)"
             type="number"
             value={editProductDetail.price}
             onChange={(e) => {
@@ -231,7 +230,7 @@ export default function UpdateProduct() {
           />
           <FormInput
             name="discount"
-            label="discount"
+            label="discount(in %)"
             type="number"
             value={editProductDetail.discount}
             onChange={(e) => {
