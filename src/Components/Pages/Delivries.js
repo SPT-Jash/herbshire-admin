@@ -79,7 +79,7 @@ export default function Delevries() {
   const [isSmallerThan450] = useMediaQuery("(max-width: 450px)");
 
   return (
-    <Box w="90%">
+    <Box w="100%">
       <Text fontSize="sm">Deliveries</Text>
       <Stack spacing="20px" ml="4" pt="4">
         <Flex alignItems="center">
@@ -220,8 +220,8 @@ export default function Delevries() {
                 order.status === "Delivered"
                   ? "#53C3AA"
                   : order.status === "Pending"
-                  ? "#EEA662"
-                  : "#FC6984";
+                    ? "#EEA662"
+                    : "#FC6984";
               return (
                 <Tr fontSize="sm" className="order-table-row">
                   <Td>

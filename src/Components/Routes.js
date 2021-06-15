@@ -29,9 +29,9 @@ export default function Routes() {
       <Switch>
         <Route path="/" exact component={Dashboard} />
         <Route path="/orders" component={Orders} />
-        <Route path="/add-order" component={AddOrder}/>
+        <Route path="/add-order" component={AddOrder} />
         <Route path="/subscription" component={Subscription} />
-        <Route path="/add-subscription" component={AddSubscription}/>
+        <Route path="/add-subscription" component={AddSubscription} />
         <Route path="/update-subscription/:id" component={UpdateSubscription} />
         <Route path="/deliveries" component={Delivries} />
         <Route path="/customers" component={Customers} />

@@ -132,7 +132,7 @@ const UpdateSubscription = () => {
       .then(function () {
         // always executed
       });
-  }, [auth]);
+  }, [id, auth]);
 
   const removeImage = (id) => {
     const tempImages = image;

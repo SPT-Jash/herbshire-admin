@@ -18,6 +18,8 @@ import ViewOrder from "../Popup/ViewOrder";
 import { MdDeleteForever } from "react-icons/md";
 import { useToast } from "@chakra-ui/react";
 // import Moment from "react-moment";
+import Moment from 'react-moment';
+import 'moment-timezone';
 
 export default function Order() {
   const {
@@ -116,15 +118,15 @@ export default function Order() {
         if (res.status === 200) {
           console.log(res.data);
           setOrderData([...orderData]);
-          toastMessage("success","Order cancel Succesfully")
+          toastMessage("success", "Order cancel Succesfully")
         }
-        else{
-          toastMessage("error","Order not cancelled");
+        else {
+          toastMessage("error", "Order not cancelled");
         }
       })
       .catch((error) => {
         console.log(error);
-        toastMessage("error","Order not cancelled");
+        toastMessage("error", "Order not cancelled");
       });
   };
 
@@ -132,7 +134,7 @@ export default function Order() {
     <>
       {viewAddress && <ViewAddress add={addressDetail} view="true" />}
       {viewOrder && <ViewOrder add={ordersDetail} view="true" />}
-      <Box w="90%">
+      <Box w="100%">
         <Flex>
           <Text mb="2" fontSize="sm" fontWeight="semibold">
             Orders
@@ -211,8 +213,8 @@ export default function Order() {
           </Menu>
         </Flex>
 
-        <Box overflowX="auto" w="100%">
-          <Table>
+        <Box overflowX="auto">
+          <Table variant="simple">
             <Thead w="sm">
               <Tr>
                 <Th color="#828194" textAlign="center">Receiver</Th>
@@ -234,8 +236,8 @@ export default function Order() {
                   order.paymentStatus === "COMPLETED"
                     ? "#53C3AA"
                     : order.paymentStatus === "PENDING"
-                    ? "#EEA662"
-                    : "#FC6984";
+                      ? "#EEA662"
+                      : "#FC6984";
                 return (
                   <Tr fontSize="sm" className="order-table-row" key={key}>
                     <Td>
@@ -254,13 +256,14 @@ export default function Order() {
                     <Td color={orderStatusColour} fontSize="large">
                       {order.paymentStatus}
                     </Td>
-                    <Td color="#828194" fontSize="large"></Td>
+                    <Td color="#828194" fontSize="large">
+                      <Moment format="DD/MM/YYYY">{order.timestamp}</Moment>
+                    </Td>
                     <Td color="#828194" fontSize="large">
                       {order.deliveryDate}
-                      {/* <Moment format="DD/MM/YYYY">{order.timestamp}</Moment> */}
                     </Td>
                     <Td color="#53C3AA" fontSize="large">
-                    ₹{order.amount.toFixed(2)}
+                      ₹{order.amount.toFixed(2)}
                     </Td>
                     <Td color="#000" fontSize="large">
                       <Button onClick={(add) => onViewAddress(order.address)}>

@@ -402,9 +402,9 @@ export default function AddProducts() {
           <Flex flexWrap="wrap">
             <FormInput name="count" label="count" type="number" />
             <FormInput name="quantity" label="quantity(in pieces)" type="number" />
-            <FormInput name="price" label="price" type="number" />
-            <FormInput name="discount" label="discount(in %)" type="number" />
-            <FormInput name="weight" label="weight" type="number" />
+            <FormInput name="price" label="price" type="number" symbol="₹" />
+            <FormInput name="discount" label="discount(in %)" type="number" symbol="%" />
+            <FormInput name="weight" label="weight" type="number" symbol="G" />
             <Box m="2">
               <Text
                 m="2"
@@ -429,10 +429,10 @@ export default function AddProducts() {
           <Divider mt="4" mb="4" />
 
           <Flex flexWrap="wrap">
-            <FormInput name="calories" label="calories" type="text" />
-            <FormInput name="proteins" label="proteins" type="text" />
-            <FormInput name="fats" label="fats" type="text" />
-            <FormInput name="curbs" label="curbs" type="text" />
+            <FormInput name="calories" label="calories" type="text" symbol="G" />
+            <FormInput name="proteins" label="proteins" type="text" symbol="G" />
+            <FormInput name="fats" label="fats" type="text" symbol="G" />
+            <FormInput name="curbs" label="curbs" type="text" symbol="G" />
           </Flex>
           <Divider mt="4" mb="4" />
 

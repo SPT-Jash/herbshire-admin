@@ -14,7 +14,7 @@ import { useHistory } from "react-router";
 export default function Header() {
   const history = useHistory();
   const [isSmallerThan1208] = useMediaQuery("(max-width: 1208px)");
-  const{setAuth} = useContext(Context);
+  const { setAuth } = useContext(Context);
 
   const logoutHandler = (event) => {
     event.preventDefault();
@@ -63,7 +63,7 @@ export default function Header() {
           </>
         )}
         <Flex direction="column" mr={isSmallerThan1208 ? "0" : "2"} p="4">
-          <Spacer/>
+          <Spacer />
           <Button onClick={logoutHandler}><AiOutlinePoweroff size="30px" className="nav-icon" /></Button>
         </Flex>
       </Flex>

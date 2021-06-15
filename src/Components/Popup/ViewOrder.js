@@ -28,11 +28,11 @@ const ViewOrder = (props) => {
 
   return (
     <>
-      <Modal isOpen={viewOrder} onClose={handleClose} size="5xl">
+      <Modal isOpen={viewOrder} onClose={handleClose} size="6xl">
         <ModalOverlay />
         <ModalContent>
           <ModalHeader bgColor="#2A9F85" color="#fff">View order</ModalHeader>
-          <ModalCloseButton bgColor="#fff" borderRadius="50%" color="#2A9F85"/>
+          <ModalCloseButton bgColor="#fff" borderRadius="50%" color="#2A9F85" />
           <ModalBody textAlign="center">
             <Table border="1px solid #e2e8f0">
               <Thead>
@@ -50,26 +50,26 @@ const ViewOrder = (props) => {
                 {props.add < 1
                   ? "No Data found :("
                   : props.add.map((order, index) => {
-                      return (
-                        <Tr key={index}>
-                          {order.ordersDetailsList.map((orderDetail, index) => {
-                            return (
-                              <>
-                                <Td>{orderDetail.product.productName}</Td>
-                                <Td>{orderDetail.product.description}</Td>
-                                <Td textAlign="center">
-                                  {orderDetail.quantity}
-                                </Td>
-                              </>
-                            );
-                          })}
-                          <Td>₹{order.amount}</Td>
-                          <Td>{order.paymentMethod}</Td>
-                          <Td>{order.paymentStatus}</Td>
-                          <Td>{order.deliveryDate}</Td>
-                        </Tr>
-                      );
-                    })}
+                    return (
+                      <Tr key={index}>
+                        {order.ordersDetailsList.map((orderDetail, index) => {
+                          return (
+                            <>
+                              <Td>{orderDetail.product.productName}</Td>
+                              <Td>{orderDetail.product.description}</Td>
+                              <Td textAlign="center">
+                                {orderDetail.quantity}
+                              </Td>
+                            </>
+                          );
+                        })}
+                        <Td><span style={{ color: "#00b6a1", fontWeight: "bold" }}>₹</span> {order.amount}</Td>
+                        <Td>{order.paymentMethod}</Td>
+                        <Td>{order.paymentStatus}</Td>
+                        <Td>{order.deliveryDate}</Td>
+                      </Tr>
+                    );
+                  })}
               </Tbody>
             </Table>
           </ModalBody>

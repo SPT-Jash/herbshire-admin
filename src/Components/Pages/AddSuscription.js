@@ -501,6 +501,7 @@ const AddSubscription = () => {
               <Flex key={index} flexWrap="wrap">
                 <FormInput
                   label="Price"
+                  symbol="₹"
                   type="number"
                   name="price"
                   onChange={(event) => changeHandler(index, event)}

@@ -1,12 +1,13 @@
 import { Button } from "@chakra-ui/button";
 import { Box, Divider, Flex, Grid, Text } from "@chakra-ui/layout";
 import { Textarea } from "@chakra-ui/textarea";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import FormInput from "../Views/FormInput";
 import axios from "axios";
 import { SERVER_URL } from "../Config/Apis";
 import { useToast } from "@chakra-ui/toast";
 import { useHistory } from "react-router";
+import { PhoneIcon, AtSignIcon } from '@chakra-ui/icons'
 
 const AddCustomer = () => {
   const history = useHistory();
@@ -40,8 +41,8 @@ const AddCustomer = () => {
       return;
     }
 
-    if(phone.length !== 10){
-      toastMessage("error","Enter valid phone number");
+    if (phone.length !== 10) {
+      toastMessage("error", "Enter valid phone number");
       return;
     }
     const url = SERVER_URL + "user";
@@ -116,6 +117,7 @@ const AddCustomer = () => {
               label="Email"
               type="email"
               value={email}
+              symbol={<AtSignIcon w={5} h={5} />}
               onChange={(e) => setemail(e.target.value)}
             />
 
@@ -123,6 +125,7 @@ const AddCustomer = () => {
               label="Phone number"
               type="tel"
               value={phone}
+              symbol={<PhoneIcon w={5} h={5} />}
               onChange={(e) => setphone(e.target.value)}
             />
           </Flex>
@@ -187,6 +190,7 @@ const AddCustomer = () => {
               name="deliveryPhoneNumber"
               label="Phone Number"
               // value={deliveryPhoneNumber}
+              symbol={<PhoneIcon w={5} h={5} />}
               onChange={(e) =>
                 e.target.value.length === 10 &&
                 setdeliveryPhoneNumber(e.target.value)

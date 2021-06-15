@@ -289,14 +289,14 @@ const Customers = () => {
                         onClick={(add) => onViewAddress(customer.addressList)}
                       >
                         View Address
-                        </Button>
+                      </Button>
                     </Td>
                     <Td color="blackAlpha.700">
                       <Button
                         onClick={(add) => onViewOrder(customer.ordersList)}
                       >
                         View Order
-                        </Button>
+                      </Button>
                     </Td>
                     {/* <Td as={HStack}>
                       <Button bg="transparent" color="green.400">

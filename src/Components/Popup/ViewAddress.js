@@ -27,10 +27,10 @@ const ViewAddress = (props) => {
       <Modal isOpen={viewAddress} onClose={handleClose}>
         <ModalOverlay />
         <ModalContent w="fit-content">
-          <ModalHeader bgColor="#2A9F85" borderTopRadius="5px">
+          <ModalHeader bgColor="#2A9F85" color="#fff" borderTopRadius="5px">
             View Address
           </ModalHeader>
-          <ModalCloseButton />
+          <ModalCloseButton bgColor="#fff" borderRadius="50%" color="#2A9F85" />
           <ModalBody width="4.5">
             {props.add < 1
               ? "No Data found :("

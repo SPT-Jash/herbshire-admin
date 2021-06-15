@@ -56,7 +56,7 @@ export default function Dashboard() {
                             <Menu>
                                 <MenuButton as={Button} rightIcon={<BsChevronDown />} borderColor="#E2E2E8" p="2">
                                     Year
-                            </MenuButton>
+                                </MenuButton>
                                 <MenuList fontSize="sm">
                                     <MenuItem >Days</MenuItem>
                                     <MenuItem>Week</MenuItem>

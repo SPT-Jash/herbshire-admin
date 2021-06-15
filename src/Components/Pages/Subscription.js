@@ -116,7 +116,7 @@ const Subscription = () => {
     const url = SERVER_URL + "subscription?id=";
 
     const id = subscriptionData[key].id;
-    
+
     const config = {
       headers: {
         Authorization: `Bearer ${auth.user.token}`,
@@ -139,7 +139,7 @@ const Subscription = () => {
       });
   };
 
-  const editSubHandler = (id) =>{
+  const editSubHandler = (id) => {
     history.push(`/update-subscription/${id}`);
   }
 
@@ -239,7 +239,7 @@ const Subscription = () => {
           </Box>
         </Stack>
 
-        <Box w="90%">
+        <Box w="100%">
           <Flex mt="4" mr="4">
             <Text fontSize="large" fontWeight="semibold" color="#4C4C66">
               SUBSCRIBERS
@@ -288,78 +288,78 @@ const Subscription = () => {
                   {subscriptionData.length < 1
                     ? "No Data found :("
                     : subscriptionData.map((customer, key) => {
-                        return (
-                          <Tr
-                            fontSize="sm"
-                            className="order-table-row"
-                            key={key}
-                          >
-                            <Td>
-                              <Flex>
-                                <Avatar
-                                  size="xs"
-                                  borderRadius="5"
-                                  name="Andrew"
-                                  src={customer.imageUrl}
-                                />
-                                <Text
-                                  ml="3"
-                                  color="#828194"
-                                  whiteSpace="nowrap"
-                                >
-                                  {key + 1}
-                                </Text>
-                              </Flex>
-                            </Td>
-                            <Td color="blackAlpha.700">{customer.name}</Td>
-                            <Td color="blackAlpha.700">
-                              <ShowMoreText
-                                lines={2}
-                                more="Show more"
-                                less="Show less"
-                                expanded={false}
-                                width={200}
-                                anchorClass="more-anchor"
+                      return (
+                        <Tr
+                          fontSize="sm"
+                          className="order-table-row"
+                          key={key}
+                        >
+                          <Td>
+                            <Flex>
+                              <Avatar
+                                size="xs"
+                                borderRadius="5"
+                                name="Andrew"
+                                src={customer.imageUrl}
+                              />
+                              <Text
+                                ml="3"
+                                color="#828194"
+                                whiteSpace="nowrap"
                               >
-                                {customer.description}
-                              </ShowMoreText>
-                            </Td>
-                            <Td color="blackAlpha.700">{customer.active? "Active" : "Inactive"}</Td>
-                            <Td color="blackAlpha.700">
-                              <Button
-                                onClick={(add) =>
-                                  onViewProduct(customer.productsList)
-                                }
-                              >
-                                Product List
-                              </Button>
-                            </Td>
-                            <Td color="blackAlpha.700">
-                              <Button
-                                onClick={(add) =>
-                                  onViewSubscription(
-                                    customer.subscriptionPricesList
-                                  )
-                                }
-                              >
-                                Subscription List
-                              </Button>
-                            </Td>
-                            <Td as={HStack}>
-                              <Button bg="transparent" color="green.400" onClick={() => editSubHandler(customer.id)}>
-                                <MdEdit size="20px" />
-                              </Button>
-                              <Button
-                                bg="transparent"
-                                color="red.400"
-                                onClick={() => subDeleteHandle(key)}
-                              >
-                                <MdDeleteForever size="25px" color="red" />
-                              </Button>
-                            </Td>
-                          </Tr>
-                        );
-                      })}
+                                {key + 1}
+                              </Text>
+                            </Flex>
+                          </Td>
+                          <Td color="blackAlpha.700">{customer.name}</Td>
+                          <Td color="blackAlpha.700">
+                            <ShowMoreText
+                              lines={2}
+                              more="Show more"
+                              less="Show less"
+                              expanded={false}
+                              width={200}
+                              anchorClass="more-anchor"
+                            >
+                              {customer.description}
+                            </ShowMoreText>
+                          </Td>
+                          <Td color="blackAlpha.700">{customer.active ? "Active" : "Inactive"}</Td>
+                          <Td color="blackAlpha.700">
+                            <Button
+                              onClick={(add) =>
+                                onViewProduct(customer.productsList)
+                              }
+                            >
+                              Product List
+                            </Button>
+                          </Td>
+                          <Td color="blackAlpha.700">
+                            <Button
+                              onClick={(add) =>
+                                onViewSubscription(
+                                  customer.subscriptionPricesList
+                                )
+                              }
+                            >
+                              Subscription List
+                            </Button>
+                          </Td>
+                          <Td as={HStack}>
+                            <Button bg="transparent" color="green.400" onClick={() => editSubHandler(customer.id)}>
+                              <MdEdit size="20px" />
+                            </Button>
+                            <Button
+                              bg="transparent"
+                              color="red.400"
+                              onClick={() => subDeleteHandle(key)}
+                            >
+                              <MdDeleteForever size="25px" color="red" />
+                            </Button>
+                          </Td>
+                        </Tr>
+                      );
+                    })}
                 </Tbody>
               </Table>
             }

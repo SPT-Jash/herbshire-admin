@@ -11,6 +11,7 @@ import Select from "react-select";
 import { PRODUCT_URL, SERVER_URL } from "../Config/Apis";
 import { Context } from "../Data/Context";
 import FormInput from "../Views/FormInput";
+import { CalendarIcon } from '@chakra-ui/icons'
 
 const AddOrder = () => {
   const { auth } = useContext(Context);
@@ -268,6 +269,7 @@ const AddOrder = () => {
           <FormInput
             label="Delivery Date"
             type="date"
+            symbol={<CalendarIcon w={5} h={5} />}
             onChange={(e) => setDeliveryDate(e.target.value)}
           />
           <Box m="3">

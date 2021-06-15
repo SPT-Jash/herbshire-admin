@@ -34,7 +34,7 @@ export default function Sidenav() {
       <div className="sidenav">
         <a className="side-nav-title" href="#about">
           {" "}
-          <img src={logo} /> 
+          <img src={logo} alt="herbshire logo" />
           {/* <div>Herb</div>Shire */}
         </a>
         <NavLink
@@ -51,7 +51,7 @@ export default function Sidenav() {
     <div className="sidenav">
       <a className="side-nav-title" href="#about">
         {" "}
-        <img src={logo} /> 
+        <img src={logo} alt="herbshire logo" />
         {/* <div>Herb</div>Shire */}
       </a>
 

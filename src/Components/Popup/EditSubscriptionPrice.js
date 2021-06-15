@@ -98,7 +98,7 @@ const EditSubscription = (props) => {
       .then(function () {
         // always executed
       });
-  }, []);
+  }, [auth.user.token, props.id]);
 
   const deliveryDaysChangeHandler = (e) => {
     const days = e.map((x) => x.label);
@@ -125,6 +125,7 @@ const EditSubscription = (props) => {
               label="Price"
               type="number"
               name="price"
+              symbol="₹"
               value={subscriptionPriceList.price}
               onChange={(e) => {
                 setsubscriptionPriceList({

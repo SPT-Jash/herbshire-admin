@@ -220,6 +220,7 @@ export default function UpdateProduct() {
             name="price"
             label="price(in ₹)"
             type="number"
+            symbol="₹"
             value={editProductDetail.price}
             onChange={(e) => {
               seteditProductDetail({
@@ -232,6 +233,7 @@ export default function UpdateProduct() {
             name="discount"
             label="discount(in %)"
             type="number"
+            symbol="%"
             value={editProductDetail.discount}
             onChange={(e) => {
               seteditProductDetail({
@@ -244,6 +246,7 @@ export default function UpdateProduct() {
             name="weight"
             label="weight"
             type="number"
+            symbol="G"
             value={editProductDetail.weight}
             onChange={(e) => {
               seteditProductDetail({
@@ -280,6 +283,7 @@ export default function UpdateProduct() {
             name="calories"
             label="calories"
             type="text"
+            symbol="G"
             value={editProductDetail.calories}
             onChange={(e) => {
               seteditProductDetail({
@@ -292,6 +296,7 @@ export default function UpdateProduct() {
             name="proteins"
             label="proteins"
             type="text"
+            symbol="G"
             value={editProductDetail.proteins}
             onChange={(e) => {
               seteditProductDetail({
@@ -304,6 +309,7 @@ export default function UpdateProduct() {
             name="fats"
             label="fats"
             type="text"
+            symbol="G"
             value={editProductDetail.fats}
             onChange={(e) => {
               seteditProductDetail({
@@ -316,6 +322,7 @@ export default function UpdateProduct() {
             name="curbs"
             label="curbs"
             type="text"
+            symbol="G"
             value={editProductDetail.curbs}
             onChange={(e) => {
               seteditProductDetail({
@@ -328,7 +335,7 @@ export default function UpdateProduct() {
         <Divider mt="4" mb="4" />
 
         <Box>
-          <Text mb="4">Description</Text>
+          <Text mb="4" fontSize="md" fontWeight="semibold" color="blackAlpha.800">DESCRIPTION</Text>
           <Textarea
             name="description"
             label="description"

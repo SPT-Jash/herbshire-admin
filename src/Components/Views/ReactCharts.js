@@ -43,7 +43,7 @@ export default function ReactCharts({ type, lineColor }) {
         color: lineColor,
       },
     ],
-    []
+    [lineColor]
   );
   const series = React.useMemo(
     () => ({

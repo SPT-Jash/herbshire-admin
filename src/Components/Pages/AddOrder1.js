@@ -9,28 +9,28 @@ import React, { useRef, useState } from "react";
 import FormInput from "../Views/FormInput";
 
 const AddOrder = () => {
-    const form = useRef();
-    const [images, setImages] = useState([]);
-    const [gstList, setGstList] = useState([]);
+  const form = useRef();
+  const [images, setImages] = useState([]);
+  const [gstList, setGstList] = useState([]);
 
-    const SelectedImages = (
-        <Flex display="block">
-          {images.map((img, key) => (
-            <Tag
-              size="lg"
-              h="50px"
-              key={key}
-              borderRadius="10px"
-              variant="solid"
-              colorScheme="green"
-              m="2"
-            >
-              <TagLabel>{img.name}</TagLabel>
-              {/* <TagCloseButton onClick={() => removeImage(key)} /> */}
-            </Tag>
-          ))}
-        </Flex>
-      );
+  const SelectedImages = (
+    <Flex display="block">
+      {images.map((img, key) => (
+        <Tag
+          size="lg"
+          h="50px"
+          key={key}
+          borderRadius="10px"
+          variant="solid"
+          colorScheme="green"
+          m="2"
+        >
+          <TagLabel>{img.name}</TagLabel>
+          {/* <TagCloseButton onClick={() => removeImage(key)} /> */}
+        </Tag>
+      ))}
+    </Flex>
+  );
 
   return (
     <>
@@ -47,7 +47,7 @@ const AddOrder = () => {
         >
           <form
             ref={form}
-            
+
             encType="multipart/form-data"
           >
             <Flex>
@@ -116,7 +116,7 @@ const AddOrder = () => {
                   mt="3"
                   borderWidth="thin"
                   borderColor="blackAlpha.200"
-                  
+
                   accept="images/*"
                   multiple
                 />

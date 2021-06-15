@@ -327,18 +327,18 @@ export default function Products() {
                         </Text>
                       </Flex>
                     </Td>
-                    <Td color="blackAlpha.700">{product.weight}</Td>
-                    <Td color="blackAlpha.700">{product.quantity} pieces</Td>
-                    <Td color="blackAlpha.700">₹{product.price}</Td>
-                    <Td color="blackAlpha.700">{product.discount}%</Td>
-                    <Td color="blackAlpha.700">{product.freshTill} days</Td>
+                    <Td color="blackAlpha.700">{product.weight} <span style={{ color: "#00b6a1", fontWeight: "bold" }}>G</span></Td>
+                    <Td color="blackAlpha.700">{product.quantity} <span style={{ color: "#00b6a1", fontWeight: "bold" }}>Pieces</span></Td>
+                    <Td color="blackAlpha.700"><span style={{ color: "#00b6a1", fontWeight: "bold" }}>₹</span> {product.price}</Td>
+                    <Td color="blackAlpha.700">{product.discount} <span style={{ color: "#00b6a1", fontWeight: "bold" }}>%</span></Td>
+                    <Td color="blackAlpha.700">{product.freshTill} <span style={{ color: "#00b6a1", fontWeight: "bold" }}>Days</span></Td>
                     <Td color="blackAlpha.700">{product.count}</Td>
-                    <Td color="blackAlpha.700">{product.calories}</Td>
-                    <Td color="blackAlpha.700">{product.proteins}</Td>
-                    <Td color="blackAlpha.700">{product.fats}</Td>
-                    <Td color="blackAlpha.700">{product.curbs}</Td>
+                    <Td color="blackAlpha.700">{product.calories} <span style={{ color: "#00b6a1", fontWeight: "bold" }}>g</span></Td>
+                    <Td color="blackAlpha.700">{product.proteins} <span style={{ color: "#00b6a1", fontWeight: "bold" }}>g</span></Td>
+                    <Td color="blackAlpha.700">{product.fats} <span style={{ color: "#00b6a1", fontWeight: "bold" }}>g</span></Td>
+                    <Td color="blackAlpha.700">{product.curbs} <span style={{ color: "#00b6a1", fontWeight: "bold" }}>g</span></Td>
                     <Td as={HStack}>
-                      <Button onClick={() => countHandler(key)} disabled={product.count? false : true}>
+                      <Button onClick={() => countHandler(key)} disabled={product.count ? false : true}>
                         {product.count ? "Unavailable" : "Available"}
                       </Button>
                       <Button

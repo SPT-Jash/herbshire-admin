@@ -51,8 +51,8 @@ const ViewSubscription = (props) => {
       <Modal isOpen={viewSubscription} onClose={handleClose} size="3xl">
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader bgColor="#2A9F85">View Subscription</ModalHeader>
-          <ModalCloseButton />
+          <ModalHeader bgColor="#2A9F85" color="#fff">View Subscription</ModalHeader>
+          <ModalCloseButton bgColor="#fff" borderRadius="50%" color="#2A9F85" />
           <ModalBody width="3xl">
             <Table border="1px solid #e2e8f0">
               <Thead>
@@ -67,21 +67,21 @@ const ViewSubscription = (props) => {
                 {props.add < 1
                   ? "No Data found :("
                   : props.add.map((sub, index) => {
-                      return (
-                        // <Box w="100%" h="100%" key={index} style={{ padding: "10px", border: "1px solid #ddd", borderRadius: "5px", marginRight: "5px", marginBottom: "5px" }}>
-                        <Tr color="gray" key={index}>
-                          <Td>{sub.price}</Td>
-                          <Td>{sub.upto}</Td>
-                          <Td>{sub.frequency}</Td>
-                          <Td>
-                            {sub.deliveryDays
-                              .split("-")
-                              .map((day) => subDay(day))}
-                          </Td>
-                        </Tr>
-                        // </Box>
-                      );
-                    })}
+                    return (
+                      // <Box w="100%" h="100%" key={index} style={{ padding: "10px", border: "1px solid #ddd", borderRadius: "5px", marginRight: "5px", marginBottom: "5px" }}>
+                      <Tr color="gray" key={index}>
+                        <Td>{sub.price}</Td>
+                        <Td>{sub.upto}</Td>
+                        <Td>{sub.frequency}</Td>
+                        <Td>
+                          {sub.deliveryDays
+                            .split("-")
+                            .map((day) => subDay(day))}
+                        </Td>
+                      </Tr>
+                      // </Box>
+                    );
+                  })}
               </Tbody>
             </Table>
           </ModalBody>
