@@ -395,7 +395,7 @@ const UpdateSubscription = () => {
                   subscriptionList.map((data, index) => (
                     <>
                       <Tr>
-                        <Td color="blackAlpha.700">{data.price}</Td>
+                        <Td color="blackAlpha.700"><span style={{ color: "#00b6a1", fontWeight: "bold" }}>₹</span> {data.price}</Td>
                         <Td color="blackAlpha.700">{data.frequency}</Td>
                         <Td color="blackAlpha.700">{data.upto}</Td>
                         <Td color="blackAlpha.700">{data.deliveryDays}</Td>
