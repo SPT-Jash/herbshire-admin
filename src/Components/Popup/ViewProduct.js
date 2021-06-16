@@ -88,7 +88,7 @@ const ViewProduct = (props) => {
                     <Grid templateColumns="repeat(3,1fr)">
                       <Text w="20rem">
                         <b>Fats: </b>
-                        {product.fats}
+                        {product.fats}<span style={{ color: "#00b6a1", fontWeight: "bold" }}>g</span>
                       </Text>
                       <Text w="20rem">
                         <b>Description:</b> {product.description}

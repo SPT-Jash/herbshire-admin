@@ -3,15 +3,15 @@ import { Divider, Grid } from "@chakra-ui/layout";
 import { Flex } from "@chakra-ui/layout";
 import { Text } from "@chakra-ui/layout";
 import { Box } from "@chakra-ui/layout";
-import { Textarea } from "@chakra-ui/react";
+import { Textarea, useToast } from "@chakra-ui/react";
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
-import { BsPlusSquare } from "react-icons/bs";
+import { BsDashSquare, BsPlusSquare } from "react-icons/bs";
+import { useHistory } from "react-router-dom";
 import Select from "react-select";
 import { PRODUCT_URL, SERVER_URL } from "../Config/Apis";
 import { Context } from "../Data/Context";
 import FormInput from "../Views/FormInput";
-import { CalendarIcon } from '@chakra-ui/icons'
 
 const AddOrder = () => {
   const { auth } = useContext(Context);
@@ -22,8 +22,10 @@ const AddOrder = () => {
   const [deliveryDate, setDeliveryDate] = useState("");
   const [note, setNote] = useState("");
   const [deliveryStatus, setDeliveryStatus] = useState("");
-  const [order, setOrder] = useState([{ product: "", quantity: "" }]);
+  const [orders, setOrders] = useState([{ product: "", quantity: "" }]);
   const [products, setProducts] = useState([]);
+  const toast = useToast();
+  const history = useHistory();
 
   const userList = [];
   {
@@ -36,14 +38,7 @@ const AddOrder = () => {
 
   const paymentMethodList = [
     { value: 1, label: "Cash" },
-    { value: 2, label: "Wallet" },
-    { value: 3, label: "Net Banking" },
-  ];
-
-  const paymentStatusList = [
-    { value: 1, label: "Complete" },
-    { value: 2, label: "Incomplete" },
-    { value: 3, label: "Paid" },
+    { value: 2, label: "Online" },
   ];
 
   const deliveryStatusList = [
@@ -59,6 +54,17 @@ const AddOrder = () => {
       productList.push({ value: pro.id, label: pro.productName });
     });
   }
+
+  const toastMessage = (status,title, msg) => {
+    toast({
+      title: title,
+      description: msg !== "null" ? msg : "",
+      status: status,
+      duration: 3000,
+      isClosable: true,
+      position: "bottom-right",
+    });
+  };
 
   useEffect(() => {
     const url = SERVER_URL + "user/search";
@@ -114,37 +120,66 @@ const AddOrder = () => {
   }, [auth]);
 
   const changeSelectHandler = (e, index) => {
-    const temp = [...order];
+    const temp = [...orders];
     temp[index]["product"] = { id: e.value };
-    setOrder(temp);
+    setOrders(temp);
   };
 
   const changeHandler = (e, index) => {
-    const temp = [...order];
+    const temp = [...orders];
     temp[index]["quantity"] = +e.target.value;
-    setOrder(temp);
+    setOrders(temp);
   };
 
   const addHandler = () => {
-    setOrder([...order, { product: "", quantity: "" }]);
+    setOrders([...orders, { product: "", quantity: "" }]);
+  };
+
+  const removeHandler = (index) => {
+    const temp = [...orders];
+    temp.splice(index, 1);
+    setOrders(temp);
   };
 
   const createOrderHandler = () => {
+    const url = SERVER_URL + "order/admin/create";
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
+      },
+    };
+
     const user = users.filter((user) => user.id === userId);
 
     const body = {
       userId: userId,
       paymentMethod: paymentMethod,
-      paymentStatus: paymentStatus,
       deliveryDate: deliveryDate,
       deliveryStatus: deliveryStatus,
       note: note,
       address: {
         id: user[0].addressList[0].id,
       },
-      ordersDetailsList: order,
+      ordersDetailsList: orders,
     };
-    console.log(body, "body", order);
+    console.log(body, "body");
+
+    axios
+      .post(url, body, config)
+      .then((response) => {
+      console.log("response", response);
+      if(response.status === 200){
+        toastMessage("success","Order create successfully");
+        history.push("/orders");
+      }
+    })
+    .catch((error) => {
+      toastMessage("error", "Order not created", `${error.response.data.message}`);
+    })
+    .then(() => {
+      //always executed
+    })
   };
 
   return (
@@ -194,8 +229,8 @@ const AddOrder = () => {
           />
         </Grid>
         <Divider mt="4" mb="4" />
-        {order.map((or, key) => (
-          <Flex>
+        {orders.map((order, key) => (
+          <Flex key={key}>
             <Box m="3">
               <Text
                 m="2"
@@ -222,16 +257,27 @@ const AddOrder = () => {
               color="#2A9F85"
               backgroundColor="transparent"
               fontSize="1.5rem"
-              marginTop="3rem"
+              marginTop="3.5rem"
               onClick={() => addHandler()}
             >
               <BsPlusSquare />
             </Button>
+            {key > 0 && (
+              <Button
+                color="#2A9F85"
+                backgroundColor="transparent"
+                fontSize="1.5rem"
+                marginTop="3.5rem"
+                onClick={() => removeHandler(key)}
+              >
+                <BsDashSquare />
+              </Button>
+            )}
           </Flex>
         ))}
         <Divider mt="4" mb="4" />
         <Flex>
-          <Box m="3">
+        <Box m="3">
             <Text
               m="2"
               fontSize="md"
@@ -247,29 +293,9 @@ const AddOrder = () => {
               />
             </div>
           </Box>
-          <Box m="3">
-            <Text
-              m="2"
-              fontSize="md"
-              fontWeight="semibold"
-              color="blackAlpha.800"
-            >
-              Payment Status
-            </Text>
-            <div style={{ fontSize: "1.1rem", width: "10rem" }}>
-              <Select
-                options={paymentStatusList}
-                onChange={(e) => setPaymentStatus(e.label)}
-              />
-            </div>
-          </Box>
-        </Flex>
-        <Divider mt="4" mb="4" />
-        <Flex>
           <FormInput
             label="Delivery Date"
             type="date"
-            symbol={<CalendarIcon w={5} h={5} />}
             onChange={(e) => setDeliveryDate(e.target.value)}
           />
           <Box m="3">

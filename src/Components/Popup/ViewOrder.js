@@ -58,7 +58,7 @@ const ViewOrder = (props) => {
                               <Td>{orderDetail.product.productName}</Td>
                               <Td>{orderDetail.product.description}</Td>
                               <Td textAlign="center">
-                                {orderDetail.quantity}
+                                {orderDetail.quantity}<span style={{ color: "#00b6a1", fontWeight: "bold" }}>Pieces</span>
                               </Td>
                             </>
                           );
