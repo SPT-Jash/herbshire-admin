@@ -44,6 +44,8 @@ const AddSubscription = () => {
 
   const toast = useToast();
 
+  console.log(subPrices, 'subPrices');
+
   const statusList = [
     { value: 1, label: "Active" },
     { value: 2, label: "Inavtive" },
@@ -64,14 +66,14 @@ const AddSubscription = () => {
   const delivery_days = [
     { value: 1, label: "Monday" },
     { value: 2, label: "Tuesday" },
-    { value: 3, label: "Wensday" },
+    { value: 3, label: "Wednesday" },
     { value: 4, label: "Thursday" },
     { value: 5, label: "Friday" },
     { value: 6, label: "Saturday" },
     { value: 7, label: "Sunday" },
   ];
 
-  const toastMessage = (status,title, msg) => {
+  const toastMessage = (status, title, msg) => {
     toast({
       title: title,
       description: msg !== "null" ? msg : "",
@@ -157,7 +159,9 @@ const AddSubscription = () => {
       .then(function () {
         // always executed
       });
+    console.log(body, "body");
   };
+
 
   const add_media = (event) => {
     event.preventDefault();

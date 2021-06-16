@@ -70,7 +70,7 @@ const ViewSubscription = (props) => {
                     return (
                       // <Box w="100%" h="100%" key={index} style={{ padding: "10px", border: "1px solid #ddd", borderRadius: "5px", marginRight: "5px", marginBottom: "5px" }}>
                       <Tr color="gray" key={index}>
-                        <Td>{sub.price}</Td>
+                        <Td><span style={{ color: "#00b6a1", fontWeight: "bold" }}>₹</span> {sub.price}</Td>
                         <Td>{sub.upto}</Td>
                         <Td>{sub.frequency}</Td>
                         <Td>
