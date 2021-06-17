@@ -15,9 +15,11 @@ import { SERVER_URL } from "../Config/Apis";
 import { useHistory } from "react-router";
 import avater from "../images/tt_avatar_small.jpg";
 import { MdDeleteForever, MdEdit } from "react-icons/md";
+import { BiUserCheck } from "react-icons/bi";
 import ViewProduct from "../Popup/ViewProduct";
 import ViewSubscription from "../Popup/ViewSubscription";
 import { useToast } from "@chakra-ui/toast";
+import SubscribeView from "../Popup/SubscribeView";
 
 const Subscription = () => {
   const history = useHistory();
@@ -29,6 +31,8 @@ const Subscription = () => {
     setViewProduct,
     viewSubscription,
     setViewSubscription,
+    subscribeView, 
+    setsubscribeView
   } = useContext(Context);
   setSelectedNavItem("subscription");
 
@@ -42,6 +46,7 @@ const Subscription = () => {
 
   const [productDetails, setProductDetails] = useState([]);
   const [subscriptionDetails, setSubscriptionDetails] = useState([]);
+  const [SubscribeId, setSubscribeId] = useState();
 
   const pageArray = [];
   for (let index = 0; index < totalPages; index++) {
@@ -107,6 +112,11 @@ const Subscription = () => {
     setProductDetails(add);
   };
 
+  const onSubscribeView = (ssid) => {
+    setsubscribeView(true);
+    setSubscribeId(ssid)
+  };
+
   const onViewSubscription = (add) => {
     setViewSubscription(true);
     setSubscriptionDetails(add);
@@ -145,6 +155,7 @@ const Subscription = () => {
 
   return (
     <>
+      {subscribeView && <SubscribeView id={SubscribeId} view="true" />}
       {viewProduct && <ViewProduct add={productDetails} view="true" />}
       {viewSubscription && (
         <ViewSubscription add={subscriptionDetails} view="true" />
@@ -279,6 +290,7 @@ const Subscription = () => {
                     <Th color="#828194">Subscription Name</Th>
                     <Th color="#828194">Description</Th>
                     <Th color="#828194">Status</Th>
+                    <Th color="#828194">subscribe</Th>
                     <Th color="#828194">Products List</Th>
                     <Th color="#828194">Subscription List</Th>
                     <Th color="#828194">Action</Th>
@@ -325,6 +337,15 @@ const Subscription = () => {
                             </ShowMoreText>
                           </Td>
                           <Td color="blackAlpha.700">{customer.active ? "Active" : "Inactive"}</Td>
+                          <Td color="blackAlpha.700">
+                            <Button
+                              onClick={() =>
+                                onSubscribeView(customer.id)
+                              }
+                            >
+                              <BiUserCheck size="25px" />
+                            </Button>
+                          </Td>
                           <Td color="blackAlpha.700">
                             <Button
                               onClick={(add) =>
