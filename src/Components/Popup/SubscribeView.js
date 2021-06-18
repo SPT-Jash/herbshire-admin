@@ -7,8 +7,6 @@ import {
     ModalHeader,
     ModalBody,
     ModalCloseButton,
-    Text,
-    Flex,
     Tr,
     Th,
     Table,
@@ -30,7 +28,7 @@ const SubscribeView = (props) => {
     console.log(props.id, "view address");
 
     useEffect(() => {
-        const url = SERVER_URL + "subscribe/admin/subscription/customers";
+        const url = SERVER_URL + "admin/subscribe/subscription/customers";
         const config = {
             headers: {
                 Authorization: `Bearer ${auth.user.token}`,
@@ -51,7 +49,7 @@ const SubscribeView = (props) => {
             .then(function () {
                 // always executed
             });
-    }, [auth]);
+    }, [auth, props.id]);
 
     return (
         <>

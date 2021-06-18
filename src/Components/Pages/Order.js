@@ -11,13 +11,11 @@ import { Button } from "@chakra-ui/button";
 import { Table, Tbody, Td, Thead, Tr, Th } from "@chakra-ui/table";
 import { Avatar } from "@chakra-ui/avatar";
 import { Link } from "react-router-dom";
-import { SERVER_URL } from "../Config/Apis";
+import { ORDER_CANCEL_URL, ORDER_URL } from "../Config/Apis";
 import axios from "axios";
 import ViewAddress from "../Popup/ViewAddress";
 import ViewOrder from "../Popup/ViewOrder";
-import { MdDeleteForever } from "react-icons/md";
 import { useToast } from "@chakra-ui/react";
-// import Moment from "react-moment";
 import Moment from 'react-moment';
 import 'moment-timezone';
 
@@ -57,7 +55,6 @@ export default function Order() {
   }
 
   useEffect(() => {
-    const url = SERVER_URL + "order/admin/get_all";
 
     const config = {
       headers: {
@@ -72,7 +69,7 @@ export default function Order() {
     };
 
     axios
-      .get(url, config)
+      .get(ORDER_URL, config)
       .then(function (response) {
         console.log(response);
         if (response.status === 200) {
@@ -99,14 +96,13 @@ export default function Order() {
   };
 
   const deleteOrderHandler = (key) => {
-    const url = SERVER_URL + "order/admin/cancel";
     const order_id = orderData[key].id;
     // const amount = parseInt(orderData[key].amount.toFixed());
 
     console.log(order_id);
 
     axios
-      .delete(url, {
+      .delete(ORDER_CANCEL_URL, {
         data: { id: order_id },
         headers: {
           Authorization: `Bearer ${auth.user.token}`,

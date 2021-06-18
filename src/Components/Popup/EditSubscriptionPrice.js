@@ -13,7 +13,7 @@ import {
   Select as Cselect,
 } from "@chakra-ui/react";
 import FormInput from "../Views/FormInput";
-import { SERVER_URL, PRODUCT_URL } from "../Config/Apis";
+import { SUB_PRICE_UPDATE_URL, SUB_PRICE_ID_URL } from "../Config/Apis";
 import axios from "axios";
 import { useToast } from "@chakra-ui/toast";
 import Select from "react-select";
@@ -51,14 +51,13 @@ const EditSubscription = (props) => {
 
   const onUpdateSubscriptionPrice = () => {
     // edit subscription price list
-    const url = SERVER_URL + "subscription/price";
     const config = {
       headers: {
         Authorization: `Bearer ${auth.user.token}`,
       },
     };
     axios
-      .patch(url, subscriptionPriceList, config)
+      .patch(SUB_PRICE_UPDATE_URL, subscriptionPriceList, config)
       .then(function (response) {
         console.log(response, "response");
         if (response.status === 200) {
@@ -78,7 +77,6 @@ const EditSubscription = (props) => {
 
   useEffect(() => {
     // GET SUBSCRIPTION BY ID
-    const url = SERVER_URL + "subscription/price";
     const config = {
       headers: {
         Authorization: `Bearer ${auth.user.token}`,
@@ -88,7 +86,7 @@ const EditSubscription = (props) => {
       },
     };
     axios
-      .get(url, config)
+      .get(SUB_PRICE_ID_URL, config)
       .then(function (response) {
         setsubscriptionPriceList(response.data.body);
       })

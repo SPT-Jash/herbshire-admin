@@ -35,7 +35,7 @@ import { GrDeliver } from "react-icons/gr";
 import { FaShoppingCart } from "react-icons/fa";
 import { Context } from "../Data/Context";
 import { MdDeleteForever, MdEdit } from "react-icons/md";
-import { PRODUCT_DELETE_URL, PRODUCT_URL } from "../Config/Apis";
+import { PRODUCT_DELETE_URL, PRODUCT_UPDATE_URL, PRODUCT_URL } from "../Config/Apis";
 
 export default function Products() {
 
@@ -62,7 +62,7 @@ export default function Products() {
   };
 
   useEffect(() => {
-    const url = PRODUCT_URL + "/search";
+    const url = PRODUCT_URL;
     const config = {
       headers: {
         Authorization: `Bearer ${auth.user.token}`,
@@ -144,7 +144,7 @@ export default function Products() {
       console.log("body inside handler", body);
 
       axios
-        .put(PRODUCT_URL, body, config)
+        .patch(PRODUCT_UPDATE_URL, body, config)
         .then(function (response) {
           console.log("response: ", response);
           toastMessage("success", "successfully you make product unavailable");
@@ -327,15 +327,15 @@ export default function Products() {
                         </Text>
                       </Flex>
                     </Td>
-                    <Td color="blackAlpha.700">{product.weight} <span style={{ color: "#00b6a1", fontWeight: "bold" }}>G</span></Td>
-                    <Td color="blackAlpha.700">{product.quantity} <span style={{ color: "#00b6a1", fontWeight: "bold" }}>Pieces</span></Td>
+                    <Td color="blackAlpha.700">{product.weight} <span style={{ color: "#00b6a1", fontWeight: "bold" }}>{product.weightUnit? product.weightUnit : "g"}</span></Td>
+                    <Td color="blackAlpha.700">{product.quantity} {product.quantity && <span style={{ color: "#00b6a1", fontWeight: "bold" }}>Pieces</span>}</Td>
                     <Td color="blackAlpha.700"><span style={{ color: "#00b6a1", fontWeight: "bold" }}>₹</span> {product.price}</Td>
                     <Td color="blackAlpha.700">{product.discount} <span style={{ color: "#00b6a1", fontWeight: "bold" }}>%</span></Td>
                     <Td color="blackAlpha.700">{product.freshTill} <span style={{ color: "#00b6a1", fontWeight: "bold" }}>Days</span></Td>
                     <Td color="blackAlpha.700">{product.count}</Td>
                     <Td color="blackAlpha.700">{product.calories} <span style={{ color: "#00b6a1", fontWeight: "bold" }}>g</span></Td>
                     <Td color="blackAlpha.700">{product.proteins} <span style={{ color: "#00b6a1", fontWeight: "bold" }}>g</span></Td>
-                    <Td color="blackAlpha.700">{product.fats} <span style={{ color: "#00b6a1", fontWeight: "bold" }}>g</span></Td>
+                    <Td color="blackAlpha.700" paddingRight="1em">{product.fats} <span style={{ color: "#00b6a1", fontWeight: "bold" }}>g</span></Td>
                     <Td color="blackAlpha.700">{product.curbs} <span style={{ color: "#00b6a1", fontWeight: "bold" }}>g</span></Td>
                     <Td as={HStack}>
                       <Button onClick={() => countHandler(key)} disabled={product.count ? false : true}>

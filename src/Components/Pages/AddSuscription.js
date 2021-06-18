@@ -6,11 +6,11 @@ import { Box, Flex, Text } from "@chakra-ui/layout";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import FormInput from "../Views/FormInput";
 import { Textarea } from "@chakra-ui/textarea";
-import { Checkbox } from "@chakra-ui/checkbox";
 import {
   DELETE_FILE_URL,
   PRODUCT_URL,
   SERVER_URL,
+  SUB_ADD_URL,
   UPLOAD_FILE_URL,
 } from "../Config/Apis";
 import axios from "axios";
@@ -87,7 +87,6 @@ const AddSubscription = () => {
   //get product
 
   useEffect(() => {
-    const url = PRODUCT_URL + "/search";
     const config = {
       headers: {
         Authorization: `Bearer ${auth.user.token}`,
@@ -100,7 +99,7 @@ const AddSubscription = () => {
       },
     };
     axios
-      .get(url, config)
+      .get(PRODUCT_URL, config)
       .then(function (response) {
         const data = response.data.body.content;
         setProducts(data);
@@ -114,7 +113,6 @@ const AddSubscription = () => {
   }, [auth]);
 
   const onCreateSubscription = (image) => {
-    const url = SERVER_URL + "subscription";
 
     const config = {
       headers: {
@@ -143,7 +141,7 @@ const AddSubscription = () => {
     };
     console.log(body, "body");
     axios
-      .post(url, body, config)
+      .post(SUB_ADD_URL, body, config)
       .then(function (response) {
         console.log(response, "response");
         if (response.status === 200) {
@@ -267,7 +265,7 @@ const AddSubscription = () => {
   };
 
   const statusHandler = (e) => {
-    if (e.label == "Active") {
+    if (e.label === "Active") {
       console.log("Active");
       setStatus(true);
     }
@@ -558,7 +556,7 @@ const AddSubscription = () => {
                   >
                     Delivery Days
                   </Text>
-                  <div style={{ fontSize: "1.3rem", width: "13rem" }}>
+                  <div style={{ fontSize: "1.3rem", width: "14rem" }}>
                     <Select
                       isMulti
                       options={delivery_days}

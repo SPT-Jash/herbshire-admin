@@ -9,7 +9,7 @@ import { useContext, useEffect, useState } from "react";
 import { BsDashSquare, BsPlusSquare } from "react-icons/bs";
 import { useHistory } from "react-router-dom";
 import Select from "react-select";
-import { PRODUCT_URL, SERVER_URL } from "../Config/Apis";
+import { ORDER_ADD_URL, PRODUCT_URL, USER_URL } from "../Config/Apis";
 import { Context } from "../Data/Context";
 import FormInput from "../Views/FormInput";
 
@@ -18,7 +18,6 @@ const AddOrder = () => {
   const [users, setUsers] = useState([]);
   const [userId, setUserId] = useState();
   const [paymentMethod, setPaymentMethod] = useState("");
-  const [paymentStatus, setPaymentStatus] = useState("");
   const [deliveryDate, setDeliveryDate] = useState("");
   const [note, setNote] = useState("");
   const [deliveryStatus, setDeliveryStatus] = useState("");
@@ -67,7 +66,6 @@ const AddOrder = () => {
   };
 
   useEffect(() => {
-    const url = SERVER_URL + "user/search";
     const config = {
       headers: {
         Authorization: `Bearer ${auth.user.token}`,
@@ -80,7 +78,7 @@ const AddOrder = () => {
       },
     };
     axios
-      .get(url, config)
+      .get(USER_URL, config)
       .then(function (response) {
         const data = response.data.body.content;
         console.log(data, "data");
@@ -93,7 +91,6 @@ const AddOrder = () => {
         // always executed
       });
 
-    const url1 = PRODUCT_URL + "/search";
     const config1 = {
       headers: {
         Authorization: `Bearer ${auth.user.token}`,
@@ -106,7 +103,7 @@ const AddOrder = () => {
       },
     };
     axios
-      .get(url1, config1)
+      .get(PRODUCT_URL, config1)
       .then(function (response) {
         const data = response.data.body.content;
         setProducts(data);
@@ -142,7 +139,6 @@ const AddOrder = () => {
   };
 
   const createOrderHandler = () => {
-    const url = SERVER_URL + "order/admin/create";
 
     const config = {
       headers: {
@@ -166,7 +162,7 @@ const AddOrder = () => {
     console.log(body, "body");
 
     axios
-      .post(url, body, config)
+      .post(ORDER_ADD_URL, body, config)
       .then((response) => {
       console.log("response", response);
       if(response.status === 200){

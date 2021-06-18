@@ -22,7 +22,7 @@ import { useHistory } from "react-router";
 import {
   DELETE_FILE_URL,
   GST_URL,
-  PRODUCT_URL,
+  PRODUCT_ADD_URL,
   UPLOAD_FILE_URL,
 } from "../Config/Apis";
 import { Context } from "../Data/Context";
@@ -100,6 +100,7 @@ export default function AddProducts() {
     const price = formData.price.value ? formData.price.value : "";
     const discount = formData.discount.value ? formData.discount.value : "";
     const weight = formData.weight.value ? formData.weight.value : "";
+    const unit = formData.weightUnit.value ? formData.weightUnit.value : "";
     const count = formData.count.value ? formData.count.value : "";
     const calories = formData.calories.value ? formData.calories.value : "";
     const proteins = formData.proteins.value ? formData.proteins.value : "";
@@ -118,10 +119,10 @@ export default function AddProducts() {
       toastMessage("error", "freshTill Cannot be null !");
       return false;
     }
-    if(freshTill.trim() > "10"){
-      toastMessage("error", "freshTill can not more than 10 ")
-      return false;
-    }
+    // if(freshTill.trim() > "10"){
+    //   toastMessage("error", "freshTill can not more than 10 ")
+    //   return false;
+    // }
     if (quantity.trim() === "") {
       toastMessage("error", "quantity Cannot be null !");
       return false;
@@ -134,9 +135,16 @@ export default function AddProducts() {
       toastMessage("error", "discount Cannot be null !");
       return false;
     }
-    if (weight.trim() === "") {
-      toastMessage("error", "weight Cannot be null !");
-      return false;
+    // if (weight.trim() === "") {
+    //   toastMessage("error", "weight Cannot be null !");
+    //   return false;
+    // }
+
+    if(weight.trim() !== ""){
+      if(unit.trim() === ""){
+        toastMessage("error","Weight unit can not be null!");
+        return false;
+      }
     }
 
     if (calories.trim() === "") {
@@ -175,6 +183,7 @@ export default function AddProducts() {
     const data = {
       productName,
       weight,
+      unit,
       quantity,
       price,
       discount,
@@ -263,6 +272,7 @@ export default function AddProducts() {
     const body = {
       productName: data.productName,
       weight: +data.weight,
+      weightUnit : data.unit,
       quantity: +data.quantity,
       price: +data.price,
       discount: +data.discount,
@@ -280,7 +290,7 @@ export default function AddProducts() {
     console.log("body", body);
 
     axios
-      .post(PRODUCT_URL, body, config)
+      .post(PRODUCT_ADD_URL, body, config)
       .then(function (response) {
         console.log("Add product response: ", response);
         toastMessage("success", "Product Added !");
@@ -404,7 +414,8 @@ export default function AddProducts() {
             <FormInput name="quantity" label="quantity(in pieces)" type="number" />
             <FormInput name="price" label="price" type="number" symbol="₹" />
             <FormInput name="discount" label="discount(in %)" type="number" symbol="%" />
-            <FormInput name="weight" label="weight" type="number" symbol="G" />
+            <FormInput name="weight" label="weight" type="number" />
+            <FormInput name="weightUnit" label="Unit of weight" type="text"/>
             <Box m="2">
               <Text
                 m="2"
