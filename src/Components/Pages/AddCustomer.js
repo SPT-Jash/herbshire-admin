@@ -4,7 +4,7 @@ import { Textarea } from "@chakra-ui/textarea";
 import React, { useState } from "react";
 import FormInput from "../Views/FormInput";
 import axios from "axios";
-import { SERVER_URL } from "../Config/Apis";
+import { USER_ADD_URL } from "../Config/Apis";
 import { useToast } from "@chakra-ui/toast";
 import { useHistory } from "react-router";
 import { PhoneIcon, AtSignIcon } from '@chakra-ui/icons'
@@ -45,7 +45,7 @@ const AddCustomer = () => {
       toastMessage("error", "Enter valid phone number");
       return;
     }
-    const url = SERVER_URL + "user";
+    
 
     const body = {
       fullName: fullName,
@@ -71,7 +71,7 @@ const AddCustomer = () => {
 
     console.log(body, "body");
     axios
-      .post(url, body)
+      .post(USER_ADD_URL, body)
       .then(function (response) {
         const data = response;
         console.log(data, "response");

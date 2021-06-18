@@ -6,7 +6,6 @@ import {
   Center,
   Divider,
   Flex,
-  HStack,
   Spacer,
   Text,
 } from "@chakra-ui/layout";
@@ -16,17 +15,16 @@ import { BsChevronDown } from "react-icons/bs";
 import ReactCharts from "../Views/ReactCharts";
 import { Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/table";
 import { Avatar } from "@chakra-ui/avatar";
-import { MdDeleteForever, MdEdit } from "react-icons/md";
 import avater from "../images/tt_avatar_small.jpg";
 import axios from "axios";
-import { SERVER_URL } from "../Config/Apis";
+import { USER_URL } from "../Config/Apis";
 import { Context } from "../Data/Context";
 import ViewAddress from "../Popup/ViewAddress";
 import ViewOrder from "../Popup/ViewOrder";
-import { useToast } from "@chakra-ui/toast";
+// import { useToast } from "@chakra-ui/toast";
 
 const Customers = () => {
-  const toast = useToast();
+  // const toast = useToast();
   const { auth, viewAddress, setviewAddress, viewOrder, setviewOrder } =
     useContext(Context);
   const [isSmallerThan600] = useMediaQuery("(max-width: 600px)");
@@ -41,19 +39,18 @@ const Customers = () => {
     pageArray.push(index + 1);
   }
 
-  const toastMessage = (status, title, description) => {
-    toast({
-      title: title,
-      description: description ? description : "",
-      status: status,
-      duration: 9000,
-      isClosable: true,
-      position: "bottom-right",
-    });
-  };
+  // const toastMessage = (status, title, description) => {
+  //   toast({
+  //     title: title,
+  //     description: description ? description : "",
+  //     status: status,
+  //     duration: 9000,
+  //     isClosable: true,
+  //     position: "bottom-right",
+  //   });
+  // };
 
   useEffect(() => {
-    const url = SERVER_URL + "user/search";
     const config = {
       headers: {
         Authorization: `Bearer ${auth.user.token}`,
@@ -66,7 +63,7 @@ const Customers = () => {
       },
     };
     axios
-      .get(url, config)
+      .get(USER_URL, config)
       .then(function (response) {
         const data = response.data.body.content;
         setTotalPages(response.data.body.totalPages);
@@ -79,7 +76,7 @@ const Customers = () => {
       .then(function () {
         // always executed
       });
-  }, [currentPage]);
+  }, [auth,currentPage]);
 
   const onViewAddress = (add) => {
     setviewAddress(true);

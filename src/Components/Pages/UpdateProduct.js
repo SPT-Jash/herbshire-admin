@@ -3,24 +3,22 @@ import { Button } from "@chakra-ui/button";
 import { Input } from "@chakra-ui/input";
 import { Box, Center, Divider, Flex, Text } from "@chakra-ui/layout";
 import { Select } from "@chakra-ui/select";
-import { Tag, TagCloseButton, TagLabel } from "@chakra-ui/tag";
+import { Tag, TagLabel } from "@chakra-ui/tag";
 import { Textarea } from "@chakra-ui/textarea";
 import { useToast } from "@chakra-ui/toast";
 import axios from "axios";
 import React, {
-  useCallback,
   useContext,
   useEffect,
-  useRef,
   useState,
 } from "react";
 import { useHistory, useParams } from "react-router";
 import {
   DELETE_FILE_URL,
   GST_URL,
-  PRODUCT_URL,
   UPLOAD_FILE_URL,
-  SERVER_URL
+  PRODUCT_UPDATE_URL,
+  PRODUCT_ID_URL
 } from "../Config/Apis";
 import { Context } from "../Data/Context";
 import FormInput from "../Views/FormInput";
@@ -29,7 +27,6 @@ export default function UpdateProduct() {
   const { id } = useParams();
   const history = useHistory();
   const { auth } = useContext(Context);
-  const form = useRef();
   const [images, setImages] = useState([]);
   const [editProductDetail, seteditProductDetail] = useState({});
   const [uploadedImages, setUploadedImages] = useState([]);
@@ -55,14 +52,13 @@ export default function UpdateProduct() {
 
   const onUpdateProduct = () => {
     // edit product
-    const url = SERVER_URL + "product";
     const config = {
       headers: {
         Authorization: `Bearer ${auth.user.token}`,
       }
     };
     axios
-      .put(url, editProductDetail, config)
+      .patch(PRODUCT_UPDATE_URL, editProductDetail, config)
       .then(function (response) {
         console.log(response, 'response');
         if (response.status === 200) {
@@ -83,7 +79,6 @@ export default function UpdateProduct() {
 
   useEffect(() => {
     // get product detail
-    const url = SERVER_URL + "product";
     const config = {
       headers: {
         Authorization: `Bearer ${auth.user.token}`,
@@ -93,7 +88,7 @@ export default function UpdateProduct() {
       },
     };
     axios
-      .get(url, config)
+      .get(PRODUCT_ID_URL, config)
       .then(function (response) {
         seteditProductDetail(response.data.body)
         setUploadedImages(response.data.body.displayUrl)
@@ -113,7 +108,7 @@ export default function UpdateProduct() {
         setGstList(list);
       })
       .catch((r) => console.log(r));
-  }, []);
+  }, [auth, id]);
 
 
 
@@ -246,12 +241,23 @@ export default function UpdateProduct() {
             name="weight"
             label="weight"
             type="number"
-            symbol="G"
             value={editProductDetail.weight}
             onChange={(e) => {
               seteditProductDetail({
                 ...editProductDetail,
                 weight: e.target.value
+              })
+            }}
+          />
+           <FormInput
+            name="weightUnit"
+            label="weight Unit"
+            type="text"
+            value={editProductDetail.weightUnit}
+            onChange={(e) => {
+              seteditProductDetail({
+                ...editProductDetail,
+                weightUnit: e.target.value
               })
             }}
           />

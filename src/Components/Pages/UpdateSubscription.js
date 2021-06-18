@@ -5,9 +5,9 @@ import { Textarea } from "@chakra-ui/textarea";
 import { Button } from "@chakra-ui/button";
 import { Input } from "@chakra-ui/input";
 import axios from "axios";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router";
-import { SERVER_URL, PRODUCT_URL } from "../Config/Apis";
+import { PRODUCT_URL, SUB_UPDATE_URL, SUB_ID_URL, SUB_PRICE_DELETE_URL } from "../Config/Apis";
 import { Context } from "../Data/Context";
 import FormInput from "../Views/FormInput";
 import Select from "react-select";
@@ -25,8 +25,7 @@ const UpdateSubscription = () => {
   const toast = useToast();
   const [productList, setproductList] = useState([]);
   const [products, setProducts] = useState([]);
-  const [productId, setProductId] = useState([]);
-  const [subPriceList, setsubPriceList] = useState();
+  const [subPriceList, setsubPriceList] = useState([]);
   const [subscriptionList, setsubscriptionList] = useState([]);
 
   const statusList = [
@@ -53,7 +52,6 @@ const UpdateSubscription = () => {
 
   const onUpdateSubscription = () => {
     // EDIT SUBSCRIPTION
-    const url = SERVER_URL + "subscription";
     const config = {
       headers: {
         Authorization: `Bearer ${auth.user.token}`,
@@ -61,7 +59,7 @@ const UpdateSubscription = () => {
     };
     console.log(editSubDetail, "update");
     axios
-      .patch(url, editSubDetail, config)
+      .patch(SUB_UPDATE_URL, editSubDetail, config)
       .then(function (response) {
         console.log(response, "response");
         if (response.status === 200) {
@@ -79,11 +77,10 @@ const UpdateSubscription = () => {
       });
   };
 
-  console.log(editSubDetail, "editSubDetail");
+  console.log(editSubDetail, "editSubDetail", subscriptionList);
 
   useEffect(() => {
     // GET SUBSCRIPTION BY ID
-    const url = SERVER_URL + "subscription";
     const config = {
       headers: {
         Authorization: `Bearer ${auth.user.token}`,
@@ -93,7 +90,7 @@ const UpdateSubscription = () => {
       },
     };
     axios
-      .get(url, config)
+      .get(SUB_ID_URL, config)
       .then(function (response) {
         // console.log(response);
         setEditSubDetail(response.data.body);
@@ -108,7 +105,6 @@ const UpdateSubscription = () => {
       });
 
     // GET PRODUCT LIST
-    const url2 = PRODUCT_URL + "/search";
     const config2 = {
       headers: {
         Authorization: `Bearer ${auth.user.token}`,
@@ -121,7 +117,7 @@ const UpdateSubscription = () => {
       },
     };
     axios
-      .get(url2, config2)
+      .get(PRODUCT_URL, config2)
       .then(function (response) {
         const data = response.data.body.content;
         setProducts(data);
@@ -149,7 +145,6 @@ const UpdateSubscription = () => {
   };
 
   const onDeleteSub = (subPriceId, index) => {
-    let deleteUrl = SERVER_URL + "subscription/price";
     const deleteConfig = {
       headers: {
         Authorization: `Bearer ${auth.user.token}`,
@@ -159,7 +154,7 @@ const UpdateSubscription = () => {
       },
     };
     axios
-      .delete(deleteUrl, deleteConfig)
+      .delete(SUB_PRICE_DELETE_URL, deleteConfig)
       .then(function (response) {
         console.log(response, "delete response");
         if (response.status === 200) {
@@ -213,9 +208,13 @@ const UpdateSubscription = () => {
     </Flex>
   );
 
+  const addHandler = () => {
+    // setsubPriceList([...subPriceList,])
+  }
+
   return (
     <>
-      {editSubscription && <EditSubscription id={subPriceList} view="true" />}
+      {editSubscription && <EditSubscription id={subPriceList} view="true"/>}
       <Box>
         <Text m="2" fontSize="lg" fontWeight="semibold">
           Edit Subscription
@@ -394,7 +393,7 @@ const UpdateSubscription = () => {
                 {subscriptionList ? (
                   subscriptionList.map((data, index) => (
                     <>
-                      <Tr>
+                      <Tr key={index}>
                         <Td color="blackAlpha.700"><span style={{ color: "#00b6a1", fontWeight: "bold" }}>₹</span> {data.price}</Td>
                         <Td color="blackAlpha.700">{data.frequency}</Td>
                         <Td color="blackAlpha.700">{data.upto}</Td>
@@ -425,15 +424,15 @@ const UpdateSubscription = () => {
                 )}
               </Tbody>
             </Table>
-            {/* <Button
+            <Button
                   color="#2A9F85"
                   backgroundColor="transparent"
                   fontSize="2rem"
                   marginTop="3rem"
-                  // onClick={() => addHandler()}
+                  onClick={() => addHandler()}
                 >
                   <BsPlusSquare />
-                </Button> */}
+                </Button>
           </Box>
           <Button type="submit" onClick={() => onUpdateSubscription()}>
             Edit Subscription

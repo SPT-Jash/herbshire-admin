@@ -11,9 +11,8 @@ import { Button } from "@chakra-ui/button";
 import { Table, Tbody, Td, Thead, Tr, Th } from "@chakra-ui/table";
 import { Avatar, AvatarGroup } from "@chakra-ui/avatar";
 import axios from "axios";
-import { SERVER_URL } from "../Config/Apis";
+import { SUB_DELETE_URL, SUB_URL } from "../Config/Apis";
 import { useHistory } from "react-router";
-import avater from "../images/tt_avatar_small.jpg";
 import { MdDeleteForever, MdEdit } from "react-icons/md";
 import { BiUserCheck } from "react-icons/bi";
 import ViewProduct from "../Popup/ViewProduct";
@@ -79,7 +78,6 @@ const Subscription = () => {
   };
 
   useEffect(() => {
-    const url = SERVER_URL + "subscription/search";
     const config = {
       headers: {
         Authorization: `Bearer ${auth.user.token}`,
@@ -92,7 +90,7 @@ const Subscription = () => {
       },
     };
     axios
-      .get(url, config)
+      .get(SUB_URL, config)
       .then(function (response) {
         const data = response.data.body.content;
         setTotalPages(response.data.body.totalPages);
@@ -123,7 +121,6 @@ const Subscription = () => {
   };
 
   const subDeleteHandle = (key) => {
-    const url = SERVER_URL + "subscription?id=";
 
     const id = subscriptionData[key].id;
 
@@ -133,7 +130,7 @@ const Subscription = () => {
       },
     };
     axios
-      .delete(url + id, config)
+      .delete(SUB_DELETE_URL + id, config)
       .then((res) => {
         console.log("response", res);
         if (res.data.code === 200) {
@@ -211,7 +208,7 @@ const Subscription = () => {
               {newSubscribers.map((subscriber, key) => {
                 if (key < 4) {
                   return (
-                    <Box>
+                    <Box key={key}>
                       <Avatar
                         size="md"
                         mr="2"
@@ -234,6 +231,7 @@ const Subscription = () => {
                         mr="2"
                         name={subscriber.name}
                         src={subscriber.profileSrc}
+                        key={key}
                       />
                     );
                   } else {

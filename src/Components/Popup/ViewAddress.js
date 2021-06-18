@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 // import { Button, Modal } from 'react-bootstrap';
 import { Context } from "../Data/Context";
 import { BiMap, BiPhoneCall } from "react-icons/bi";
@@ -7,10 +7,8 @@ import {
   ModalOverlay,
   ModalContent,
   ModalHeader,
-  ModalFooter,
   ModalBody,
   ModalCloseButton,
-  Grid,
   Box,
   Text,
   Flex,
