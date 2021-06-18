@@ -85,6 +85,21 @@ export default function Sidenav() {
       </NavLink>
       <NavLink
         className={
+          selectedNavItem === "recipe"
+            ? "side-nav-content side-nav-content-selected side-nav-icon-selected"
+            : orderIconClassName
+        }
+        onMouseEnter={OrderIconHoverColor}
+        onMouseLeave={OrderIconNormalColor}
+        onClick={() => {
+          setSelectedNavItem("recipe");
+        }}
+        to="/recipe"
+      >
+        <GrCube /> Recipe 
+      </NavLink>
+      <NavLink
+        className={
           selectedNavItem === "subscription"
             ? "side-nav-content side-nav-content-selected side-nav-icon-selected"
             : "side-nav-content"

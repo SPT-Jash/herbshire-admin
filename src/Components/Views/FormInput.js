@@ -24,7 +24,7 @@ export default function FormInput({ label, name, type, value, onChange, symbol }
           color="#00b6a1"
           fontSize="25px"
           children={symbol}
-          style={{ marginTop: "6px", marginLeft:"5px" }}
+          style={{ marginTop: "6px", marginLeft: "5px" }}
         />
       </InputGroup>
     </Box>

@@ -89,6 +89,26 @@ export default function NavForMobile() {
             </Center>
           </Flex>
         </NavLink>
+        <NavLink to="/recipe">
+          <Flex
+            h="14"
+            pl="75px"
+            bgGradient={
+              selectedNavItem === "recipe"
+                ? "linear(to-r, #5bf5e3, #ffffff00)"
+                : "linear(to-r, #fffff00, #ffffff00)"
+            }
+            onClick={() => onClickNavItem("recipe")}
+          >
+            <Center h="14">
+              <GrCube />{" "}
+              <Text fontSize="larger" ml="4">
+                {" "}
+                Recipe
+              </Text>
+            </Center>
+          </Flex>
+        </NavLink>
         <NavLink to="/subscription">
           <Flex
             h="14"
