@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Button } from "@chakra-ui/button";
 import {
     Box,
@@ -25,6 +25,7 @@ import ShowMoreText from "react-show-more-text";
 
 const Recipe = () => {
     const toast = useToast();
+    const history = useHistory();
     const { auth, } = useContext(Context);
     const [isSmallerThan600] = useMediaQuery("(max-width: 600px)");
     const [currentPage, setCurrentPage] = useState(1);
@@ -107,8 +108,8 @@ const Recipe = () => {
             });
     }
 
-    const onEditRecipe = () => {
-
+    const onEditRecipe = (eId) => {
+        history.push(`/updaterecipe/${eId}`)
     }
 
     useEffect(() => {

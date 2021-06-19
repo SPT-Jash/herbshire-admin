@@ -16,6 +16,7 @@ import UpdateProduct from "./Pages/UpdateProduct";
 import UpdateSubscription from "./Pages/UpdateSubscription";
 import Recipe from "./Pages/Recipe";
 import AddRecipe from "./Pages/AddRecipe";
+import UpdateRecipe from "./Pages/UpdateRecipe";
 export default function Routes() {
   const { auth } = useContext(Context);
 
@@ -43,6 +44,7 @@ export default function Routes() {
         <Route path="/update-product/:id" component={UpdateProduct} />
         <Route path="/recipe" component={Recipe} />
         <Route path="/addrecipe" component={AddRecipe} />
+        <Route path="/updaterecipe/:id" component={UpdateRecipe} />
         <Route render={() => <h1>404: page not found</h1>} />
       </Switch>
     );
