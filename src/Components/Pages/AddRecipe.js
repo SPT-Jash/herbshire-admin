@@ -143,7 +143,7 @@ const AddRecipe = () => {
     }
 
     useEffect(() => {
-        const url = PRODUCT_URL + "/search";
+        const url = PRODUCT_URL;
         const config = {
             headers: {
                 Authorization: `Bearer ${auth.user.token}`,

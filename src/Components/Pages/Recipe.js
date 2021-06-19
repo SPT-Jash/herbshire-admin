@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Button } from "@chakra-ui/button";
 import {
     Box,
@@ -109,8 +109,8 @@ const Recipe = () => {
             });
     }
 
-    const onEditRecipe = () => {
-
+    const onEditRecipe = (eId) => {
+        history.push(`/updaterecipe/${eId}`)
     }
 
     useEffect(() => {
