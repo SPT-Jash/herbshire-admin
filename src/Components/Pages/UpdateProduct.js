@@ -1,24 +1,20 @@
 import { Button } from "@chakra-ui/button";
-
+import { CloseButton } from "@chakra-ui/close-button";
+import { Image } from "@chakra-ui/image";
 import { Input } from "@chakra-ui/input";
 import { Box, Center, Divider, Flex, Text } from "@chakra-ui/layout";
 import { Select } from "@chakra-ui/select";
-import { Tag, TagLabel } from "@chakra-ui/tag";
 import { Textarea } from "@chakra-ui/textarea";
 import { useToast } from "@chakra-ui/toast";
 import axios from "axios";
-import React, {
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import {
   DELETE_FILE_URL,
   GST_URL,
   UPLOAD_FILE_URL,
   PRODUCT_UPDATE_URL,
-  PRODUCT_ID_URL
+  PRODUCT_ID_URL,
 } from "../Config/Apis";
 import { Context } from "../Data/Context";
 import FormInput from "../Views/FormInput";
@@ -33,10 +29,7 @@ export default function UpdateProduct() {
   const [gstList, setGstList] = useState([]);
   const toast = useToast();
 
-
-
-  console.log(id, 'product id');
-
+  console.log(id, "product id");
 
   const toastMessage = (status, title, description) => {
     toast({
@@ -49,18 +42,17 @@ export default function UpdateProduct() {
     });
   };
 
-
   const onUpdateProduct = () => {
     // edit product
     const config = {
       headers: {
         Authorization: `Bearer ${auth.user.token}`,
-      }
+      },
     };
     axios
       .patch(PRODUCT_UPDATE_URL, editProductDetail, config)
       .then(function (response) {
-        console.log(response, 'response');
+        console.log(response, "response");
         if (response.status === 200) {
           history.push(`/products`);
           toastMessage("success", "Product Edit Successful.");
@@ -74,7 +66,7 @@ export default function UpdateProduct() {
       .then(function () {
         // always executed
       });
-  }
+  };
   console.log(editProductDetail, "dataxcvbuimp");
 
   useEffect(() => {
@@ -84,14 +76,14 @@ export default function UpdateProduct() {
         Authorization: `Bearer ${auth.user.token}`,
       },
       params: {
-        id: id
+        id: id,
       },
     };
     axios
       .get(PRODUCT_ID_URL, config)
       .then(function (response) {
-        seteditProductDetail(response.data.body)
-        setUploadedImages(response.data.body.displayUrl)
+        seteditProductDetail(response.data.body);
+        setUploadedImages(response.data.body.displayUrl);
       })
       .catch(function (error) {
         console.log(error);
@@ -110,31 +102,49 @@ export default function UpdateProduct() {
       .catch((r) => console.log(r));
   }, [auth, id]);
 
+  const add_media = () => {}
 
+  const removeImage = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", `Bearer ${auth.user.token}`);
 
-  const SelectedImages = (
-    <Flex display="block">
-      {images.map((img, key) => (
-        <Tag
-          size="lg"
-          h="50px"
-          key={key}
-          borderRadius="10px"
-          variant="solid"
-          colorScheme="green"
-          m="2"
-        >
-          <TagLabel>{img.name}</TagLabel>
-          {/* <TagCloseButton onClick={() => removeImage(key)} /> */}
-        </Tag>
-      ))}
-    </Flex>
-  );
+    var formdata = new FormData();
+    formdata.append("url", uploadedImages);
+
+    var requestOptions = {
+      method: "DELETE",
+      headers: myHeaders,
+      body: formdata,
+      redirect: "follow",
+    };
+
+    fetch(DELETE_FILE_URL, requestOptions)
+      .then((response) => {
+        console.log(response, "imgres");
+        if (response.status === 200) {
+          toastMessage("info", "Image deteled !");
+          setUploadedImages("");
+          seteditProductDetail({ ...editProductDetail, displayUrl: null });
+        }
+      })
+      .then((result) => console.log(result))
+      .catch((error) => console.log("error", error));
+  };
+
+  const SelectedImages = () => {
+    uploadedImages && (
+    <>
+      <Flex m="3" alignItems="center">
+        <Image src={uploadedImages} w="20%" />
+        <CloseButton size="lg" m="2" onClick={() => removeImage()} />
+      </Flex>
+    </>
+  )};
 
   return (
     <Box>
       <Text m="2" fontSize="lg" fontWeight="semibold">
-        ADD PRODUCTS
+        Edit PRODUCTS
       </Text>
       <Box
         w="100%"
@@ -164,8 +174,8 @@ export default function UpdateProduct() {
             onChange={(e) => {
               seteditProductDetail({
                 ...editProductDetail,
-                productName: e.target.value
-              })
+                productName: e.target.value,
+              });
             }}
           />
           <FormInput
@@ -176,8 +186,8 @@ export default function UpdateProduct() {
             onChange={(e) => {
               seteditProductDetail({
                 ...editProductDetail,
-                freshTill: e.target.value
-              })
+                freshTill: e.target.value,
+              });
             }}
           />
         </Flex>
@@ -194,8 +204,8 @@ export default function UpdateProduct() {
             onChange={(e) => {
               seteditProductDetail({
                 ...editProductDetail,
-                count: e.target.value
-              })
+                count: e.target.value,
+              });
             }}
           />
 
@@ -207,8 +217,8 @@ export default function UpdateProduct() {
             onChange={(e) => {
               seteditProductDetail({
                 ...editProductDetail,
-                quantity: e.target.value
-              })
+                quantity: e.target.value,
+              });
             }}
           />
           <FormInput
@@ -220,8 +230,8 @@ export default function UpdateProduct() {
             onChange={(e) => {
               seteditProductDetail({
                 ...editProductDetail,
-                price: e.target.value
-              })
+                price: e.target.value,
+              });
             }}
           />
           <FormInput
@@ -233,8 +243,8 @@ export default function UpdateProduct() {
             onChange={(e) => {
               seteditProductDetail({
                 ...editProductDetail,
-                discount: e.target.value
-              })
+                discount: e.target.value,
+              });
             }}
           />
           <FormInput
@@ -245,11 +255,11 @@ export default function UpdateProduct() {
             onChange={(e) => {
               seteditProductDetail({
                 ...editProductDetail,
-                weight: e.target.value
-              })
+                weight: e.target.value,
+              });
             }}
           />
-           <FormInput
+          <FormInput
             name="weightUnit"
             label="weight Unit"
             type="text"
@@ -257,8 +267,8 @@ export default function UpdateProduct() {
             onChange={(e) => {
               seteditProductDetail({
                 ...editProductDetail,
-                weightUnit: e.target.value
-              })
+                weightUnit: e.target.value,
+              });
             }}
           />
           <Box m="2">
@@ -269,7 +279,7 @@ export default function UpdateProduct() {
               color="blackAlpha.800"
             >
               Tax
-              </Text>
+            </Text>
             <Select name="gst" placeholder="Select option">
               {gstList.map((gst, key) => {
                 return (
@@ -294,8 +304,8 @@ export default function UpdateProduct() {
             onChange={(e) => {
               seteditProductDetail({
                 ...editProductDetail,
-                calories: e.target.value
-              })
+                calories: e.target.value,
+              });
             }}
           />
           <FormInput
@@ -307,9 +317,10 @@ export default function UpdateProduct() {
             onChange={(e) => {
               seteditProductDetail({
                 ...editProductDetail,
-                proteins: e.target.value
-              })
-            }} />
+                proteins: e.target.value,
+              });
+            }}
+          />
 
           <FormInput
             name="fats"
@@ -320,9 +331,10 @@ export default function UpdateProduct() {
             onChange={(e) => {
               seteditProductDetail({
                 ...editProductDetail,
-                fats: e.target.value
-              })
-            }} />
+                fats: e.target.value,
+              });
+            }}
+          />
 
           <FormInput
             name="curbs"
@@ -333,15 +345,22 @@ export default function UpdateProduct() {
             onChange={(e) => {
               seteditProductDetail({
                 ...editProductDetail,
-                curbs: e.target.value
-              })
-            }} />
-
+                curbs: e.target.value,
+              });
+            }}
+          />
         </Flex>
         <Divider mt="4" mb="4" />
 
         <Box>
-          <Text mb="4" fontSize="md" fontWeight="semibold" color="blackAlpha.800">DESCRIPTION</Text>
+          <Text
+            mb="4"
+            fontSize="md"
+            fontWeight="semibold"
+            color="blackAlpha.800"
+          >
+            DESCRIPTION
+          </Text>
           <Textarea
             name="description"
             label="description"
@@ -350,9 +369,10 @@ export default function UpdateProduct() {
             onChange={(e) => {
               seteditProductDetail({
                 ...editProductDetail,
-                description: e.target.value
-              })
-            }} />
+                description: e.target.value,
+              });
+            }}
+          />
         </Box>
 
         <Divider mt="4" mb="4" />
@@ -374,6 +394,7 @@ export default function UpdateProduct() {
               borderColor="blackAlpha.200"
               accept="images/*"
               multiple
+              onChange={add_media}
             />
             <Text
               position="absolute"
@@ -382,7 +403,7 @@ export default function UpdateProduct() {
               color="blackAlpha.500"
             >
               {" "}
-                File Upload{" "}
+              File Upload{" "}
             </Text>
           </Center>
         </Flex>
@@ -393,9 +414,10 @@ export default function UpdateProduct() {
           type="submit"
           background="green.400"
           color="white"
-          onClick={() => onUpdateProduct()}>
+          onClick={() => onUpdateProduct()}
+        >
           Submit
-          </Button>
+        </Button>
       </Box>
     </Box>
   );

@@ -24,13 +24,20 @@ export const SUB_ADD_URL = SERVER_URL + "admin/subscription/add";
 export const SUB_PRICE_DELETE_URL = SERVER_URL + "admin/subscription/price/delete";
 export const SUB_PRICE_UPDATE_URL = SERVER_URL + "admin/subscription/price/update";
 export const SUB_PRICE_ID_URL = SERVER_URL + "subscription/price/get";
+export const SUB_PRICE_ADD_URL = SERVER_URL + "admin/subscription/price/add";
 
 //user url
 export const USER_URL = SERVER_URL + "user/search";
 export const USER_ADD_URL = SERVER_URL + "user";
 
+//recipt urls
+export const RECIPE_ADD_URL = SERVER_URL + "admin/recipe/add";
+
+//file storage url
 export const UPLOAD_FILE_URL = SERVER_URL + "api/storage/uploadMultipleFile";
 export const DELETE_FILE_URL = SERVER_URL + "api/storage/deleteFile";
+
+//gst url
 export const GST_URL = SERVER_URL + "gst/search";
 // export const SUBSCRIPTION_SEARCH_URL = SERVER_URL + "subscription/search";
 export const OTP_URL = SERVER_URL + "otp";

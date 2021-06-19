@@ -5,9 +5,15 @@ import { Textarea } from "@chakra-ui/textarea";
 import { Button } from "@chakra-ui/button";
 import { Input } from "@chakra-ui/input";
 import axios from "axios";
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router";
-import { PRODUCT_URL, SUB_UPDATE_URL, SUB_ID_URL, SUB_PRICE_DELETE_URL } from "../Config/Apis";
+import {
+  PRODUCT_URL,
+  SUB_UPDATE_URL,
+  SUB_ID_URL,
+  SUB_PRICE_DELETE_URL,
+  SUB_PRICE_ADD_URL,
+} from "../Config/Apis";
 import { Context } from "../Data/Context";
 import FormInput from "../Views/FormInput";
 import Select from "react-select";
@@ -25,8 +31,9 @@ const UpdateSubscription = () => {
   const toast = useToast();
   const [productList, setproductList] = useState([]);
   const [products, setProducts] = useState([]);
-  const [subPriceList, setsubPriceList] = useState([]);
+  const [subPriceId, setsubPriceId] = useState([]);
   const [subscriptionList, setsubscriptionList] = useState([]);
+  const [subPriceList, setSubPriceList] = useState();
 
   const statusList = [
     { value: 1, label: "Active" },
@@ -39,6 +46,21 @@ const UpdateSubscription = () => {
       productsListDisplay.push({ value: pro.id, label: pro.productName });
     });
   }
+
+  const uptoList = [{ value: 1, label: "ONE_MONTH" }];
+  const frequencyList = [
+    { value: 1, label: "ONCE_A_WEEK" },
+    { value: 2, label: "TWICE_A_WEEK" },
+  ];
+  const delivery_days = [
+    { value: 1, label: "Monday" },
+    { value: 2, label: "Tuesday" },
+    { value: 3, label: "Wednesday" },
+    { value: 4, label: "Thursday" },
+    { value: 5, label: "Friday" },
+    { value: 6, label: "Saturday" },
+    { value: 7, label: "Sunday" },
+  ];
 
   const toastMessage = (status, msg) => {
     toast({
@@ -64,9 +86,9 @@ const UpdateSubscription = () => {
         console.log(response, "response");
         if (response.status === 200) {
           history.push("/subscription");
-          toastMessage("success", "Product Edit Successful.");
+          toastMessage("success", "Subscription Edit Successful.");
         } else {
-          toastMessage("error", "Error while Editing Product!");
+          toastMessage("error", "Error while Editing Subscription!");
         }
       })
       .catch(function (error) {
@@ -77,7 +99,12 @@ const UpdateSubscription = () => {
       });
   };
 
-  console.log(editSubDetail, "editSubDetail", subscriptionList);
+  const setState = (sub) => {
+    setEditSubDetail(sub);
+    setsubscriptionList(sub.subscriptionPricesList);
+  };
+
+  console.log(editSubDetail, "editSubDetail");
 
   useEffect(() => {
     // GET SUBSCRIPTION BY ID
@@ -128,7 +155,7 @@ const UpdateSubscription = () => {
       .then(function () {
         // always executed
       });
-  }, [id, auth]);
+  }, [auth, id]);
 
   const removeImage = (id) => {
     const tempImages = image;
@@ -177,7 +204,7 @@ const UpdateSubscription = () => {
 
   const onEditSub = (subPriceId) => {
     seteditSubscription(true);
-    setsubPriceList(subPriceId);
+    setsubPriceId(subPriceId);
   };
 
   const productChangeHandler = (e) => {
@@ -208,13 +235,61 @@ const UpdateSubscription = () => {
     </Flex>
   );
 
+  const deliveryDaysHandler = (e) => {
+    const days = e.map((x) => x.label);
+    const daystr =
+      days.length > 0 && days.reduce((str, day) => str + "-" + day);
+    setSubPriceList({ ...subPriceList, deliveryDays: daystr });
+  };
+
   const addHandler = () => {
-    // setsubPriceList([...subPriceList,])
-  }
+    console.log(subPriceList, "sub");
+    setSubPriceList({
+      price: "",
+      frequency: "",
+      upto: "",
+      deliveryDays: "",
+      subscriptionDTO: {
+        id: editSubDetail.id,
+      },
+    });
+  };
+
+
+  //create pricelist
+
+  const addPriceListHandler = () => {
+    console.log(subPriceList, "price");
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
+      }
+    }
+
+    axios
+      .post(SUB_PRICE_ADD_URL, subPriceList, config)
+      .then((res) => {
+        if(res.status === 200){
+          setEditSubDetail(res.data.body);
+          setsubscriptionList(res.data.body.subscriptionPricesList);
+          setSubPriceList('');
+          toastMessage("success","Subscription price list added successfully");
+        }
+      })
+      .catch((error) => {
+        toastMessage("error","Subscription price list not added!");
+      })
+      .then(()=> {
+        //always execute
+      })
+  };
 
   return (
     <>
-      {editSubscription && <EditSubscription id={subPriceList} view="true"/>}
+      {editSubscription && (
+        <EditSubscription id={subPriceId} view="true" setState={setState} />
+      )}
       <Box>
         <Text m="2" fontSize="lg" fontWeight="semibold">
           Edit Subscription
@@ -394,7 +469,14 @@ const UpdateSubscription = () => {
                   subscriptionList.map((data, index) => (
                     <>
                       <Tr key={index}>
-                        <Td color="blackAlpha.700"><span style={{ color: "#00b6a1", fontWeight: "bold" }}>₹</span> {data.price}</Td>
+                        <Td color="blackAlpha.700">
+                          <span
+                            style={{ color: "#00b6a1", fontWeight: "bold" }}
+                          >
+                            ₹
+                          </span>{" "}
+                          {data.price}
+                        </Td>
                         <Td color="blackAlpha.700">{data.frequency}</Td>
                         <Td color="blackAlpha.700">{data.upto}</Td>
                         <Td color="blackAlpha.700">{data.deliveryDays}</Td>
@@ -424,15 +506,98 @@ const UpdateSubscription = () => {
                 )}
               </Tbody>
             </Table>
-            <Button
-                  color="#2A9F85"
-                  backgroundColor="transparent"
-                  fontSize="2rem"
-                  marginTop="3rem"
-                  onClick={() => addHandler()}
+          </Box>
+          <Box>
+            {subPriceList && (
+              <Flex flexWrap="wrap">
+                <FormInput
+                  label="Price"
+                  symbol="₹"
+                  type="number"
+                  name="price"
+                  onChange={(event) =>
+                    setSubPriceList({
+                      ...subPriceList,
+                      price: event.target.value,
+                    })
+                  }
+                  value={subPriceList.price}
+                />
+                <Box m="3">
+                  <Text
+                    m="2"
+                    fontSize="md"
+                    fontWeight="semibold"
+                    color="blackAlpha.800"
+                  >
+                    Frequency
+                  </Text>
+                  <div style={{ fontSize: "1.3rem", width: "16rem" }}>
+                    <Select
+                      options={frequencyList}
+                      name="frequency"
+                      onChange={(e) =>
+                        setSubPriceList({ ...subPriceList, frequency: e.label })
+                      }
+                    />
+                  </div>
+                </Box>
+                <Box m="3">
+                  <Text
+                    m="2"
+                    fontSize="md"
+                    fontWeight="semibold"
+                    color="blackAlpha.800"
+                  >
+                    Up To
+                  </Text>
+                  <div style={{ fontSize: "1.3rem", width: "15rem" }}>
+                    <Select
+                      name="upto"
+                      options={uptoList}
+                      onChange={(e) =>
+                        setSubPriceList({ ...subPriceList, upto: e.label })
+                      }
+                    />
+                  </div>
+                </Box>
+                <Box m="3">
+                  <Text
+                    m="2"
+                    fontSize="md"
+                    fontWeight="semibold"
+                    color="blackAlpha.800"
+                  >
+                    Delivery Days
+                  </Text>
+                  <div style={{ fontSize: "1.3rem", width: "14rem" }}>
+                    <Select
+                      isMulti
+                      options={delivery_days}
+                      name="deliveryDays"
+                      onChange={(e) => deliveryDaysHandler(e)}
+                    />
+                  </div>
+                </Box>
+                <Button
+                  backgroundColor="#2A9F85"
+                  color="#fff"
+                  marginTop="3.3rem"
+                  onClick={() => addPriceListHandler()}
                 >
-                  <BsPlusSquare />
+                  Add
                 </Button>
+              </Flex>
+            )}
+            <Button
+              color="#2A9F85"
+              backgroundColor="transparent"
+              fontSize="1.5rem"
+              marginTop="3rem"
+              onClick={() => addHandler()}
+            >
+              <BsPlusSquare />
+            </Button>
           </Box>
           <Button type="submit" onClick={() => onUpdateSubscription()}>
             Edit Subscription

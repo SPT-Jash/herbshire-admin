@@ -22,14 +22,16 @@ import { SERVER_URL } from "../Config/Apis";
 import { Context } from "../Data/Context";
 import { useToast } from "@chakra-ui/toast";
 import ShowMoreText from "react-show-more-text";
+import RecipeIngredient from '../Popup/RecipeIngredient';
 
 const Recipe = () => {
     const toast = useToast();
-    const { auth, } = useContext(Context);
+    const { auth,recipeView, setRecipeView } = useContext(Context);
     const [isSmallerThan600] = useMediaQuery("(max-width: 600px)");
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
     const [RecipeData, setRecipeData] = useState([]);
+    const [recipeIngredientDetails, setRecipeIngredientDetails] = useState();
 
     const pageArray = [];
     for (let index = 0; index < totalPages; index++) {
@@ -115,8 +117,14 @@ const Recipe = () => {
         fetchRecipeList()
     }, [fetchRecipeList]);
 
+    const onViewRecipeIngredient = (list) => {
+        setRecipeView(true);
+        setRecipeIngredientDetails(list);
+      };
+    
     return (
         <>
+        {recipeView && <RecipeIngredient detail={recipeIngredientDetails} view="true"/>}
             <Box w="100%" p="4">
                 <Box flex="1" flexDirection="row" mt="8">
                     <Flex>
@@ -331,7 +339,7 @@ const Recipe = () => {
                                             </ShowMoreText>
                                         </Td>
                                         <Td color="blackAlpha.700">
-                                            <Button>
+                                            <Button onClick={() => onViewRecipeIngredient(recipe.recipeIngredientList)}>
                                                 Recipe Ingredient List
                                             </Button>
                                         </Td>

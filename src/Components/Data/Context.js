@@ -12,6 +12,7 @@ export const ContextProvider = (props) => {
   const [viewSubscription, setViewSubscription] = useState(false);
   const [editSubscription, seteditSubscription] = useState(false);
   const [subscribeView, setsubscribeView] = useState(false);
+  const [recipeView, setRecipeView] = useState(false);
 
   useEffect(() => {
     const authData = JSON.parse(localStorage.getItem("auth"));
@@ -42,7 +43,9 @@ export const ContextProvider = (props) => {
         editSubscription,
         seteditSubscription,
         subscribeView,
-        setsubscribeView
+        setsubscribeView,
+        recipeView,
+        setRecipeView
       }}
     >
       {props.children}

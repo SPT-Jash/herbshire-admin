@@ -42,7 +42,7 @@ const EditSubscription = (props) => {
   const delivery_days = [
     { value: 1, label: "Monday" },
     { value: 2, label: "Tuesday" },
-    { value: 3, label: "Wensday" },
+    { value: 3, label: "Wednesday" },
     { value: 4, label: "Thursday" },
     { value: 5, label: "Friday" },
     { value: 6, label: "Saturday" },
@@ -61,6 +61,7 @@ const EditSubscription = (props) => {
       .then(function (response) {
         console.log(response, "response");
         if (response.status === 200) {
+          props.setState(response.data.body);
           seteditSubscription(false);
           toastMessage("success", "Subscription Price List Edit Successful.");
         } else {
