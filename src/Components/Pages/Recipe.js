@@ -26,6 +26,7 @@ import RecipeIngredient from '../Popup/RecipeIngredient';
 
 const Recipe = () => {
     const toast = useToast();
+    const history = useHistory();
     const { auth,recipeView, setRecipeView } = useContext(Context);
     const [isSmallerThan600] = useMediaQuery("(max-width: 600px)");
     const [currentPage, setCurrentPage] = useState(1);

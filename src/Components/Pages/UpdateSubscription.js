@@ -13,6 +13,7 @@ import {
   SUB_ID_URL,
   SUB_PRICE_DELETE_URL,
   SUB_PRICE_ADD_URL,
+  UPLOAD_FILE_URL,
 } from "../Config/Apis";
 import { Context } from "../Data/Context";
 import FormInput from "../Views/FormInput";
@@ -157,13 +158,6 @@ const UpdateSubscription = () => {
       });
   }, [auth, id]);
 
-  const removeImage = (id) => {
-    const tempImages = image;
-    const deletedImage = tempImages.splice(id, 1);
-    toastMessage("warning", `${deletedImage[0].name} deleted !`);
-    setImage([...tempImages]);
-  };
-
   const removeProduct = (key) => {
     const tempProduct = productList;
     const deletedProduct = tempProduct.splice(key, 1);
@@ -216,23 +210,71 @@ const UpdateSubscription = () => {
     console.log(p, "product");
   };
 
+  const add_media = (event) => {
+    event.preventDefault();
+    const files = event.target.files;
+    const tempImages = [...image];
+
+    for (let index = 0; index < files.length; index++) {
+      const file = files[index];
+      let duplicate = false;
+      if (!duplicate) tempImages.push(file);
+    }
+    setImage([...tempImages]);
+    console.log(tempImages, "nkk");
+  };
+
+  const uploadedImage = () => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
+        Accept: "*/*",
+        "content-type": "multipart/form-data",
+      },
+    };
+
+    const formData = new FormData();
+    image.forEach((file) => {
+      formData.append("file", file);
+    });
+
+    axios
+      .post(UPLOAD_FILE_URL, formData, config)
+      .then((res) => {
+        console.log("imgres", res);
+        if (res.status === 200) {
+          toastMessage("success", "Images Uploaded !");
+          const imgurl = res.data[0];
+          // setUploadedImages(imgurl);
+          setEditSubDetail({ ...editSubDetail, imageUrl: imgurl });
+        }
+      })
+      .catch((reason) => {
+        console.log(reason);
+        toastMessage("error", "Images not Uploaded !");
+      });
+  };
+
   const SelectedImage = (
-    <Flex display="block">
-      {image.map((img, key) => (
-        <Tag
-          size="lg"
-          h="50px"
-          key={key}
-          borderRadius="10px"
-          variant="solid"
-          colorScheme="green"
-          m="2"
-        >
-          <TagLabel>{img.name}</TagLabel>
-          <TagCloseButton onClick={() => removeImage(key)} />
-        </Tag>
-      ))}
-    </Flex>
+    editSubDetail.imageUrl && (<Flex display="block">
+       <Tag
+        size="lg"
+        p="3"
+        borderRadius="10px"
+        variant="solid"
+        colorScheme="green"
+        m="2"
+      >
+        <Box>
+          <img
+            height="180px"
+            width="180px"
+            src={editSubDetail.imageUrl}
+            alt="product"
+          />
+        </Box>
+      </Tag>
+    </Flex>)
   );
 
   const deliveryDaysHandler = (e) => {
@@ -399,6 +441,7 @@ const UpdateSubscription = () => {
                     borderWidth="thin"
                     borderColor="blackAlpha.200"
                     accept="images/*"
+                    onChange={add_media}
                     multiple
                   />
 
@@ -414,6 +457,7 @@ const UpdateSubscription = () => {
               </Flex>
               {SelectedImage}
             </Box>
+            <Button marginTop="3.2rem" onClick={() => uploadedImage()}>ADD</Button>
             <Box m="3">
               <Text
                 m="2"

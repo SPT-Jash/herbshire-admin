@@ -1,6 +1,4 @@
 import { Button } from "@chakra-ui/button";
-import { CloseButton } from "@chakra-ui/close-button";
-import { Image } from "@chakra-ui/image";
 import { Input } from "@chakra-ui/input";
 import { Box, Center, Divider, Flex, Text } from "@chakra-ui/layout";
 import { Select } from "@chakra-ui/select";
@@ -18,6 +16,7 @@ import {
 } from "../Config/Apis";
 import { Context } from "../Data/Context";
 import FormInput from "../Views/FormInput";
+import { TagLabel, Tag, TagCloseButton } from "@chakra-ui/tag";
 
 export default function UpdateProduct() {
   const { id } = useParams();
@@ -25,7 +24,7 @@ export default function UpdateProduct() {
   const { auth } = useContext(Context);
   const [images, setImages] = useState([]);
   const [editProductDetail, seteditProductDetail] = useState({});
-  const [uploadedImages, setUploadedImages] = useState([]);
+  const [uploadedImages, setUploadedImages] = useState();
   const [gstList, setGstList] = useState([]);
   const toast = useToast();
 
@@ -67,7 +66,7 @@ export default function UpdateProduct() {
         // always executed
       });
   };
-  console.log(editProductDetail, "dataxcvbuimp");
+  console.log(editProductDetail, "editproduct");
 
   useEffect(() => {
     // get product detail
@@ -102,9 +101,54 @@ export default function UpdateProduct() {
       .catch((r) => console.log(r));
   }, [auth, id]);
 
-  const add_media = () => {}
+  //image method
+  const add_media = (event) => {
+    event.preventDefault();
+    const files = event.target.files;
+    const tempImages = [...images];
+
+    for (let index = 0; index < files.length; index++) {
+      const file = files[index];
+      let duplicate = false;
+      if (!duplicate) tempImages.push(file);
+    }
+    setImages([...tempImages]);
+    // console.log(tempImages);
+  };
+
+  const uploadedImage = () => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
+        Accept: "*/*",
+        "content-type": "multipart/form-data",
+      },
+    };
+
+    const formData = new FormData();
+    images.forEach((file) => {
+      formData.append("file", file);
+    });
+
+    axios
+      .post(UPLOAD_FILE_URL, formData, config)
+      .then((res) => {
+        console.log("imgres", res);
+        if (res.status === 200) {
+          toastMessage("success", "Images Uploaded !");
+          const imgurl = res.data[0];
+          // setUploadedImages(imgurl);
+          seteditProductDetail({ ...editProductDetail, displayUrl: imgurl });
+        }
+      })
+      .catch((reason) => {
+        console.log(reason);
+        toastMessage("error", "Images not Uploaded !");
+      });
+  };
 
   const removeImage = () => {
+    console.log(uploadedImages);
     var myHeaders = new Headers();
     myHeaders.append("Authorization", `Bearer ${auth.user.token}`);
 
@@ -120,7 +164,7 @@ export default function UpdateProduct() {
 
     fetch(DELETE_FILE_URL, requestOptions)
       .then((response) => {
-        console.log(response, "imgres");
+        response.text();
         if (response.status === 200) {
           toastMessage("info", "Image deteled !");
           setUploadedImages("");
@@ -128,18 +172,34 @@ export default function UpdateProduct() {
         }
       })
       .then((result) => console.log(result))
-      .catch((error) => console.log("error", error));
+      .catch((error) => {
+        console.log("error", error);
+        toastMessage("error","Image not deleted");
+      });
   };
 
-  const SelectedImages = () => {
-    uploadedImages && (
-    <>
-      <Flex m="3" alignItems="center">
-        <Image src={uploadedImages} w="20%" />
-        <CloseButton size="lg" m="2" onClick={() => removeImage()} />
-      </Flex>
-    </>
-  )};
+  const SelectedImages = editProductDetail.displayUrl && (
+    <Flex display="block">
+      <Tag
+        size="lg"
+        p="3"
+        borderRadius="10px"
+        variant="solid"
+        colorScheme="green"
+        m="2"
+      >
+        <Box>
+          <img
+            height="180px"
+            width="180px"
+            src={editProductDetail.displayUrl}
+            alt="product"
+          />
+        </Box>
+        <TagCloseButton onClick={() => removeImage()} />
+      </Tag>
+    </Flex>
+  );
 
   return (
     <Box>
@@ -406,6 +466,9 @@ export default function UpdateProduct() {
               File Upload{" "}
             </Text>
           </Center>
+          <Button marginLeft="3" p="3" onClick={() => uploadedImage()}>
+            ADD
+          </Button>
         </Flex>
 
         {SelectedImages}
